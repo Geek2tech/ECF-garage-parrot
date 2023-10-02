@@ -11,7 +11,7 @@ let routes = (app) => {
         mailController.sendMail(req,res)
     })
 
-    router.post("/upload",fileController.upload)
+    router.post("/upload/:name",fileController.upload)
 
     app.use(router);
 };

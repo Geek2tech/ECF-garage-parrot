@@ -7,14 +7,14 @@ let storage = multer.diskStorage({
         cb(null, __basedir + "/Ressources/Photos")
     },
     filename: (req, file, cb) => {
-
+        file.originalname = req.params.name
         cb(null, file.originalname)
     },
 });
 
 let uploadFile = multer({
     storage: storage,
-    limits: { fileSize: maxSize },
+    limits: {fileSize: maxSize},
 }).single("file")
 
 let uploadFileMiddleware = util.promisify(uploadFile)
