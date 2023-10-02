@@ -8,7 +8,10 @@ const initRoutes =require("./src/routes")
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 app.use(helmet())
-app.use(cors)
+const corsOptions = {
+    origin: "http://localhost:8080"
+};
+app.use(cors(corsOptions))
 //app.use(express.urlencoded({extended:true}))
 global.__basedir = __dirname
 
