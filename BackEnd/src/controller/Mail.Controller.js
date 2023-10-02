@@ -1,42 +1,23 @@
-const nodemailer = require('nodemailer')
+const send = require("../middleware/mail")
 
-const transporter = nodemailer.createTransport({
-    host: 'smtp-zose.yulpa.io',
-    port: 465,
-    secure: true,
-    auth: {
-        user: 'smtp@geek2tech.fr',
-        pass: 'g%DKz26XELRG5=bky3[FVM'
+const sendmail = async (req,res) => {
+    try {
+
+        await send(req, res);
+
+
+
+        res.status(200).send({
+            message: "Mail send ",
+        });
+    } catch (err) {
+        res.status(500).send({
+            message: `Could not send mail ${err}`,
+        })
     }
-})
-
-async function sendMail(req,res) {
-
-    const mailInfo = req.body
-
-    const info = await transporter.sendMail( {
-        from : "smtp@geek2tech.fr",
-        to:'demuylder.herve@gmail.com',
-        subject: 'Demande d information',
-        text: mailInfo.message,
-
-    })
-        .then(() => {
-
-            res.status(200)
-            res.send("ok")
-        })
-        .catch((err) => {
-            console.log(err)
-            res.status(500)
-            res.send('ko')
-        })
-
 
 }
-
 
 module.exports = {
-    sendMail
+    sendmail
 }
-//main().catch(console.error)

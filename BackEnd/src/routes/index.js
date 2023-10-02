@@ -7,9 +7,8 @@ let routes = (app) => {
 
     router.get("/files/:name", fileController.download)
 
-    router.post("/mail",(req,res) => {
-        mailController.sendMail(req,res)
-    })
+    router.post("/mail",mailController.sendmail)
+
 
     router.post("/upload/:name",fileController.upload)
 
