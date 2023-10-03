@@ -4,10 +4,9 @@ function addConstructor(req, res) {
     const database = require('../services/db')
     const request = req.body
 
-    const query = `INSERT INTO constructor (constructor_name)
-                   VALUES ("${suppressSpecialChar(request.name)}") `
+    const query = `INSERT INTO constructor (constructor_name) VALUES ( ? )`
 
-    database.dbconnect.query(query, (err, result) => {
+    database.dbconnect.query(query,[suppressSpecialChar(request.name)], (err, result) => {
         if (err) {
 
             res.status(500)
@@ -39,8 +38,8 @@ function constructorList(req, res) {
 function constructorUpdate(req,res)  {
     const database = require('../services/db')
     const request =  req.body
-    const query = `UPDATE ParrotDB.constructor SET constructor_name = "${suppressSpecialChar(request.newValue)}"  WHERE constructor_id = ${suppressSpecialChar(request.id)}`
-    database.dbconnect.query(query, (err , result) => {
+    const query = "UPDATE ParrotDB.constructor SET constructor_name = ?  WHERE constructor_id = ? "
+    database.dbconnect.query(query, [suppressSpecialChar(request.newValue),suppressSpecialChar(request.id)], (err , result) => {
         if (err) {
             console.log('Erreur lors de la mise à jour ' + err)
             res.status(500)

@@ -4,7 +4,8 @@ const dbconnect = mysql.createConnection({
     host: process.env.APP_DBHOST,
     user: process.env.APP_DBUSER,
     password: process.env.APP_DBPASSWORD,
-    database: process.env.APP_DB
+    database: process.env.APP_DB,
+    multipleStatements: false
 })
 dbconnect.connect(function (err) {
     if (err) {
