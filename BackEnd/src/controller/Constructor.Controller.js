@@ -1,5 +1,3 @@
-
-
 function addConstructor(req, res) {
     const database = require('../services/db')
     let request = req.body
@@ -19,6 +17,28 @@ function addConstructor(req, res) {
         }
     })
 }
+
+function constructorList(req, res) {
+
+    const database = require('../services/db')
+
+    database.dbconnect.query("SELECT * from constructor", (err, result) => {
+        if (err) {
+            console.log('erreur de récupération des données')
+            res.status(500)
+
+        } else {
+
+            res.status(200)
+            res.send(result)
+
+        }
+
+    })
+
+}
+
 module.exports = {
-addConstructor
+    addConstructor,
+    constructorList
 }

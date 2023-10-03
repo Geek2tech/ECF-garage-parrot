@@ -6,12 +6,12 @@ const constructorController = require('../controller/Constructor.Controller')
 let routes = (app) => {
 
     router.get("/files/:name", fileController.download)
+    router.get("/constructors", constructorController.constructorList)
+    router.post("/mail", mailController.sendMail)
 
-    router.post("/mail",mailController.sendMail)
 
-
-    router.post("/upload/:name",fileController.upload)
-    router.post('/constructor',constructorController.addConstructor)
+    router.post("/upload/:name", fileController.upload)
+    router.post('/constructor', constructorController.addConstructor)
 
     app.use(router);
 };
