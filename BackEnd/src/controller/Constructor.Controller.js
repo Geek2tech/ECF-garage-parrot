@@ -21,8 +21,9 @@ function addConstructor(req, res) {
 function constructorList(req, res) {
 
     const database = require('../services/db')
+    const query = "SELECT * FROM constructor"
 
-    database.dbconnect.query("SELECT * from constructor", (err, result) => {
+    database.dbconnect.query(query, (err, result) => {
         if (err) {
             console.log('erreur de récupération des données')
             res.status(500)
