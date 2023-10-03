@@ -7,9 +7,7 @@ const sendmail = async (req,res) => {
 
 
 
-        res.status(200).send({
-            message: "Mail send ",
-        });
+        res.status(200).send("Mail send")
     } catch (err) {
         res.status(500).send({
             message: `Could not send mail ${err}`,

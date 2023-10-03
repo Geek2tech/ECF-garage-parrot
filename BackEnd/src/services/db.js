@@ -2,13 +2,13 @@ const mysql = require('mysql')
 
 const config = require ("../config/config")
 
-const connexion = mysql.createConnection({
+const dbconnect = mysql.createConnection({
     host: config.envs['APP_DBHOST'],
     user: config.envs['APP_DBUSER'],
     password: config.envs['APP_DBPASSWORD'],
     database: config.envs['APP_DB']
 })
-connexion.connect(function (err) {
+dbconnect.connect(function (err) {
     if (err) {
         console.log(err)
         console.log("une erreur est survenue")
@@ -18,7 +18,7 @@ connexion.connect(function (err) {
 })
 module.exports = {
 
-    connexion
+    dbconnect
 
 }
 

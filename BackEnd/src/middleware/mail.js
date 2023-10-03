@@ -27,12 +27,12 @@ async function sendMail(req,res) {
         .then(() => {
 
             res.status(200)
-            res.send("ok")
+            res.send("Message envoyé avec success")
         })
         .catch((err) => {
             console.log(err)
             res.status(500)
-            res.send('ko')
+            res.send(err)
         })
 
 

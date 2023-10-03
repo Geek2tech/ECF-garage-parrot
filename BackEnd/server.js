@@ -5,6 +5,7 @@ const helmet = require("helmet")
 const cors = require("cors")
 const initRoutes =require("./src/routes")
 
+global.__basedir = __dirname
 
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
