@@ -1,10 +1,12 @@
 const mysql = require('mysql')
 
+const config = require ("../config/config")
+
 const connexion = mysql.createConnection({
-    host: "srvbdd",
-    user: "parrotuser",
-    password: "m2VXn8MZfAeFYy6DjsubEt",
-    database: "ParrotDB"
+    host: config.envs['APP_DBHOST'],
+    user: config.envs['APP_DBUSER'],
+    password: config.envs['APP_DBPASSWORD'],
+    database: config.envs['APP_DB']
 })
 connexion.connect(function (err) {
     if (err) {
