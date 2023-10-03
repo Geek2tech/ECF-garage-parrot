@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer')
+const {suppressSpecialChar} = require("../helpers/fieldControl");
 
 
 
@@ -18,10 +19,10 @@ async function sendMail(req,res) {
     const mailInfo = req.body
 
     const info = await transporter.sendMail( {
-        from : "smtp@geek2tech.fr",
+        from : process.env.APP_SMTPUSER,
         to:'demuylder.herve@gmail.com',
-        subject: 'Demande d information',
-        text: mailInfo.message,
+        subject: 'Demande d information d un client',
+        text: suppressSpecialChar(mailInfo.message),
 
     })
         .then(() => {
