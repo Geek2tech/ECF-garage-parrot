@@ -22,24 +22,36 @@ function constructorList(req, res) {
 
     const database = require('../services/db')
     const query = "SELECT * FROM constructor"
-
     database.dbconnect.query(query, (err, result) => {
         if (err) {
-            console.log('erreur de récupération des données')
+            console.log('erreur de récupération des données : ' + err)
             res.status(500)
-
+            res.send("ko : " + err)
         } else {
-
             res.status(200)
             res.send(result)
-
         }
-
     })
-
 }
+
+function constructorUpdate(req,res)  {
+    const database = require('../services/db')
+    const request =  req.body
+    const query = `UPDATE ParrotDB.constructor SET constructor_name = "${request.newValue}"  WHERE constructor_id = ${request.id}`
+    database.dbconnect.query(query, (err , result) => {
+        if (err) {
+            console.log('Erreur lors de la mise à jour ' + err)
+            res.status(500)
+        }else {
+            res.status(200)
+            res.send(result.message)
+        }
+    })
+}
+
 
 module.exports = {
     addConstructor,
-    constructorList
+    constructorList,
+    constructorUpdate
 }
