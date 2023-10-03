@@ -1,6 +1,6 @@
 function addConstructor(req, res) {
     const database = require('../services/db')
-    let request = req.body
+    const request = req.body
 
     const query = `INSERT INTO constructor (constructor_name)
                    VALUES ("${request.name}") `

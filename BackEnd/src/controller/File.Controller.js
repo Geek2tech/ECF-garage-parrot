@@ -1,4 +1,5 @@
 const uploadFile = require("../middleware/upload")
+const fs = require("fs")
 const upload = async (req, res) => {
     try {
 console.log("upload File")
@@ -22,7 +23,7 @@ console.log("upload File")
 
 const download = (req, res) => {
     const fileName = req.params.name
-    const directoryPath = __basedir + "/resources/"
+    const directoryPath = __basedir + "/resources/Photos/"
 
     res.download(directoryPath + fileName, fileName, (err) => {
         if (err) {
@@ -33,7 +34,24 @@ const download = (req, res) => {
     })
 }
 
+const deleteFile = (req,res) =>{
+
+    const fileToDelete = __basedir +"/Resources/Photos/" + req.params.name
+    fs.unlink(fileToDelete,(err) =>{
+        if (err) {
+            res.status(500)
+            res.send("Supression impossible : " + err)
+        } else {
+            res.status(200)
+            res.send("ok")
+        }
+    })
+
+
+}
+
 module.exports = {
     upload,
     download,
+    deleteFile
 }

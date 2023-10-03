@@ -5,10 +5,10 @@ const fileController = require("../controller/File.Controller")
 const constructorController = require('../controller/Constructor.Controller')
 let routes = (app) => {
 
-    router.get("/files/:name", fileController.download)
+    router.get("/file/:name", fileController.download)
     router.get("/constructors", constructorController.constructorList)
     router.post("/mail", mailController.sendMail)
-
+    router.post("/delete/:name", fileController.deleteFile)
 
     router.post("/upload/:name", fileController.upload)
     router.post('/constructor', constructorController.addConstructor)
