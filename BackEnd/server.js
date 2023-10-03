@@ -1,3 +1,4 @@
+require("dotenv").config()
 const express  = require("express")
 const app = express()
 const bodyParser= require("body-parser")
@@ -19,7 +20,7 @@ global.__basedir = __dirname
 
 initRoutes(app)
 
-let port = 8080
+let port = process.env.APP_PORT
 
 app.listen(port, () => {
     console.log(`server running at localhost:${port}`)

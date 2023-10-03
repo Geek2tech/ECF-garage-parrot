@@ -4,12 +4,12 @@ const nodemailer = require('nodemailer')
 
 
 const transporter = nodemailer.createTransport({
-    host: 'smtp-zose.yulpa.io',
-    port: 465,
-    secure: true,
+    host: process.env.APP_SMTPSERVER,
+    port: process.env.APP_SMTPPORT,
+    secure: process.env.APP_SMTPSECURE,
     auth: {
-        user: 'smtp@geek2tech.fr',
-        pass: 'g%DKz26XELRG5=bky3[FVM'
+        user: process.env.APP_SMTPUSER,
+        pass: process.env.APP_SMTPPASSWORD
     }
 })
 

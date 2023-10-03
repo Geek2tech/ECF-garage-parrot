@@ -1,12 +1,10 @@
 const mysql = require('mysql')
 
-const config = require ("../config/config")
-
 const dbconnect = mysql.createConnection({
-    host: config.envs['APP_DBHOST'],
-    user: config.envs['APP_DBUSER'],
-    password: config.envs['APP_DBPASSWORD'],
-    database: config.envs['APP_DB']
+    host: process.env.APP_DBHOST,
+    user: process.env.APP_DBUSER,
+    password: process.env.APP_DBPASSWORD,
+    database: process.env.APP_DB
 })
 dbconnect.connect(function (err) {
     if (err) {
