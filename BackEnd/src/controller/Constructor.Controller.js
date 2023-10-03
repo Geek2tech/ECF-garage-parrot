@@ -1,19 +1,24 @@
-const addConstructor = require("../middleware/constructor")
-
-const newConstructor = async (req,res) => {
-
-    try {
-
-        await addConstructor(req, res);
 
 
-    } catch (err) {
-        res.status(500).send({
-            message: `Could not create new constructor not bdd error  ${err}`,
-        })
-    }
+function addConstructor(req, res) {
+    const database = require('../services/db')
+    let request = req.body
 
+    const query = `INSERT INTO constructor (constructor_name)
+                   VALUES ("${request.name}") `
+
+    database.dbconnect.query(query, (err, result) => {
+        if (err) {
+
+            res.status(500)
+            res.send(err.sqlMessage)
+        } else {
+
+            res.send("ok : " + result.insertId)
+
+        }
+    })
 }
 module.exports = {
-    newConstructor
+addConstructor
 }

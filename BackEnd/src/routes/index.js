@@ -7,11 +7,11 @@ let routes = (app) => {
 
     router.get("/files/:name", fileController.download)
 
-    router.post("/mail",mailController.sendmail)
+    router.post("/mail",mailController.sendMail)
 
 
     router.post("/upload/:name",fileController.upload)
-    router.post('/constructor',constructorController.newConstructor)
+    router.post('/constructor',constructorController.addConstructor)
 
     app.use(router);
 };
