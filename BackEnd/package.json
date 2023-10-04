@@ -1,10 +1,9 @@
-
 {
-"name": "Parrot garage backend",
+  "name": "Parrot garage backend",
   "version": "1.0.0",
   "description": "Api pour le site du garage Parrot",
-  "main" : "server.js",
-  "dependencies": {
+  "main": "server.js",
+    "dependencies": {
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
