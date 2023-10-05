@@ -1,15 +1,24 @@
-
-
-function paginatedResult(req, res, table, query) {
+/**
+ * @function
+ * @description return paginated result for sql request
+ *
+ * @param req request with optional ?page=X&limit=X
+ * @param res response
+ * @param table table to query
+ * @param query sql query
+ *
+ * @return {object}  number of rows ,if exist the number of previous and next page  and the result of the query
+ */
+  function paginatedResult(req, res, table, query) {
 
     // connexion à la base de données
 
     const database = require('../services/db')
 
-    // on récupère le nombre total de ligne
+    // on récupère le nombre total de lignes
 
     let countQuery = `SELECT COUNT(*) AS TOTAL from ${table}`
-    database.dbconnect.query(countQuery, (err, rows) => {
+       database.dbconnect.query(countQuery, (err, rows) => {
         if (err) {
             res.status(500)
             res.send("une erreur est survenu " + err)
