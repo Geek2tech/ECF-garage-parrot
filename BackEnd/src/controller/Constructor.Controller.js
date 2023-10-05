@@ -1,5 +1,5 @@
 const {suppressSpecialChar} = require("../helpers/fieldControl");
-const paginatedResult = require("../middleware/paginatedSelectQuery")
+const paginatedResult = require("../helpers/paginatedSelectQuery")
 
 function addConstructor(req, res) {
     const database = require('../services/db')
