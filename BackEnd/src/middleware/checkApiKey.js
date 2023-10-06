@@ -11,7 +11,7 @@
     if (req.headers['x-api-key'] !== process.env.APP_APIKEY) {
         return res.status(401).json({status: 'No API KEY'})
     }
-    console.log('API KEY OK')
+
     next()
 }
 

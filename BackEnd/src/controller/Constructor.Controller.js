@@ -8,14 +8,14 @@ const paginatedResult = require("../helpers/paginatedSelectQuery")
  * @param res response
  * @return response and id of the insert
  */
-function addConstructor(req, res) {
+function makeConstructor(req, res) {
     const database = require('../services/db')
     const request = req.body
 
     const query = `INSERT INTO constructor (constructor_name)
                    VALUES (?)`
 
-    database.dbconnect.query(query, [suppressSpecialChar(request.name)], (err, result) => {
+    database.dbconnect.query(query, [suppressSpecialChar(request.contructor_name)], (err, result) => {
         if (err) {
 
             res.status(500)
@@ -37,7 +37,7 @@ function addConstructor(req, res) {
  * @param res response
  * @return paginated list of constructor
  */
-function constructorList(req, res) {
+function getContructor(req, res) {
 
     const table = 'constructor'
     const query = `SELECT * FROM ${table}`
@@ -48,11 +48,11 @@ function constructorList(req, res) {
 /**
  * @function
  * @description Update a constructor in the database
- * @param req request with id of the constructor to update
+ * @param req request with id of the constructor to update and new name ( newValue)
  * @param res response
  * @return response message
  */
-function constructorUpdate(req, res) {
+function updateConstructor(req, res) {
     const database = require('../services/db')
     const request = req.body
     const query = "UPDATE ParrotDB.constructor SET constructor_name = ?  WHERE constructor_id = ? "
@@ -75,7 +75,7 @@ function constructorUpdate(req, res) {
 
 
 module.exports = {
-    addConstructor,
-    constructorList,
-    constructorUpdate,
+    makeConstructor,
+    getContructor,
+    updateConstructor,
      }
