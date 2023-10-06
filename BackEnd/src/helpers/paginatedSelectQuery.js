@@ -6,7 +6,6 @@
  * @param res response
  * @param table table to query
  * @param query sql query
- *
  * @return {object}  number of rows ,if exist the number of previous and next page  and the result of the query
  */
   function paginatedResult(req, res, table, query) {
@@ -25,7 +24,6 @@
         }
 
         const totalRowsNumber = rows[0]['TOTAL']
-
 
         // on récupère les résultats
 
@@ -55,7 +53,6 @@
                     page: page + 1,
                     limit: limit
                 }
-
             }
 
             if (startIndex > 0) {
@@ -66,22 +63,14 @@
                 }
             }
 
-
-
-
-
             // découpe des résultats pour renvoyer uniquement les résultats de la page demandée
 
             results.results = rows.slice(startIndex, endIndex)
 
-
             // envoie du resultat
 
             res.send(results)
-
         })
-
-
     })
 
 }
