@@ -4,6 +4,7 @@ const mailController = require("../controller/Mail.Controller")
 const fileController = require("../controller/File.Controller")
 const constructorController = require('../controller/Constructor.Controller')
 const fuelController = require('../controller/Fuel.Controller')
+const profilController = require('../controller/Profil_Controller')
 const checkApiKey = require('../middleware/checkApiKey')
 
 let routes = (app) => {
@@ -20,6 +21,10 @@ let routes = (app) => {
 
     router.get('/fuels' , checkApiKey,(req,res) => {
         fuelController.getFuel(req,res)
+    })
+
+    router.get('/profils', checkApiKey,(req,res) => {
+        profilController.getProfil(req,res)
     })
 
     // Route POST
