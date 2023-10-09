@@ -56,11 +56,11 @@ router.post('/login',checkApiKey,(req,res) => {
 
     // Route PUT
 
-    router.put("/constructor", checkApiKey,(req,res) => {
+    router.put("/constructor", checkApiKey,checkJwt,(req,res) => {
         constructorController.updateConstructor(req,res)
     })
 
-    router.put('/fuel',checkApiKey,(req,res)=>{
+    router.put('/fuel',checkApiKey,checkJwt,(req,res)=>{
         fuelController.updateFuel(req,res)
     })
 
