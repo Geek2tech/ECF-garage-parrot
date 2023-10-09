@@ -7,7 +7,7 @@ const fuelController = require('../controller/Fuel.Controller')
 const profilController = require('../controller/Profil_Controller')
 const userController = require('../controller/User.controller')
 const checkApiKey = require('../middleware/checkApiKey')
-const checkJwt = require('../middleware/checkJWT')
+const checkAuth = require('../middleware/checkAuth')
 
 let routes = (app) => {
 
@@ -26,7 +26,7 @@ let routes = (app) => {
         fuelController.getFuel(req,res)
     })
 
-    router.get('/profils', checkApiKey,(req,res) => {
+    router.get('/profils', checkApiKey,checkAuth,(req,res) => {
         profilController.getProfil(req,res)
     })
 
@@ -36,16 +36,16 @@ let routes = (app) => {
         mailController.sendMail(req,res)
     })
 
-    router.post("/delete/:name", checkApiKey,checkJwt,(req,res) => {
+    router.post("/delete/:name", checkApiKey,checkAuth,(req,res) => {
         fileController.deleteFile(req,res)
     })
-    router.post("/upload/:name", checkApiKey,checkJwt,(req,res) => {
+    router.post("/upload/:name", checkApiKey,checkAuth,(req,res) => {
         fileController.upload(req,res)
     })
-    router.post('/constructor',checkApiKey,checkJwt,(req,res) => {
+    router.post('/constructor',checkApiKey,checkAuth,(req,res) => {
         constructorController.makeConstructor(req, res)
     })
-    router.post('/fuel',checkApiKey,checkJwt,(req,res) => {
+    router.post('/fuel',checkApiKey,checkAuth,(req,res) => {
         fuelController.makeFuel(req,res)
     })
 router.post('/login',checkApiKey,(req,res) => {
@@ -56,11 +56,11 @@ router.post('/login',checkApiKey,(req,res) => {
 
     // Route PUT
 
-    router.put("/constructor", checkApiKey,checkJwt,(req,res) => {
+    router.put("/constructor", checkApiKey,checkAuth,(req,res) => {
         constructorController.updateConstructor(req,res)
     })
 
-    router.put('/fuel',checkApiKey,checkJwt,(req,res)=>{
+    router.put('/fuel',checkApiKey,checkAuth,(req,res)=>{
         fuelController.updateFuel(req,res)
     })
 

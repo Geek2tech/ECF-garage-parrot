@@ -3,6 +3,7 @@ const database = require('../services/db')
 const bcrypt = require('bcrypt')
 
 const jwt = require('jsonwebtoken')
+const crypto = require("crypto");
 const SECRET_KEY = process.env.APP_SECRET_KEY
 
 /**
@@ -41,25 +42,41 @@ async function authentification(req, res) {
                     if (err) {
                         throw new Error(err);
                     }
+
                     if (response) {
+// création token xsrf
+                        const xsrfToken = crypto.randomBytes(64).toString('hex')
+                        console.log(xsrfToken)
 
                         const expireIn = 24 * 60 * 60
                         const token = jwt.sign({
                                 userFirsname: userFirstName,
                                 userLastName: userLastName,
-                                profil: userProfil
+                                profil: userProfil,
+                                xsrfToken
                             },
                             SECRET_KEY,
                             {
                                 expiresIn: expireIn
                             });
+                        res.cookie('token', token, {
+                            httpOnly:true,
+                            secure:true,
+                            maxAge:expireIn
+                        })
+                        res.send({
+                            tokenExpiresIn : expireIn,
+                            xsrfToken
+                        })
+                        //res.header('Authorization', 'Bearer ' + token)
 
-                        res.header('Authorization', 'Bearer ' + token)
 
-                        return res.status(200).json('auth_ok')
+                        //return res.status(200).json('auth_ok')
+                    }else {
+                        return res.status(403).json('wrong_credentials')
                     }
 
-                    return res.status(403).json('wrong_credentials')
+
                 })
             } else {
                 return res.status(404).json('user_not_found')
