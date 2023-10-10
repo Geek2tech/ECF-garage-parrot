@@ -7,6 +7,7 @@ const fuelController = require('../controller/Fuel.Controller')
 const profilController = require('../controller/Profil_Controller')
 const userController = require('../controller/User.controller')
 const openningController = require('../controller/Opening.Controller')
+const servicesController = require('../controller/Services.Controller')
 const checkApiKey = require('../middleware/checkApiKey')
 const checkAuth = require('../middleware/checkAuth')
 
@@ -35,6 +36,10 @@ let routes = (app) => {
         openningController.getOpeningHours(req,res)
     })
 
+    router.get('/services',checkApiKey,(req,res) => {
+        servicesController.getServices(req,res)
+    })
+
     // Route POST
 
     router.post("/mail", checkApiKey,(req,res) => {
@@ -48,7 +53,7 @@ let routes = (app) => {
         fileController.upload(req,res)
     })
     router.post('/constructor',checkApiKey,checkAuth,(req,res) => {
-        constructorController.makeConstructor(req, res)
+        constructorController.addConstructor(req, res)
     })
     router.post('/fuel',checkApiKey,checkAuth,(req,res) => {
         fuelController.makeFuel(req,res)
@@ -56,6 +61,9 @@ let routes = (app) => {
 router.post('/login',checkApiKey,(req,res) => {
     userController.authentification(req,res)
 })
+    router.post('/service',checkApiKey,(req,res)=>{
+        servicesController.addServices(req,res)
+    })
 
 
 
@@ -71,6 +79,16 @@ router.post('/login',checkApiKey,(req,res) => {
 
     router.put('/opening',checkApiKey,checkAuth,(req,res) => {
         openningController.updateOpenningHours(req,res)
+    })
+
+    router.put('/service',checkApiKey,checkAuth,(req,res) => {
+        servicesController.updateServices(req,res)
+    })
+
+    //route delete
+
+    router.delete('/service',checkApiKey,(req,res) => {
+        servicesController.deleteServices(req,res)
     })
 
     app.use(router)

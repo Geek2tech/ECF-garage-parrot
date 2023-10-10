@@ -1,5 +1,4 @@
 const paginatedResult = require("../helpers/paginatedSelectQuery");
-const database = require("../services/db");
 const {suppressSpecialChar} = require("../helpers/fieldControl");
 
 /**

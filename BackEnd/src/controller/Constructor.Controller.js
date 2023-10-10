@@ -8,7 +8,7 @@ const paginatedResult = require("../helpers/paginatedSelectQuery")
  * @param res response
  * @return response and id of the insert
  */
-async function makeConstructor(req, res) {
+async function addConstructor(req, res) {
     const database = require('../services/db')
     const request = req.body
 
@@ -55,7 +55,7 @@ async function getContructor(req, res) {
 async function updateConstructor(req, res) {
     const database = require('../services/db')
     const request = req.body
-    const query = "UPDATE ParrotDB.constructor SET constructor_name = ?  WHERE constructor_id = ? "
+    const query = "UPDATE constructor SET constructor_name = ?  WHERE constructor_id = ? "
     await database.dbconnect.query(query, [suppressSpecialChar(request.newValue), suppressSpecialChar(request.id)], (err, result) => {
         if (err) {
             console.log('Erreur lors de la mise à jour ' + err)
@@ -76,7 +76,7 @@ async function updateConstructor(req, res) {
 
 
 module.exports = {
-    makeConstructor,
+    addConstructor,
     getContructor,
     updateConstructor,
      }
