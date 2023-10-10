@@ -8,7 +8,7 @@
  * @param query sql query
  * @return {object}  number of rows ,if exist the number of previous and next page  and the result of the query
  */
-  function paginatedResult(req, res, table, query) {
+  async function paginatedResult(req, res, table, query) {
 
     // connexion à la base de données
 
@@ -17,7 +17,7 @@
     // on récupère le nombre total de lignes
 
     let countQuery = `SELECT COUNT(*) AS TOTAL from ${table}`
-       database.dbconnect.query(countQuery, (err, rows) => {
+    await   database.dbconnect.query(countQuery, (err, rows) => {
         if (err) {
             res.status(500)
             res.send("une erreur est survenu " + err)

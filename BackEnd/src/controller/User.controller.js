@@ -1,7 +1,4 @@
-const database = require('../services/db')
-
 const bcrypt = require('bcrypt')
-
 const jwt = require('jsonwebtoken')
 const crypto = require("crypto");
 const SECRET_KEY = process.env.APP_SECRET_KEY
@@ -14,10 +11,13 @@ const SECRET_KEY = process.env.APP_SECRET_KEY
  * @return {Promise<*>}
  */
 async function authentification(req, res) {
+    const database = require('../services/db')
     console.log('auth')
 
     const {email, password} = req.body
-
+    console.log(req.body)
+    console.log('email : ', email)
+    console.log('password : ', password)
 
     try {
         // recherche de l'utilisateur
@@ -60,19 +60,17 @@ async function authentification(req, res) {
                                 expiresIn: expireIn
                             });
                         res.cookie('token', token, {
-                            httpOnly:true,
-                            secure:true,
-                            maxAge:expireIn
+                            httpOnly: true,
+                            secure: true,
+                            maxAge: expireIn
                         })
+
                         res.send({
-                            tokenExpiresIn : expireIn,
+                            tokenExpiresIn: expireIn,
                             xsrfToken
                         })
-                        //res.header('Authorization', 'Bearer ' + token)
 
-
-                        //return res.status(200).json('auth_ok')
-                    }else {
+                    } else {
                         return res.status(403).json('wrong_credentials')
                     }
 

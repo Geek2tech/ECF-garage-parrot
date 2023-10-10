@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken');
-const crypto = require("crypto");
 const SECRET_KEY = process.env.APP_SECRET_KEY
 
 /**
@@ -12,22 +11,17 @@ const SECRET_KEY = process.env.APP_SECRET_KEY
  */
 async function checkAuth(req, res, next) {
     try {
-        const {cookies, headers} = req;
+        const {cookies, headers} = req
 
-        //const {headers} = req
-//   a supprimer code pour des fin de test avec Postman
-        // console.log(headers)
-        //let cookieTtoken=headers['cookie']
-        //cookieTtoken=cookieTtoken.split("=")
-        //console.log(cookieTtoken[1])
+
 
         /* On vérifie que le JWT est présent dans les cookies de la requête */
         if (!cookies || !cookies.token) {
             return res.status(401).json({message: 'Missing token in cookie'})
         }
 
-        const accessToken = cookies.token;
-        //const accessToken = cookieTtoken[1]
+        const accessToken = cookies.token
+
         /* On vérifie que le token CSRF est présent dans les en-têtes de la requête */
         if (!headers || !headers['x-xsrf-token']) {
             return res.status(401).json({message: 'Missing XSRF token in headers'})
@@ -43,9 +37,9 @@ async function checkAuth(req, res, next) {
             return res.status(401).json({message: 'Bad xsrf token'})
         }
 
-        return next();
+        return next()
     } catch (err) {
-        return res.status(500).json({message: 'Internal error ' + err});
+        return res.status(500).json({message: 'Internal error ' + err})
     }
 }
 

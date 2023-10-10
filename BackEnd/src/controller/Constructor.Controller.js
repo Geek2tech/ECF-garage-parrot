@@ -8,14 +8,14 @@ const paginatedResult = require("../helpers/paginatedSelectQuery")
  * @param res response
  * @return response and id of the insert
  */
-function makeConstructor(req, res) {
+async function makeConstructor(req, res) {
     const database = require('../services/db')
     const request = req.body
 
     const query = `INSERT INTO constructor (constructor_name)
                    VALUES (?)`
 
-    database.dbconnect.query(query, [suppressSpecialChar(request.contructor_name)], (err, result) => {
+    await database.dbconnect.query(query, [suppressSpecialChar(request.contructor_name)], (err, result) => {
         if (err) {
 
             res.status(500)
@@ -37,7 +37,7 @@ function makeConstructor(req, res) {
  * @param res response
  * @return paginated list of constructor
  */
-function getContructor(req, res) {
+async function getContructor(req, res) {
 
     const table = 'constructor'
     const query = `SELECT * FROM ${table}`
@@ -52,11 +52,11 @@ function getContructor(req, res) {
  * @param res response
  * @return response message
  */
-function updateConstructor(req, res) {
+async function updateConstructor(req, res) {
     const database = require('../services/db')
     const request = req.body
     const query = "UPDATE ParrotDB.constructor SET constructor_name = ?  WHERE constructor_id = ? "
-    database.dbconnect.query(query, [suppressSpecialChar(request.newValue), suppressSpecialChar(request.id)], (err, result) => {
+    await database.dbconnect.query(query, [suppressSpecialChar(request.newValue), suppressSpecialChar(request.id)], (err, result) => {
         if (err) {
             console.log('Erreur lors de la mise à jour ' + err)
             res.status(500)
