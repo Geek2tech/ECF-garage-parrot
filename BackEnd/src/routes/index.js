@@ -61,7 +61,7 @@ let routes = (app) => {
 router.post('/login',checkApiKey,(req,res) => {
     userController.authentification(req,res)
 })
-    router.post('/service',checkApiKey,(req,res)=>{
+    router.post('/service',checkApiKey,checkAuth,(req,res)=>{
         servicesController.addServices(req,res)
     })
 
@@ -87,7 +87,7 @@ router.post('/login',checkApiKey,(req,res) => {
 
     //route delete
 
-    router.delete('/service',checkApiKey,(req,res) => {
+    router.delete('/service',checkApiKey,checkAuth,(req,res) => {
         servicesController.deleteServices(req,res)
     })
 

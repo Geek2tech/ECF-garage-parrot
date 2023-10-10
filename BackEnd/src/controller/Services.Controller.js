@@ -29,12 +29,8 @@ async function updateServices(req, res) {
     const database = require('../services/db')
 
     const serviceName = suppressSpecialChar(req.body.name)
-    console.log(serviceName)
     const newValue = suppressSpecialChar(req.body.newValue)
-    console.log(newValue)
     const serviceDescription = suppressSpecialChar(req.body.description)
-    console.log(serviceDescription)
-
     const query = "UPDATE services SET service_name = ? , service_description = ?  WHERE service_name = ? "
 
     await database.dbconnect.query(query, [newValue, serviceDescription, serviceName], (err, result) => {

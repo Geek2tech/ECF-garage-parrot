@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const crypto = require("crypto");
+const {suppressSpecialChar} = require("../helpers/fieldControl");
 const SECRET_KEY = process.env.APP_SECRET_KEY
 
 /**
@@ -26,7 +27,7 @@ async function authentification(req, res) {
                        where email = ?  `
 
 
-        await database.dbconnect.query(query, email, (err, rows, result) => {
+        await database.dbconnect.query(query, suppressSpecialChar(email), (err, rows, result) => {
 
 
             if (rows[0] !== undefined) {
@@ -38,7 +39,7 @@ async function authentification(req, res) {
 
                 const userProfil = rows[0].profil_id
 
-                bcrypt.compare(password, passwordDb, function (err, response) {
+                bcrypt.compare(suppressSpecialChar(password), passwordDb, function (err, response) {
                     if (err) {
                         throw new Error(err);
                     }

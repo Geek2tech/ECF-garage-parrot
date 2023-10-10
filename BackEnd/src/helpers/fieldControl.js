@@ -1,3 +1,5 @@
+
+
 function suppressSpecialChar (value) {
     /**
      * @function
@@ -6,8 +8,10 @@ function suppressSpecialChar (value) {
      * @return {string} string cleaned
      */
 
+
     const valueToClean = value
-    const valueClean = valueToClean.replace(/[\W_]/g, "").trim()
+    const valueClean = valueToClean.replace(/\<|\>|\?|\$|\&|\"/g, "").trim()
+
     return valueClean
 }
 
