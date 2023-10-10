@@ -6,6 +6,7 @@ const constructorController = require('../controller/Constructor.Controller')
 const fuelController = require('../controller/Fuel.Controller')
 const profilController = require('../controller/Profil_Controller')
 const userController = require('../controller/User.controller')
+const openningController = require('../controller/Opening.Controller')
 const checkApiKey = require('../middleware/checkApiKey')
 const checkAuth = require('../middleware/checkAuth')
 
@@ -28,6 +29,10 @@ let routes = (app) => {
 
     router.get('/profils', checkApiKey,checkAuth,(req,res) => {
         profilController.getProfil(req,res)
+    })
+
+    router.get('/openinghours',checkApiKey,(req,res) => {
+        openningController.getOpeningHours(req,res)
     })
 
     // Route POST
@@ -62,6 +67,10 @@ router.post('/login',checkApiKey,(req,res) => {
 
     router.put('/fuel',checkApiKey,checkAuth,(req,res)=>{
         fuelController.updateFuel(req,res)
+    })
+
+    router.put('/opening',checkApiKey,checkAuth,(req,res) => {
+        openningController.updateOpenningHours(req,res)
     })
 
     app.use(router)

@@ -60,6 +60,7 @@ async function updateConstructor(req, res) {
         if (err) {
             console.log('Erreur lors de la mise à jour ' + err)
             res.status(500)
+            res.send('Erreur lors de la mise à jour ' + err)
 
         } else {
             res.status(200)
