@@ -2,13 +2,11 @@ const bcrypt = require('bcrypt')
 const logger = require('../services/Logger')
 
 function stringCrypt(value) {
-    const now = new Date()
-    const time =now.getHours() + ":" + now.getMinutes() + ':' + now.getSeconds()
 
     logger.log({
         level: 'info',
         module: 'passwordCrypt',
-        message: ` ${time}  Call stringCrypt `
+        message: `Call stringCrypt `
     })
 
     const saltRound = 10
