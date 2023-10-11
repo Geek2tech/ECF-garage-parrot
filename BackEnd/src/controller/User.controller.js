@@ -22,23 +22,23 @@ async function authentification(req, res) {
 
     try {
         // recherche de l'utilisateur
-        const query = `select *
-                       from users
-                       where email = ?  `
 
 
+        const query = `SELECT u.first_name, u.last_name, u.email, u.password, p.profil_name
+                       from users as u
+                                join profils as p on u.profil_id = p.profil_id
+                       where u.email = ?`
         await database.dbconnect.query(query, suppressSpecialChar(email), (err, rows, result) => {
-
 
             if (rows[0] !== undefined) {
                 const passwordDb = rows[0].password
-                const userFirstName = rows[0].firstName
-                const userLastName = rows[0].lastName
+                const userFirstName = rows[0].first_name
+                const userLastName = rows[0].last_name
                 console.log(userFirstName)
                 console.log(userLastName)
 
-                const userProfil = rows[0].profil_id
-
+                const userProfil = rows[0].profil_name
+                console.log(userProfil)
                 bcrypt.compare(suppressSpecialChar(password), passwordDb, function (err, response) {
                     if (err) {
                         throw new Error(err);
