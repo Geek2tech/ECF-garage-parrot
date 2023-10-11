@@ -39,6 +39,7 @@ async function addConstructor(req, res) {
                 module: 'Constructor',
                 message: `Insert successfully with id : ${result.insertId}`
             })
+            res.status(201)
             res.send("ok : " + result.insertId)
 
 

@@ -61,9 +61,9 @@ async function updateServices(req, res) {
             if (result.affectedRows === 0) {
 
                 logger.log({
-                    level:'info',
-                    module:'Services',
-                    message:`Nothing to update : ${result.message}`
+                    level: 'info',
+                    module: 'Services',
+                    message: `Nothing to update : ${result.message}`
                 })
 
                 res.status(204)
@@ -71,9 +71,9 @@ async function updateServices(req, res) {
             } else {
 
                 logger.log({
-                    level:'info',
-                    module:'Services',
-                    message:`Update successfully : ${result.message}`
+                    level: 'info',
+                    module: 'Services',
+                    message: `Update successfully : ${result.message}`
                 })
 
                 res.status(200)
@@ -118,11 +118,12 @@ async function addServices(req, res) {
             res.send(err.sqlMessage)
 
         } else {
-logger.log({
-    level:'info',
-    module:'Services',
-    message:`Insert successfull : id = ${result.insertId}`
-})
+            logger.log({
+                level: 'info',
+                module: 'Services',
+                message: `Insert successfull : id = ${result.insertId}`
+            })
+            res.status(201)
             res.send("ok : " + result.insertId)
 
 
@@ -136,9 +137,9 @@ async function deleteServices(req, res) {
     const whereValue = req.body.whereValue
 
     logger.log({
-        level:'info',
-        module:'Services',
-        message:`Call deleteServices with params : ${table} , ${whereField} , ${whereValue} `
+        level: 'info',
+        module: 'Services',
+        message: `Call deleteServices with params : ${table} , ${whereField} , ${whereValue} `
     })
 
     deleteItem(res, table, whereField, whereValue)

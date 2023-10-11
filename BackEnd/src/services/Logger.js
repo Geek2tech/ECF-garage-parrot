@@ -14,7 +14,7 @@ const logger = winston.createLogger({
         }),
         new dailyRotateFile({
             filename : './log/combined-%DATE%.log',
-            datePattern:'YYYY-MM-DD-HH-MM',
+            datePattern:'YYYY-MM-DD',
             zippedArchive :true,
             maxSize:'20m',
             maxFiles :'14d',
@@ -25,9 +25,13 @@ const logger = winston.createLogger({
 })
 
 
+
+
+
+
 if (process.env.NODE_ENV !== 'production') {
     logger.add(new winston.transports.Console({
-        format:winston.format.simple(),
+        format:winston.format.simple()
     }))
 }
 
