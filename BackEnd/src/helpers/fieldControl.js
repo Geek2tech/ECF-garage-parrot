@@ -1,4 +1,4 @@
-
+const logger = require('../services/Logger')
 
 function suppressSpecialChar (value) {
     /**
@@ -8,6 +8,11 @@ function suppressSpecialChar (value) {
      * @return {string} string cleaned
      */
 
+    logger.log({
+        level:'info',
+        module:'fieldControl',
+        message:`Call fielControl with params : ${value}`
+    })
 
     const valueToClean = value
     const valueClean = valueToClean.replace(/\<|\>|\?|\$|\&|\"/g, "").trim()

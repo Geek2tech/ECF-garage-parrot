@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const SECRET_KEY = process.env.APP_SECRET_KEY
+const logger = require('../services/Logger')
 
 /**
  * @function
@@ -10,13 +11,27 @@ const SECRET_KEY = process.env.APP_SECRET_KEY
  * @return {Promise<*>}
  */
 async function checkAuth(req, res, next) {
+
+    logger.log({
+        level: 'info',
+        module: 'chekcAuth',
+        message: 'Call checkAuth'
+
+    })
+
     try {
         const {cookies, headers} = req
 
 
-
         /* On vérifie que le JWT est présent dans les cookies de la requête */
         if (!cookies || !cookies.token) {
+
+            logger.log({
+                level: 'error',
+                module: 'checkAuth',
+                message: 'Missing token in cookie'
+            })
+
             return res.status(401).json({message: 'Missing token in cookie'})
         }
 
@@ -24,6 +39,13 @@ async function checkAuth(req, res, next) {
 
         /* On vérifie que le token CSRF est présent dans les en-têtes de la requête */
         if (!headers || !headers['x-xsrf-token']) {
+
+            logger.log({
+                level: 'error',
+                module: 'checkAuth',
+                message: 'Missing XSRF token in headers'
+            })
+
             return res.status(401).json({message: 'Missing XSRF token in headers'})
         }
 
@@ -34,11 +56,25 @@ async function checkAuth(req, res, next) {
 
         /* On vérifie que le token CSRF correspond à celui présent dans le JWT  */
         if (xsrfToken !== decodedToken.xsrfToken) {
+
+            logger.log({
+                level: 'error',
+                module: 'checkAuth',
+                message: 'Bad xsrf token'
+            })
+
             return res.status(401).json({message: 'Bad xsrf token'})
         }
 
         return next()
     } catch (err) {
+
+        logger.log({
+            level:'error',
+            module:'checkAuth',
+            message:`Internal error ${err}`
+        })
+
         return res.status(500).json({message: 'Internal error ' + err})
     }
 }

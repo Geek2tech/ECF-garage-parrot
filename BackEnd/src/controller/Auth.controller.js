@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken')
 const crypto = require("crypto");
 const {suppressSpecialChar} = require("../helpers/fieldControl");
 const SECRET_KEY = process.env.APP_SECRET_KEY
+const logger = require('../services/Logger')
 
 /**
  * @function
@@ -13,12 +14,15 @@ const SECRET_KEY = process.env.APP_SECRET_KEY
  */
 async function authentification(req, res) {
     const database = require('../services/db')
-    console.log('auth')
+
+    logger.log({
+        level: 'info',
+        module: 'Authentification',
+        message: 'Authentification request'
+    })
 
     const {email, password} = req.body
-    console.log(req.body)
-    console.log('email : ', email)
-    console.log('password : ', password)
+
 
     try {
         // recherche de l'utilisateur
@@ -30,24 +34,44 @@ async function authentification(req, res) {
                        where u.email = ?`
         await database.dbconnect.query(query, suppressSpecialChar(email), (err, rows, result) => {
 
+            const passwordDb = rows[0].password
+            const userFirstName = rows[0].first_name
+            const userLastName = rows[0].last_name
+
             if (rows[0] !== undefined) {
-                const passwordDb = rows[0].password
-                const userFirstName = rows[0].first_name
-                const userLastName = rows[0].last_name
-                console.log(userFirstName)
-                console.log(userLastName)
+                logger.log({
+                    level: 'info',
+                    module: 'Authentification',
+                    message: `User ${userFirstName} ${userLastName} found `
+                })
+
 
                 const userProfil = rows[0].profil_name
-                console.log(userProfil)
+
                 bcrypt.compare(suppressSpecialChar(password), passwordDb, function (err, response) {
                     if (err) {
+                        logger.log({
+                            level: 'error',
+                            module: 'Authentification',
+                            message: `Error when compare decrypted password : ${err} `
+                        })
                         throw new Error(err);
                     }
 
                     if (response) {
+
+                        logger.log({
+                            level: 'info',
+                            module: 'Authentification',
+                            message: 'User password ok'
+                        })
 // création token xsrf
                         const xsrfToken = crypto.randomBytes(64).toString('hex')
-                        console.log(xsrfToken)
+                        logger.log({
+                            level: 'info',
+                            module: 'Authentification',
+                            message: 'xsrf token generated'
+                        })
 
                         const expireIn = 24 * 60 * 60
                         const token = jwt.sign({
@@ -65,25 +89,49 @@ async function authentification(req, res) {
                             secure: true,
                             maxAge: expireIn
                         })
-
+                        logger.log({
+                            level: 'info',
+                            module: 'Authentification',
+                            message: 'JWT token generated and stocked'
+                        })
+                        logger.log({
+                            level: 'info',
+                            module: 'Authentification',
+                            message: `user ${userFirstName} ${userLastName} is connected`
+                        })
                         res.send({
                             tokenExpiresIn: expireIn,
                             xsrfToken
                         })
 
                     } else {
+                        logger.log({
+                            level: 'error',
+                            module: 'Authentification',
+                            message: `Wrong credentials for ${email}`
+                        })
                         return res.status(403).json('wrong_credentials')
                     }
 
 
                 })
             } else {
+                logger.log({
+                    level: 'error',
+                    module: 'Authentification',
+                    message: ` user ${email} not found `
+                })
                 return res.status(404).json('user_not_found')
             }
         })
 
     } catch (err) {
-        console.log(err)
+        logger.log({
+            level: 'error',
+            module: 'Authentification',
+            message: `Internal error : ${err} `
+        })
+
         return res.status(501).json(err)
     }
 

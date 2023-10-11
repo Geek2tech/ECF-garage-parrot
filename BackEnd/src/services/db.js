@@ -1,4 +1,11 @@
 const mysql = require('mysql')
+const logger = require('./Logger')
+
+logger.log({
+    level:'info',
+    module:'DB',
+    message:'Call DB service'
+})
 
 const dbconnect = mysql.createConnection({
     host: process.env.APP_DBHOST,
@@ -9,10 +16,21 @@ const dbconnect = mysql.createConnection({
 })
 dbconnect.connect(function (err) {
     if (err) {
-        console.log(err)
-        console.log("une erreur est survenue")
+
+        logger.log({
+            level:'error',
+            module:'DB',
+            message:`Erreur de connection ${err}`
+        })
+
+
     } else {
-        console.log("Connecté à la base de données MySQL!")
+        logger.log({
+            level:'info',
+            module:'DB',
+            message:'Connected to BDD'
+        })
+
     }
 })
 module.exports = {

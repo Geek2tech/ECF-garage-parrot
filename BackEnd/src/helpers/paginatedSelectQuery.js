@@ -8,7 +8,15 @@
  * @param query sql query
  * @return {object}  number of rows ,if exist the number of previous and next page  and the result of the query
  */
-  async function paginatedResult(req, res, table, query) {
+const logger = require('../services/Logger')
+
+async function paginatedResult(req, res, table, query) {
+
+    logger.log({
+        level: 'info',
+        module: 'paginatedSelectQuery',
+        message: `Call paginatedResult with params : ${table} , ${query} `
+    })
 
     // connexion à la base de données
 
@@ -16,9 +24,17 @@
 
     // on récupère le nombre total de lignes
 
-    let countQuery = `SELECT COUNT(*) AS TOTAL from ${table}`
-    await   database.dbconnect.query(countQuery, (err, rows) => {
+    let countQuery = `SELECT COUNT(*) AS TOTAL
+                      from ${table}`
+    await database.dbconnect.query(countQuery, (err, rows) => {
         if (err) {
+
+            logger.log({
+                level: 'error',
+                module: 'paginatedSelectQuery',
+                message: `Sql Error : ${err}`
+            })
+
             res.status(500)
             res.send("une erreur est survenu " + err)
         }
@@ -27,7 +43,8 @@
 
         // on récupère les résultats
 
-        dbQuery = ` SELECT * from ${table}`
+        dbQuery = ` SELECT *
+                    from ${table}`
         database.dbconnect.query(query, (err, rows) => {
 
             //construction des limites d'affichage, si pas précisé on utilise 1 pour la page et le nombre de ligne en limit
@@ -35,7 +52,7 @@
             let page = parseInt(req.query.page)
             let limit = parseInt(req.query.limit)
             if (!limit) limit = rows.length
-            if (!page)  page = 1
+            if (!page) page = 1
 
             //construction des index d'affichage
 
@@ -68,7 +85,11 @@
             results.results = rows.slice(startIndex, endIndex)
 
             // envoie du resultat
-
+            logger.log({
+                level: 'info',
+                module: 'paginatedSelectQuery',
+                message: `Process ok : ${results.rows} results in ${results.pages} pages`
+            })
             res.send(results)
         })
     })

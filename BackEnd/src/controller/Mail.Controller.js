@@ -1,7 +1,6 @@
 const nodemailer = require('nodemailer')
 const {suppressSpecialChar} = require("../helpers/fieldControl");
-
-
+const logger = require('../services/Logger')
 
 
 const transporter = nodemailer.createTransport({
@@ -14,23 +13,36 @@ const transporter = nodemailer.createTransport({
     }
 })
 
-async function sendMail(req,res) {
+async function sendMail(req, res) {
 
     const mailInfo = req.body
-
-    const info = await transporter.sendMail( {
-        from : process.env.APP_SMTPUSER,
-        to:'demuylder.herve@gmail.com',
+    logger.log({
+        level: 'info',
+        module: 'Mail',
+        message: `Call sendMail`
+    })
+    const info = await transporter.sendMail({
+        from: process.env.APP_SMTPUSER,
+        to: 'demuylder.herve@gmail.com',
         subject: 'Demande d information d un client',
         text: suppressSpecialChar(mailInfo.message),
 
     })
         .then(() => {
-
+            logger.log({
+                level: 'info',
+                module: 'Mail',
+                message: 'Mail sent with success'
+            })
             res.status(200)
             res.send("Message envoyé avec success")
         })
         .catch((err) => {
+            logger.log({
+                level:'error',
+                module:'Mail',
+                message:`Error during send mail : ${err} `
+            })
             console.log(err)
             res.status(500)
             res.send(err)
@@ -38,7 +50,6 @@ async function sendMail(req,res) {
 
 
 }
-
 
 
 module.exports = {

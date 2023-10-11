@@ -5,6 +5,7 @@ const bodyParser= require("body-parser")
 const helmet = require("helmet")
 const cors = require("cors")
 const initRoutes =require("./src/routes")
+const logger = require('./src/services/Logger')
 
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
@@ -23,7 +24,12 @@ initRoutes(app)
 let port = process.env.APP_PORT
 
 app.listen(port, () => {
-    console.log(`server running at localhost:${port}`)
+    logger.log({
+        level:'info',
+        module :'App',
+        message:`Server started on port : ${port}`
+    })
+
 
 })
 

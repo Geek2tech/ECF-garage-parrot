@@ -1,5 +1,6 @@
 const paginatedResult = require("../helpers/paginatedSelectQuery");
 const {suppressSpecialChar} = require("../helpers/fieldControl");
+const logger = require("../services/Logger");
 
 /**
  * @function
@@ -8,12 +9,18 @@ const {suppressSpecialChar} = require("../helpers/fieldControl");
  * @param res response
  * @return paginated list of constructor
  */
-function getFuel (req,res) {
+function getFuel(req, res) {
 
     const table = 'fuels'
-    const query = `SELECT * FROM ${table}`
+    const query = `SELECT *
+                   FROM ${table}`
 
-    paginatedResult(req, res,table,query)
+    logger.log({
+        level: 'info',
+        module: 'Fuel',
+        message: `Call getFuel`
+    })
+    paginatedResult(req, res, table, query)
 }
 
 
@@ -24,22 +31,36 @@ function getFuel (req,res) {
  * @param res response
  * @return response and id of the insert
  */
-function makeFuel (req,res) {
+function addFuel(req, res) {
 
     const database = require('../services/db')
-    const request = req.body
+    const fuel_name = suppressSpecialChar(req.body.fuel_name)
+
+    logger.log({
+        level: 'info',
+        module: 'Fuel',
+        message: `Call addFuel with params : ${fuel_name}`
+    })
 
     const query = `INSERT INTO fuels (fuel_name)
                    VALUES (?)`
 
-    database.dbconnect.query(query, [suppressSpecialChar(request.fuel_name)], (err, result) => {
+    database.dbconnect.query(query, [fuel_name], (err, result) => {
         if (err) {
-
+            logger.log({
+                level: 'error',
+                module: 'Fuel',
+                message: `SQL error : ${err.sqlMessage}`
+            })
             res.status(500)
             res.send(err.sqlMessage)
 
         } else {
-
+            logger.log({
+                level: 'info',
+                module: 'Fuel',
+                message: `Insert successfully with id : ${result.insertId}`
+            })
             res.send("ok : " + result.insertId)
 
 
@@ -48,6 +69,7 @@ function makeFuel (req,res) {
 
 
 }
+
 /**
  * @function
  * @description Update a fuel in the database
@@ -55,19 +77,48 @@ function makeFuel (req,res) {
  * @param res response
  * @return response message
  */
-function updateFuel(req,res) {
+function updateFuel(req, res) {
 
     const database = require('../services/db')
-    const request = req.body
-    const query = "UPDATE ParrotDB.fuels SET fuel_name = ?  WHERE fuel_id = ? "
-    database.dbconnect.query(query, [suppressSpecialChar(request.newValue), suppressSpecialChar(request.id)], (err, result) => {
+
+    const fuelName = suppressSpecialChar(req.body.fuelName)
+    const newValue = suppressSpecialChar(req.body.newValue)
+    const query = "UPDATE ParrotDB.fuels SET fuel_name = ?  WHERE fuel_name = ? "
+    database.dbconnect.query(query, [newValue,fuelName], (err, result) => {
         if (err) {
-            console.log('Erreur lors de la mise à jour ' + err)
+
+            logger.log({
+                level: 'error',
+                module: 'Fuel',
+                message: `Update Error : ${err}`
+            })
+
             res.status(500)
+            res.send(`SQL error : ${err} `)
 
         } else {
-            res.status(200)
-            res.send(result.message)
+
+            if (result.affectedRows === 0) {
+
+                logger.log({
+                    level:'info',
+                    module:'Fuel',
+                    message:`Nothing to update : ${result.message}`
+                })
+
+                res.status(204)
+                res.send("aucun élément à supprimer")
+            } else {
+
+                logger.log({
+                    level:'info',
+                    module:'Fuel',
+                    message:`Update successfully : ${result.message}`
+                })
+
+                res.status(200)
+                res.send(result.message)
+            }
 
         }
     })
@@ -77,6 +128,6 @@ function updateFuel(req,res) {
 
 module.exports = {
     getFuel,
-    makeFuel,
+    addFuel,
     updateFuel
 }

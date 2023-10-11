@@ -5,7 +5,7 @@ const fileController = require("../controller/File.Controller")
 const constructorController = require('../controller/Constructor.Controller')
 const fuelController = require('../controller/Fuel.Controller')
 const profilController = require('../controller/Profil_Controller')
-const userController = require('../controller/User.controller')
+const userController = require('../controller/Auth.controller')
 const openningController = require('../controller/Opening.Controller')
 const servicesController = require('../controller/Services.Controller')
 const checkApiKey = require('../middleware/checkApiKey')
@@ -56,7 +56,7 @@ let routes = (app) => {
         constructorController.addConstructor(req, res)
     })
     router.post('/fuel',checkApiKey,checkAuth,(req,res) => {
-        fuelController.makeFuel(req,res)
+        fuelController.addFuel(req,res)
     })
 router.post('/login',checkApiKey,(req,res) => {
     userController.authentification(req,res)

@@ -1,5 +1,6 @@
 const {suppressSpecialChar} = require("../helpers/fieldControl");
 const paginatedResult = require("../helpers/paginatedSelectQuery")
+const logger = require('../services/Logger')
 
 /**
  * @function
@@ -11,18 +12,33 @@ const paginatedResult = require("../helpers/paginatedSelectQuery")
 async function addConstructor(req, res) {
     const database = require('../services/db')
     const request = req.body
+    const constructorName = suppressSpecialChar(req.body.constructor_name)
+
+    logger.log({
+        level: 'info',
+        module: 'Constructor',
+        message: `Call addConstructor with params : ${constructorName}`
+    })
 
     const query = `INSERT INTO constructor (constructor_name)
                    VALUES (?)`
 
-    await database.dbconnect.query(query, [suppressSpecialChar(request.contructor_name)], (err, result) => {
+    await database.dbconnect.query(query, [constructorName], (err, result) => {
         if (err) {
-
+            logger.log({
+                level: 'error',
+                module: 'Constructor',
+                message: `SQL error : ${err.sqlMessage}`
+            })
             res.status(500)
             res.send(err.sqlMessage)
 
         } else {
-
+            logger.log({
+                level: 'info',
+                module: 'Constructor',
+                message: `Insert successfully with id : ${result.insertId}`
+            })
             res.send("ok : " + result.insertId)
 
 
@@ -40,9 +56,16 @@ async function addConstructor(req, res) {
 async function getContructor(req, res) {
 
     const table = 'constructor'
-    const query = `SELECT * FROM ${table}`
+    const query = `SELECT *
+                   FROM ${table}`
 
-    paginatedResult(req, res,table,query)
+    logger.log({
+        level: 'info',
+        module: 'Constructor',
+        message: 'Call getConstructor'
+    })
+
+    paginatedResult(req, res, table, query)
 }
 
 /**
@@ -55,28 +78,61 @@ async function getContructor(req, res) {
 async function updateConstructor(req, res) {
     const database = require('../services/db')
     const request = req.body
-    const query = "UPDATE constructor SET constructor_name = ?  WHERE constructor_id = ? "
-    await database.dbconnect.query(query, [suppressSpecialChar(request.newValue), suppressSpecialChar(request.id)], (err, result) => {
+    const constructorName = suppressSpecialChar(req.body.constructorName)
+    const newValue = suppressSpecialChar(req.body.newValue)
+
+    logger.log({
+        level: 'info',
+        module: 'Constructor',
+        message: `Call updateContructor with param : ${constructorName} , ${newValue}`
+    })
+
+    const query = "UPDATE constructor SET constructor_name = ?  WHERE constructor_name = ? "
+    await database.dbconnect.query(query, [newValue, constructorName], (err, result) => {
         if (err) {
-            console.log('Erreur lors de la mise à jour ' + err)
+
+            logger.log({
+                level: 'error',
+                module: 'Constructor',
+                message: `Update Error : ${err}`
+            })
+
             res.status(500)
             res.send('Erreur lors de la mise à jour ' + err)
 
         } else {
-            res.status(200)
-            res.send(result.message)
+
+
+            if (result.affectedRows === 0) {
+
+                logger.log({
+                    level:'info',
+                    module:'Constructor',
+                    message:`Nothing to update : ${result.message}`
+                })
+
+                res.status(204)
+                res.send("aucun élément à supprimer")
+            } else {
+
+                logger.log({
+                    level:'info',
+                    module:'Constructor',
+                    message:`Update successfully : ${result.message}`
+                })
+
+                res.status(200)
+                res.send(result.message)
+            }
+
 
         }
     })
 }
 
 
-
-
-
-
 module.exports = {
     addConstructor,
     getContructor,
     updateConstructor,
-     }
+}
