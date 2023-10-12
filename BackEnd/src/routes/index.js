@@ -1,36 +1,38 @@
 const express = require("express");
 const router = express.Router();
-
+const fs = require('fs')
 const checkApiKey = require('../middleware/checkApiKey')
 const checkAuth = require('../middleware/checkAuth')
+const logger = require('../services/Logger')
 
-const testRoute = require('./test')
-const constructorRoutes = require('./routes/contructorRoutes')
-const mailRoutes = require('./routes/mailRoutes')
-const fileRoutes = require('./routes/fileRoutes')
-const fuelRoutes = require('./routes/fuelRoutes')
-const profilRoutes = require('./routes/profilRoutes')
-const openingHoursRoutes = require('./routes/openingHoursRoutes')
-const authRoutes = require('./routes/authRoutes')
-const servicesRoutes = require('./routes/servicesRoutes')
-const towingRoutes = require('./routes/towingsRoutes')
-const transmissionRoutes = require('./routes/transmissionRoutes')
+
 let routes = (app) => {
 
     app.all('/*', checkApiKey)
     app.all('*/protected/*', checkAuth)
 
-    app.use("/", testRoute)
-    app.use('/', constructorRoutes)
-    app.use('/', mailRoutes)
-    app.use('/', fileRoutes)
-    app.use('/', fuelRoutes)
-    app.use('/', profilRoutes)
-    app.use('/', openingHoursRoutes)
-    app.use('/', authRoutes)
-    app.use('/', servicesRoutes)
-    app.use('/', towingRoutes)
-    app.use('/',transmissionRoutes)
+    const routes_directory = require('path').resolve(__dirname) + "/routes/"
+
+    fs.readdirSync(routes_directory).forEach(route_file => {
+
+        logger.log({
+            level:'info',
+            module:'Routes',
+            message:`Loading route file : ${route_file}`
+        })
+        try {
+            app.use('/',require(routes_directory + route_file))
+        } catch (error) {
+            logger.log({
+                level:'error',
+                module:'Route',
+                message:`Error during charging routes : ${error}`
+            })
+                }
+
+    })
+
+
 
 
 
