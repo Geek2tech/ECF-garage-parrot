@@ -1,10 +1,6 @@
 const express = require("express");
 const router = express.Router();
 
-const AuthController = require('../controller/Auth.controller')
-const servicesController = require('../controller/Services.Controller')
-const towingController = require('../controller/Towing.Controller')
-const transmissionController = require('../controller/Transmission.Controller')
 const checkApiKey = require('../middleware/checkApiKey')
 const checkAuth = require('../middleware/checkAuth')
 
