@@ -8,6 +8,7 @@ const profilController = require('../controller/Profil_Controller')
 const userController = require('../controller/Auth.controller')
 const openningController = require('../controller/Opening.Controller')
 const servicesController = require('../controller/Services.Controller')
+const towingController = require('../controller/Towing.Controller')
 const checkApiKey = require('../middleware/checkApiKey')
 const checkAuth = require('../middleware/checkAuth')
 
@@ -38,6 +39,10 @@ let routes = (app) => {
 
     router.get('/services',checkApiKey,(req,res) => {
         servicesController.getServices(req,res)
+    })
+
+    router.get('/towings',checkApiKey,(req,res)=>{
+        towingController.getTowing(req,res)
     })
 
     // Route POST
