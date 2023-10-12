@@ -9,6 +9,7 @@ const userController = require('../controller/Auth.controller')
 const openningController = require('../controller/Opening.Controller')
 const servicesController = require('../controller/Services.Controller')
 const towingController = require('../controller/Towing.Controller')
+const transmissionController = require('../controller/Transmission.Controller')
 const checkApiKey = require('../middleware/checkApiKey')
 const checkAuth = require('../middleware/checkAuth')
 
@@ -43,6 +44,10 @@ let routes = (app) => {
 
     router.get('/towings',checkApiKey,(req,res)=>{
         towingController.getTowing(req,res)
+    })
+
+    router.get('/transmissions', checkApiKey , (req,res) => {
+        transmissionController.getTransmission(req,res)
     })
 
     // Route POST
