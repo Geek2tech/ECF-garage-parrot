@@ -24,6 +24,8 @@ global.__basedir = __dirname
 initRoutes(app)
 
 
+
+
 let port = process.env.APP_PORT
 
 app.listen(port, () => {

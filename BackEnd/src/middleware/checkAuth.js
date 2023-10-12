@@ -29,7 +29,7 @@ async function checkAuth(req, res, next) {
             logger.log({
                 level: 'error',
                 module: 'checkAuth',
-                message: 'Missing token in cookie'
+                message: `Missing token in cookie when try to access to ${req.url}`
             })
 
             return res.status(401).json({message: 'Missing token in cookie'})
@@ -43,7 +43,7 @@ async function checkAuth(req, res, next) {
             logger.log({
                 level: 'error',
                 module: 'checkAuth',
-                message: 'Missing XSRF token in headers'
+                message: `Missing XSRF token in headers when try to access ${req.url}`
             })
 
             return res.status(401).json({message: 'Missing XSRF token in headers'})

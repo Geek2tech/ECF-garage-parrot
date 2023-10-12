@@ -15,7 +15,7 @@ function suppressSpecialChar (value) {
     })
 
     const valueToClean = value
-    const valueClean = valueToClean.replace(/\<|\>|\?|\$|\&|\"/g, "").trim()
+    const valueClean = valueToClean.replace(/\<|\>|\?|\$|\&|\"|\!|\=/g, "").trim()
 
     return valueClean
 }
