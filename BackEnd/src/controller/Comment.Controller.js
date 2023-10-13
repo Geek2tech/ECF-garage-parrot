@@ -139,7 +139,7 @@ async function deleteComment(req, res) {
              message:`Delete successfully ${result.affectedRows}`
          })
          res.status(200)
-         res.send(`Delete Ok : ${result.sqlMessage}`)
+         res.send(`Delete Ok }`)
      }
 
 

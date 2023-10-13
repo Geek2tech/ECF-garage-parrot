@@ -74,7 +74,7 @@ async function updateServices(req, res) {
                 })
 
                 res.status(204)
-                res.send("aucun élément à supprimer")
+                res.send("aucun élément à mettre à jour")
             } else {
 
                 logger.log({

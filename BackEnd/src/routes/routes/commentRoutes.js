@@ -11,6 +11,6 @@ router.get('/protected/commentsPending',commentController.getUnvalidatedComment)
 // Add comment
 router.post('/comment',commentController.addComment)
 // Delete comment
-router.delete('/comment',commentController.deleteComment)
+router.delete('/protected/comment',commentController.deleteComment)
 
 module.exports = router
