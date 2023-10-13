@@ -3,7 +3,6 @@ const logger = require('../services/Logger')
 const transporter = require('../services/mailTransporter')
 
 
-
 async function sendMail(req, res) {
 
     const mailInfo = req.body
@@ -13,7 +12,10 @@ async function sendMail(req, res) {
         message: `Call sendMail`
     })
     await transporter.sendMail({
-        from: process.env.APP_SMTPUSER,
+        from: {
+            name: 'Garage Parrot',
+            address: process.env.APP_SMTPUSER
+        },
         to: 'demuylder.herve@gmail.com',
         subject: 'Demande d information d un client',
         text: suppressSpecialChar(mailInfo.message),
@@ -30,9 +32,9 @@ async function sendMail(req, res) {
         })
         .catch((err) => {
             logger.log({
-                level:'error',
-                module:'Mail',
-                message:`Error during send mail : ${err} `
+                level: 'error',
+                module: 'Mail',
+                message: `Error during send mail : ${err} `
             })
             console.log(err)
             res.status(500)

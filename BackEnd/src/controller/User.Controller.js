@@ -119,7 +119,10 @@ async function addUser(req, res) {
                          message:`User successfully created : ${result.message}`
                      })
                       transporter.sendMail({
-                         from: process.env.APP_SMTPUSER,
+                         from: {
+                             name: 'Garage Parrot',
+                             address: process.env.APP_SMTPUSER
+                         },
                          to: newUser.email,
                          subject: 'Votre nouveau password',
                          text: `Voici votre nouveau password : ${password}`,
