@@ -1,17 +1,9 @@
 const nodemailer = require('nodemailer')
 const {suppressSpecialChar} = require("../helpers/fieldControl");
 const logger = require('../services/Logger')
+const transporter = require('../helpers/mailTransporter')
 
 
-const transporter = nodemailer.createTransport({
-    host: process.env.APP_SMTPSERVER,
-    port: process.env.APP_SMTPPORT,
-    secure: process.env.APP_SMTPSECURE,
-    auth: {
-        user: process.env.APP_SMTPUSER,
-        pass: process.env.APP_SMTPPASSWORD
-    }
-})
 
 async function sendMail(req, res) {
 

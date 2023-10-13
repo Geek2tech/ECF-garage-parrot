@@ -17,3 +17,4 @@ function genUUID(){
     return uuid
 }
 
+module.exports= genUUID
