@@ -31,13 +31,26 @@ async function addConstructor(req, res) {
 
     await database.dbconnect.query(query, [constructorName], (err, result) => {
         if (err) {
-            logger.log({
-                level: 'error',
-                module: 'Constructor',
-                message: `SQL error : ${err.sqlMessage}`
-            })
-            res.status(500)
-            res.send(err.sqlMessage)
+             if (err.code === 'ER_DUP_ENTRY') {
+                logger.log({
+                    level:'error',
+                    module:'Constructor',
+                    message:`Duplicate Entry`
+                })
+                 res.status(204)
+                 res.send('Entré déja existant')
+
+            } else {
+                 logger.log({
+                     level: 'error',
+                     module: 'Constructor',
+                     message: `SQL error : ${err.sqlMessage}`
+                 })
+                 res.status(500)
+                 res.send(err.sqlMessage)
+             }
+
+
 
         } else {
             logger.log({

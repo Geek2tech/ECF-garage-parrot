@@ -14,7 +14,7 @@ const dbconnect = mysql.createConnection({
     database: process.env.APP_DB,
     multipleStatements: false
 })
-dbconnect.connect(function (err) {
+ dbconnect.connect(function (err) {
     if (err) {
 
         logger.log({

@@ -2,7 +2,13 @@ const logger = require('../services/Logger')
 const paginatedSelectQuery = require('../helpers/paginatedSelectQuery')
 const {suppressSpecialChar} = require("../helpers/fieldControl");
 
-
+/**
+ * @function
+ * @description Get list of equipement
+ * @param req
+ * @param res
+ * @return {Promise<void>}
+ */
 async function getEquipements(req, res) {
 
     logger.log({
@@ -17,6 +23,13 @@ async function getEquipements(req, res) {
 
 }
 
+/**
+ * @function
+ * @description Add an equipement
+ * @param req
+ * @param res
+ * @return {Promise<void>}
+ */
 async function addEquipement(req, res) {
 
     const equipement_name = suppressSpecialChar(req.body.equipement_name)
@@ -60,6 +73,13 @@ async function addEquipement(req, res) {
 
 }
 
+/**
+ * @function
+ * @description Update an equipement
+ * @param req
+ * @param res
+ * @return {Promise<void>}
+ */
 async function updateEquipement(req, res) {
 
     const equipement_name = suppressSpecialChar(req.body.equipement_name)

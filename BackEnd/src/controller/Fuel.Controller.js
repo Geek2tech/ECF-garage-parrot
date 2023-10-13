@@ -53,13 +53,28 @@ function addFuel(req, res) {
 
     database.dbconnect.query(query, [fuel_name], (err, result) => {
         if (err) {
-            logger.log({
-                level: 'error',
-                module: 'Fuel',
-                message: `SQL error : ${err.sqlMessage}`
-            })
-            res.status(500)
-            res.send(err.sqlMessage)
+            if (err.code === 'ER_DUP_ENTRY') {
+                logger.log({
+                    level:'error',
+                    module:'Fuel',
+                    message:`Duplicate Entry`
+                })
+                res.status(204)
+                res.send('Entré déja existant')
+
+            }else {
+                logger.log({
+                    level: 'error',
+                    module: 'Fuel',
+                    message: `SQL error : ${err.sqlMessage}`
+                })
+                res.status(500)
+                res.send(err.sqlMessage)
+
+            }
+
+
+
 
         } else {
             logger.log({
