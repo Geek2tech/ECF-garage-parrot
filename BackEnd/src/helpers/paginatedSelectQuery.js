@@ -22,94 +22,68 @@ async function paginatedResult(req, res, table, query) {
 
     const database = require('../services/db')
 
-    // on récupère le nombre total de lignes
 
-    let countQuery = `SELECT COUNT(*) AS TOTAL
-                      from ${table}`
+    // on récupère les résultats
+
 
     logger.log({
-        level:'info',
-        module:'paginatedSelectQuery',
-        message:'BDD request'
+        level: 'info',
+        module: 'paginatedSelectQuery',
+        message: 'BDD request'
     })
 
 
-    await database.dbconnect.query(countQuery, (err, rows) => {
-        if (err) {
+    database.dbconnect.query(query, (err, rows) => {
 
-            logger.log({
-                level: 'error',
-                module: 'paginatedSelectQuery',
-                message: `Sql Error : ${err}`
-            })
+        //construction des limites d'affichage, si pas précisé on utilise 1 pour la page et le nombre de ligne en limit
+        // on récupère le nombre total de lignes
+        const totalRowsNumber = rows.length
+        let page = parseInt(req.query.page)
+        let limit = parseInt(req.query.limit)
+        if (!limit) limit = rows.length
+        if (!page) page = 1
 
-            res.status(500)
-            res.send("une erreur est survenu " + err)
+        //construction des index d'affichage
+
+        const startIndex = (page - 1) * limit
+        const endIndex = page * limit
+
+        // construction du résultat
+
+        const results = {}
+        results.rows = rows.length
+        results.pages = Math.ceil(totalRowsNumber / limit)
+
+        if (endIndex < rows.length) {
+            results.next = {
+                page: page + 1,
+                limit: limit
+            }
         }
 
-        const totalRowsNumber = rows[0]['TOTAL']
+        if (startIndex > 0) {
 
-        // on récupère les résultats
+            results.previous = {
+                page: page - 1,
+                limit: limit
+            }
+        }
 
-        dbQuery = ` SELECT *
-                    from ${table}`
+        // découpe des résultats pour renvoyer uniquement les résultats de la page demandée
 
+        results.results = rows.slice(startIndex, endIndex)
+
+        // envoie du resultat
         logger.log({
-            level:'info',
-            module:'paginatedSelectQuery',
-            message:'BDD request'
+            level: 'info',
+            module: 'paginatedSelectQuery',
+            message: `Process ok : ${results.rows} results in ${results.pages} pages`
         })
-
-
-
-        database.dbconnect.query(query, (err, rows) => {
-
-            //construction des limites d'affichage, si pas précisé on utilise 1 pour la page et le nombre de ligne en limit
-
-            let page = parseInt(req.query.page)
-            let limit = parseInt(req.query.limit)
-            if (!limit) limit = rows.length
-            if (!page) page = 1
-
-            //construction des index d'affichage
-
-            const startIndex = (page - 1) * limit
-            const endIndex = page * limit
-
-            // construction du résultat
-
-            const results = {}
-            results.rows = rows.length
-            results.pages = Math.ceil(totalRowsNumber / limit)
-
-            if (endIndex < rows.length) {
-                results.next = {
-                    page: page + 1,
-                    limit: limit
-                }
-            }
-
-            if (startIndex > 0) {
-
-                results.previous = {
-                    page: page - 1,
-                    limit: limit
-                }
-            }
-
-            // découpe des résultats pour renvoyer uniquement les résultats de la page demandée
-
-            results.results = rows.slice(startIndex, endIndex)
-
-            // envoie du resultat
-            logger.log({
-                level: 'info',
-                module: 'paginatedSelectQuery',
-                message: `Process ok : ${results.rows} results in ${results.pages} pages`
-            })
-            res.send(results)
-        })
+        res.send(results)
     })
+
+
+
 
 }
 
