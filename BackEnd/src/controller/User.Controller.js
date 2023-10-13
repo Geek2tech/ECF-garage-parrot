@@ -4,7 +4,7 @@ const {suppressSpecialChar} = require("../helpers/fieldControl");
 const passwordGenerator = require('generate-password')
 const bcrypt = require('bcrypt')
 const { v4: uuidV4 } = require('uuid')
-const transporter = require('../helpers/mailTransporter')
+const transporter = require('../services/mailTransporter')
 
 
 /**
@@ -31,6 +31,13 @@ async function getUser(req, res) {
     paginatedSelectQuery(req, res, query)
 }
 
+/**
+ * @function
+ * @description Make a user , generate password ( and send it by email ) , use bcrypt to store it un database
+ * @param req request with first_name , last_name , email ,and profil ID in params
+ * @param res
+ * @return {Promise<void>}
+ */
 async function addUser(req, res) {
     const first_name = suppressSpecialChar(req.body.first_name)
     const last_name = suppressSpecialChar(req.body.last_name)

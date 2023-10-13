@@ -1,7 +1,6 @@
-const nodemailer = require('nodemailer')
 const {suppressSpecialChar} = require("../helpers/fieldControl");
 const logger = require('../services/Logger')
-const transporter = require('../helpers/mailTransporter')
+const transporter = require('../services/mailTransporter')
 
 
 
@@ -13,7 +12,7 @@ async function sendMail(req, res) {
         module: 'Mail',
         message: `Call sendMail`
     })
-    const info = await transporter.sendMail({
+    await transporter.sendMail({
         from: process.env.APP_SMTPUSER,
         to: 'demuylder.herve@gmail.com',
         subject: 'Demande d information d un client',
