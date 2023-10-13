@@ -12,16 +12,16 @@ const logger = require('../services/Logger')
  * @return {Promise<void>}
  */
 async function getServices(req, res) {
-    const table = 'services'
+
     const query = `SELECT *
-                   FROM ${table}`
+                   FROM services`
     logger.log({
         level: 'info',
         module: 'Services',
-        message: `Call getServices with param :  ${table}`
+        message: `Call getServices`
     })
 
-    paginatedResult(req, res, table, query)
+    paginatedResult(req, res, query)
 }
 
 /**

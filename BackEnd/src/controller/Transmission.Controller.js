@@ -9,8 +9,8 @@ const paginatedResult = require("../helpers/paginatedSelectQuery")
  * @return {Promise<void>}
  */
 async function getTransmission(req,res) {
-    const table = 'transmission_types'
-    const query = `SELECT * FROM ${table}`
+
+    const query = `SELECT * FROM transmission_types`
 
     logger.log({
         level:'info',
@@ -19,7 +19,7 @@ async function getTransmission(req,res) {
     })
 
 
-    paginatedResult(req,res,table,query)
+    paginatedResult(req,res,query)
 
 }
 

@@ -2,11 +2,9 @@ const logger = require('../services/Logger')
 const paginatedSelectQuery = require('../helpers/paginatedSelectQuery')
 
 async function getValidatedComment(req, res) {
-    const table = 'comments'
-    query = `SELECT *
-             FROM ${table}
-             WHERE STATUS = 1`
-    paginatedSelectQuery(req,res,table,query)
+
+    query = `SELECT * FROM comments WHERE STATUS = 1`
+    paginatedSelectQuery(req,res,query)
 }
 
 async function getUnvalidatedComment(req, res) {

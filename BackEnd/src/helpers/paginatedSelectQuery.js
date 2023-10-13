@@ -10,12 +10,12 @@
  */
 const logger = require('../services/Logger')
 
-async function paginatedResult(req, res, table, query) {
+async function paginatedResult(req, res,  query) {
 
     logger.log({
         level: 'info',
         module: 'paginatedSelectQuery',
-        message: `Call paginatedResult with params : ${table} , ${query} `
+        message: `Call paginatedResult with params : ${query} `
     })
 
     // connexion à la base de données
@@ -34,6 +34,16 @@ async function paginatedResult(req, res, table, query) {
 
 
     database.dbconnect.query(query, (err, rows) => {
+
+        if (err) {
+            logger.log({
+                level:'error',
+                module:'paginatedSelectQuery',
+                message:`SQL error : ${err}`
+            })
+            res.status(500)
+            res.send(`SQL error : ${err}`)
+        }
 
         //construction des limites d'affichage, si pas précisé on utilise 1 pour la page et le nombre de ligne en limit
         // on récupère le nombre total de lignes

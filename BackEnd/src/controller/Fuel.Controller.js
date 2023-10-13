@@ -13,14 +13,14 @@ function getFuel(req, res) {
 
     const table = 'fuels'
     const query = `SELECT *
-                   FROM ${table}`
+                   FROM fuels`
 
     logger.log({
         level: 'info',
         module: 'Fuel',
         message: `Call getFuel`
     })
-    paginatedResult(req, res, table, query)
+    paginatedResult(req, res,query)
 }
 
 

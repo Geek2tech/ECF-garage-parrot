@@ -10,16 +10,16 @@ const paginatedResult = require("../helpers/paginatedSelectQuery")
  */
 async function getTowing(req,res) {
 
-    const table = 'towing_modes'
-    const query =  `SELECT * From ${table}`
+
+    const query =  `SELECT * From towing_modes`
 
     logger.log({
         level:'info',
         module:'Towing ',
-        message:`Call getTowing with params : ${table} , ${query}`
+        message:`Call getTowing`
     })
 
-   await  paginatedResult(req,res,table,query)
+   await  paginatedResult(req,res,query)
 
 }
 

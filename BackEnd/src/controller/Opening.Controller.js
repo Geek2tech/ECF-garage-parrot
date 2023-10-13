@@ -81,8 +81,8 @@ async function updateOpenningHours(req,res) {
  * @return {Promise<void>}
  */
 async function getOpeningHours (req,res) {
-    const table = 'opening_hours'
-    const query = `SELECT * FROM ${table}`
+
+    const query = `SELECT * FROM opening_hours`
 
     logger.log({
         level:'info',
@@ -90,7 +90,7 @@ async function getOpeningHours (req,res) {
         message:'Call getOpeningHours'
     })
 
-    paginatedResult(req, res,table,query)
+    paginatedResult(req, res,query)
 }
 
 module.exports ={

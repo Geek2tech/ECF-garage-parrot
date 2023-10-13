@@ -2,15 +2,15 @@ const paginatedResult = require("../helpers/paginatedSelectQuery");
 const logger = require('../services/Logger')
 function getProfil(req,res) {
 
-    const table = 'profils'
-    const query = `SELECT * FROM ${table}`
+
+    const query = `SELECT * FROM profils`
 
     logger.log({
         level:'info',
         module:'Profil',
         message:`Call getProfil`
     })
-    paginatedResult(req, res,table,query)
+    paginatedResult(req, res,query)
 
 }
 

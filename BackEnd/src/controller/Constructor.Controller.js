@@ -62,9 +62,9 @@ async function addConstructor(req, res) {
  */
 async function getContructor(req, res) {
 
-    const table = 'constructor'
+
     const query = `SELECT *
-                   FROM ${table}`
+                   FROM constructor`
 
     logger.log({
         level: 'info',
@@ -72,7 +72,7 @@ async function getContructor(req, res) {
         message: 'Call getConstructor'
     })
 
-    paginatedResult(req, res, table, query)
+    paginatedResult(req, res,  query)
 }
 
 /**
