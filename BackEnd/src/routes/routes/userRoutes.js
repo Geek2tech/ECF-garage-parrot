@@ -6,7 +6,7 @@ const router = express.Router()
 router.get('/protected/users',userController.getUser)
 
 // add user
-router.post('/protected/user',userController.addUser)
+router.post('/user',userController.addUser)
 
 // update user information
 router.put('/protected/user',userController.updateUser)

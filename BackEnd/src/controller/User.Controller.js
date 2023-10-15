@@ -5,7 +5,7 @@ const passwordGenerator = require('generate-password')
 const bcrypt = require('bcrypt')
 const {v4: uuidV4} = require('uuid')
 const transporter = require('../services/mailTransporter')
-const database = require("../services/db");
+const generatePassword = require('../helpers/passwordGenerator')
 
 /**
  * @function
@@ -44,13 +44,7 @@ async function addUser(req, res) {
     const email = suppressSpecialChar(req.body.email)
     const UUID = uuidV4()
     const profil_id = suppressSpecialChar(req.body.profil)
-    const password = passwordGenerator.generate({
-        length: 10,
-        numbers: true,
-        symbols: true,
-        strict: true,
-        exclude: "<>?$!&\\/="
-    })
+    const password = generatePassword()
 
     logger.log({
         level: "info",
@@ -123,8 +117,17 @@ async function addUser(req, res) {
                             address: process.env.APP_SMTPUSER
                         },
                         to: newUser.email,
-                        subject: 'Votre nouveau password',
-                        text: `Voici votre nouveau password : ${password}`,
+                        subject: 'Votre nouveau mot de passe',
+                        text: ` Votre compte vient d'être créé , voici votre password : ${password}`,
+                        html:`<h1> Garage Parrot </h1><br><strong>Bonjour ${newUser.first_name} ${newUser.last_name}</strong><br><br><strong>Votre commpte pour l'accès au site</strong>
+<br><strong>vient d'être créé . Voici le mot de passe</strong>
+<br>
+<br>
+<strong>${password}</strong>
+ <br>
+ <p>Cette information est sensible merci de la garder confidentielle</p>
+ <br
+ ><p>En vous souhaitant une bonne journée</p>`
 
                     }).then(() => {
 
@@ -220,14 +223,14 @@ async function updateUser(req, res) {
 
         } else if (result.length === 0) {
             logger.log({
-                level:'error',
-                module:'User',
-                message:'User not Found'
+                level: 'error',
+                module: 'User',
+                message: 'User not Found'
             })
             res.status(204)
-                res.send('User not found')
+            res.send('User not found')
 
-        }else  {
+        } else {
 
             logger.log({
                 level: 'info',
@@ -236,16 +239,20 @@ async function updateUser(req, res) {
             })
 
 
-
             const uuid = result[0]['user_uuid']
             const user = {
-                uuid :uuid,
+                uuid: uuid,
                 first_name: first_name,
                 last_name: last_name,
                 email: newEmail,
-                profil:profil
+                profil: profil
             }
-            query = `UPDATE users SET first_name = ? , last_name = ? , email = ? , profil_id = ? WHERE user_uuid = ?`
+            query = `UPDATE users
+                     SET first_name = ?,
+                         last_name  = ?,
+                         email      = ?,
+                         profil_id  = ?
+                     WHERE user_uuid = ?`
 
             logger.log({
                 level: 'info',
@@ -253,7 +260,7 @@ async function updateUser(req, res) {
                 message: 'Update User'
             })
 
-            database.dbconnect.query(query, [user.first_name, user.last_name, user.email,user.profil,user.uuid], (err, result) => {
+            database.dbconnect.query(query, [user.first_name, user.last_name, user.email, user.profil, user.uuid], (err, result) => {
                 if (err) {
                     if (err.code === 'ER_DUP_ENTRY') {
                         logger.log({
@@ -266,9 +273,9 @@ async function updateUser(req, res) {
                         res.send('Erreur email déja existant')
                     } else {
                         logger.log({
-                            level:'error',
-                            module:'User',
-                            message:`SQL error : ${err.message}`
+                            level: 'error',
+                            module: 'User',
+                            message: `SQL error : ${err.message}`
                         })
                         res.status(500)
                         res.send(`SQL error ${err.message}`)
@@ -278,9 +285,9 @@ async function updateUser(req, res) {
                 } else {
 
                     logger.log({
-                        level:'info',
-                        module:'User',
-                        message:`Update user successfully ${result.message}`
+                        level: 'info',
+                        module: 'User',
+                        message: `Update user successfully ${result.message}`
                     })
 
                     res.status(200)
@@ -296,6 +303,130 @@ async function updateUser(req, res) {
 }
 
 async function updateUserPassword(req, res) {
+
+
+    const email = suppressSpecialChar(req.body.email)
+
+    logger.log({
+        level: 'info',
+        module: 'User',
+        message: `Call updateUserPassword with params ${email}`
+    })
+
+
+    const password = generatePassword()
+
+
+    const saltRounds = 10
+    await bcrypt.hash(password, saltRounds, (err, encrypted) => {
+        if (err) {
+
+            logger.log({
+                level: 'error',
+                module: 'User',
+                message: `Bcrypt error : ${err}`
+            })
+            res.status(500)
+            res.send(`Erreur de chiffrement : ${err}`)
+
+        } else {
+            const user = {
+                email: email,
+                password: encrypted,
+
+            }
+
+            const database = require('../services/db')
+            const query = `UPDATE users
+                           SET password = ?
+                           WHERE email = ?`
+
+            logger.log({
+                level: 'info',
+                module: 'User',
+                message: `Bdd Request`
+            })
+
+            database.dbconnect.query(query, [user.password, user.email], (err, result) => {
+                if (err) {
+
+
+
+                    logger.log({
+                        level: 'error',
+                        module: 'User',
+                        message: `Sql Error : ${err}`
+                    })
+               } else {
+
+                    if (result.affectedRows === 0) {
+                        logger.log({
+                            level:'info',
+                            module:'User',
+                            message:'User not found'
+                        })
+                        res.status(204)
+                        res.send()
+                    } else {
+                logger.log({
+                    level: 'info',
+                    module: 'User',
+                    message: `User password  successfully update : ${result.message}`
+                })
+                transporter.sendMail({
+                    from: {
+                        name: 'Garage Parrot',
+                        address: process.env.APP_SMTPUSER
+                    },
+                    to: user.email,
+                    subject: 'Votre nouveau password',
+                    text: `Voici votre nouveau password : ${password}`,
+                    html:`<h1> Garage Parrot </h1><br><strong>Voici votre nouveau mot de passe</strong>
+<br><strong>pour l'accès au site du garage Parrot</strong>
+<br>
+<br>
+<strong>${password}</strong>
+ <br>
+ <p>Cette information est sensible merci de la garder confidentielle</p>
+ <br
+ ><p>En vous souhaitant une bonne journée</p>`
+
+                }).then(() => {
+
+                        logger.log({
+                            level: 'info',
+                            module: 'User',
+                            message: 'Mail sent'
+                        })
+
+                    }
+                ).catch((err) => {
+
+                    logger.log({
+                        level: 'error',
+                        module: 'User',
+                        message: `Error during sending email : ${err}`
+                    })
+                    res.status(200)
+                    res.send('Error with email')
+
+                })
+
+
+                res.status(201)
+                res.send('User password successfully updated')
+
+            }
+
+
+        }}
+    )
+
+    }
+
+}
+
+)
 
 }
 
