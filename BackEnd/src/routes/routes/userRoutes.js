@@ -9,10 +9,10 @@ router.get('/protected/users',userController.getUser)
 router.post('/protected/user',userController.addUser)
 
 // update user information
-router.put('/user',userController.updateUser)
+router.put('/protected/user',userController.updateUser)
 
-// update user password
-router.put('/password',userController.updateUserPassword)
+// request an update user password
+router.post('/password',userController.updateUserPassword)
 
 
 //delete user

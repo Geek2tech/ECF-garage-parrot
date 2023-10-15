@@ -185,7 +185,7 @@ async function updateUser(req, res) {
     logger.log({
         level: 'info',
         module: 'User',
-        message: `Call updateUser with params  ${first_name} , ${last_name} , ${email} , ${profil}`
+        message: `Call updateUser with params  ${first_name} , ${last_name} , ${email} , ${newEmail}, ${profil}`
     })
 
     const database = require('../services/db')
@@ -242,9 +242,10 @@ async function updateUser(req, res) {
                 uuid :uuid,
                 first_name: first_name,
                 last_name: last_name,
-                email: newEmail
+                email: newEmail,
+                profil:profil
             }
-            query = `UPDATE users SET first_name = ? , last_name = ? , email = ? WHERE user_uuid = ?`
+            query = `UPDATE users SET first_name = ? , last_name = ? , email = ? , profil_id = ? WHERE user_uuid = ?`
 
             logger.log({
                 level: 'info',
@@ -252,7 +253,7 @@ async function updateUser(req, res) {
                 message: 'Update User'
             })
 
-            database.dbconnect.query(query, [user.first_name, user.last_name, user.email,user.uuid], (err, result) => {
+            database.dbconnect.query(query, [user.first_name, user.last_name, user.email,user.profil,user.uuid], (err, result) => {
                 if (err) {
                     if (err.code === 'ER_DUP_ENTRY') {
                         logger.log({
