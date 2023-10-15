@@ -16,7 +16,7 @@ async function sendMail(req, res) {
             name: 'Garage Parrot',
             address: process.env.APP_SMTPUSER
         },
-        to: 'demuylder.herve@gmail.com',
+        to: 'geek2tech@geek2tech.fr',
         subject: 'Demande d information d un client',
         text: suppressSpecialChar(mailInfo.message),
 

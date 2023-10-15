@@ -1,7 +1,7 @@
 const logger = require('../services/Logger')
 const {suppressSpecialChar} = require("../helpers/fieldControl");
 const paginatedSelectQuery = require('../helpers/paginatedSelectQuery')
-const {dbconnect} = require("../services/db");
+
 
 /**
  * @function
@@ -117,7 +117,7 @@ async function deleteCarEquipements(req, res) {
         message:'BDD request'
     })
 
-    await dbconnect.query(query,[car_id,equipement_id],(err,result) => {
+    await database.dbconnect.query(query,[car_id,equipement_id],(err,result) => {
 
         if (err) {
             logger.log({

@@ -14,25 +14,7 @@ const dbconnect = mysql.createConnection({
     database: process.env.APP_DB,
     multipleStatements: false
 })
- dbconnect.connect(function (err) {
-    if (err) {
 
-        logger.log({
-            level:'error',
-            module:'DB',
-            message:`Erreur de connection ${err}`
-        })
-
-
-    } else {
-        logger.log({
-            level:'info',
-            module:'DB',
-            message:'Connected to BDD'
-        })
-
-    }
-})
 module.exports = {
 
     dbconnect
