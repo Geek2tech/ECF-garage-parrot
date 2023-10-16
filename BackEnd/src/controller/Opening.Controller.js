@@ -13,7 +13,7 @@ const database = require("../services/db");
 async function updateOpenningHours(req,res) {
 
     try {
-        const database = require('../services/db')
+
         const request = req.body
         const morningHours = suppressSpecialChar(request.morning_open) + " - " + suppressSpecialChar(request.morning_close)
         const afternoonHours =  suppressSpecialChar(request.afternoon_open) + " - " + suppressSpecialChar(request.afternoon_close)

@@ -1,7 +1,7 @@
 const logger = require('../services/Logger')
 const {suppressSpecialChar} = require("../helpers/fieldControl");
 const paginatedSelectQuery = require('../helpers/paginatedSelectQuery')
-
+const database = require('../services/db')
 
 
 /**
@@ -61,7 +61,7 @@ async function addCarEquipements(req, res) {
             message: `Call addCarEquipements with params : ${car_id} , ${equipement_id}`
         })
 
-        const database = require('../services/db')
+
         const query = 'INSERT INTO cars_equipements (car_id , equipement_id) VALUES ( ? , ? )'
 
         logger.log({
@@ -139,7 +139,7 @@ async function deleteCarEquipements(req, res) {
             message:`Call deleteCarEquipement with params : ${car_id} , ${equipement_id}`
         })
 
-        const database = require('../services/db')
+
         const query = 'DELETE FROM cars_equipements WHERE car_id = ? and equipement_id = ?'
 
         logger.log({

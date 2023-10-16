@@ -50,7 +50,7 @@ async function updateServices(req, res) {
 
     try {
 
-        const database = require('../services/db')
+
 
         const serviceName = suppressSpecialChar(req.body.name)
         const newValue = suppressSpecialChar(req.body.newValue)
@@ -130,7 +130,7 @@ async function updateServices(req, res) {
  */
 async function addServices(req, res) {
     try {
-        const database = require('../services/db')
+
         const serviceName = suppressSpecialChar(req.body.name)
         const serviceDescription = suppressSpecialChar(req.body.description)
 

@@ -14,7 +14,6 @@ async function addConstructor(req, res) {
 
     try {
 
-        const database = require('../services/db')
 
         const constructorName = suppressSpecialChar(req.body.constructor_name)
 
@@ -127,7 +126,7 @@ async function getContructor(req, res) {
 async function updateConstructor(req, res) {
 
     try {
-        const database = require('../services/db')
+
 
         const constructorName = suppressSpecialChar(req.body.constructorName)
         const newValue = suppressSpecialChar(req.body.newValue)

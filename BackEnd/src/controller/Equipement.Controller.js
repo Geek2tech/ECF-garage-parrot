@@ -56,7 +56,7 @@ async function addEquipement(req, res) {
             message: `Call addEquipement with params : ${equipement_name}`
         })
 
-        const database = require('../services/db')
+
 
         const query = 'INSERT INTO equipements (equipement_name) VALUES ( ? )'
 
@@ -122,7 +122,7 @@ async function updateEquipement(req, res) {
         })
 
         const query = "UPDATE equipements SET equipement_name = ? WHERE equipement_name = ?"
-        const database = require('../services/db')
+
         logger.log({
             level:'info',
             module:'Equipements',

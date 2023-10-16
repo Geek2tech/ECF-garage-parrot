@@ -88,7 +88,7 @@ async function addComment(req, res) {
             module: 'Comments',
             message: `Call addComment with params : ${sender_name} , ${comment_text} , ${garage_note}`
         })
-        const database = require('../services/db')
+
 
         const query = `INSERT INTO comments (sender_name, comment_text, garage_note, status)
                    VALUES (?, ?, ?, 0)`
@@ -144,7 +144,7 @@ async function deleteComment(req, res) {
             message:`Call delete comment with params : ${id}`
         })
 
-        const database =require('../services/db')
+
 
         logger.log({
             level:'info',

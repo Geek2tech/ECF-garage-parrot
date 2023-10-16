@@ -4,7 +4,7 @@ const crypto = require("crypto");
 const {suppressSpecialChar} = require("../helpers/fieldControl");
 const SECRET_KEY = process.env.APP_SECRET_KEY
 const logger = require('../services/Logger')
-
+const database = require('../services/db')
 /**
  * @function
  * @description check email and password in database , if ok send JWT
@@ -13,7 +13,7 @@ const logger = require('../services/Logger')
  * @return {Promise<*>}
  */
 async function authentification(req, res) {
-    const database = require('../services/db')
+
 
     logger.log({
         level: 'info',

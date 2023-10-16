@@ -50,7 +50,7 @@ function addFuel(req, res) {
 
     try {
 
-        const database = require('../services/db')
+
         const fuel_name = suppressSpecialChar(req.body.fuel_name)
 
         logger.log({
@@ -131,7 +131,7 @@ function addFuel(req, res) {
 function updateFuel(req, res) {
 
     try {
-        const database = require('../services/db')
+
 
         const fuelName = suppressSpecialChar(req.body.fuelName)
         const newValue = suppressSpecialChar(req.body.newValue)
