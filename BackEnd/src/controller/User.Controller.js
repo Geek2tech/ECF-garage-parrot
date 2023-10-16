@@ -405,7 +405,7 @@ async function updateUser(req, res) {
                                 message: 'Duplicated email'
                             })
 
-                            res.status(204)
+                            res.status(304)
                             res.send('Erreur email déja existant')
                         } else {
                             logger.log({

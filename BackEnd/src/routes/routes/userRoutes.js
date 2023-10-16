@@ -16,7 +16,7 @@ router.post('/password',userController.updateUserPassword)
 
 
 //delete user
-router.delete('/user',userController.deleteUser)
+router.delete('/protected/user',userController.deleteUser)
 
 
 
