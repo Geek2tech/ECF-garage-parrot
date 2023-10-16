@@ -2,6 +2,33 @@ const uploadFile = require("../middleware/upload")
 const fs = require("fs")
 const logger = require('../services/Logger')
 const database = require('../services/db')
+const paginatedSelectQuery = require('../helpers/paginatedSelectQuery')
+
+const getPhotos =function (req,res) {
+    try {
+        const query = 'SELECT * FROM photos'
+        logger.log({
+            level: 'info',
+            module: 'Photos',
+            message: 'Call getPhotos'
+        })
+        paginatedSelectQuery(req,res,query)
+
+    }catch (err) {
+        logger.log({
+            level:'error',
+            module:'Photos',
+            message:`Internal error :  ${err}`
+        })
+
+        res.status(500)
+        res.send('Internal Error')
+    }
+
+
+
+
+}
 const addPhoto = async (req, res) => {
     try {
 
@@ -129,6 +156,7 @@ const deletePhotos = (req, res) => {
 }
 
 module.exports = {
+    getPhotos,
     addPhoto,
     downloadPhoto,
     deletePhotos
