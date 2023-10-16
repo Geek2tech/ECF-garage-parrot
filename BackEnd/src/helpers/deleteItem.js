@@ -4,9 +4,9 @@ const logger = require('../services/Logger')
  * @function
  * @description supprime un élément en base en fonction d'une seule condition where
  * @param res response donnant le résultat de l'execution de la requete
- * @param table
- * @param whereField champs de la condition where
- * @param whereValue valeur de la condition where
+ * @param table name of table
+ * @param whereField where condition field
+ * @param whereValue where condition value
  * @return {Promise<void>}
  */
 async function deleteItem(res, table, whereField, whereValue) {
