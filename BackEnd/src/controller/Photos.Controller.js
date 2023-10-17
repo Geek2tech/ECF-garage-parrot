@@ -90,6 +90,8 @@ const downloadPhoto = (req, res) => {
 const deletePhotos = (req, res) => {
 
     try {
+
+
         const photos_directory = __basedir + "/Resources/Photos/"
 
         fs.readdirSync(photos_directory).forEach(photo_file => {
@@ -137,7 +139,7 @@ const deletePhotos = (req, res) => {
                 message:`Delete successfully `
             })
 
-            return res.status(200).send(`Suppression ok `)
+            //return res.status(200).send(`Suppression ok `)
 
 
         })

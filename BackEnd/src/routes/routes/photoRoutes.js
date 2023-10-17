@@ -10,8 +10,7 @@ router.get('/primary/:car_id',photoController.getPrimaryPhoto)
 router.post("/protected/photo/:car_id/:primary", photoController.addPhoto)
 //Download a file
 router.get("/photo/:name", photoController.downloadPhoto)
-//Suppress a file
-router.delete("/protected/photos/:car_id", photoController.deletePhotos)
+
 
 
 module.exports =router

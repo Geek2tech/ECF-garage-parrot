@@ -1,7 +1,9 @@
 const logger = require('../services/Logger')
 const database = require('../services/db')
 const paginatedSelectQuery = require('../helpers/paginatedSelectQuery')
-const {suppressSpecialChar} = require("../helpers/fieldControl");
+const {suppressSpecialChar} = require("../helpers/fieldControl")
+const photoController = require('../controller/Photos.Controller')
+const deleteItem = require('../helpers/deleteItem')
 async function getCars (req,res) {
 
     logger.log({
@@ -90,6 +92,78 @@ database.dbconnect.query(query,[
 
 
 async function deleteCar(req,res) {
+
+    const car_id = suppressSpecialChar(req.params.car_id)
+
+    logger.log({
+        level:'info',
+        module:'Cars',
+        message:`Call deleteCar with params ${car_id}`
+    })
+
+    // Suppress the car-equipement relation
+
+    logger.log({
+        level:'info',
+        module:'Cars',
+        message:'Bdd resquest to suppress the car-equipements '
+    })
+
+    let query = `DELETE FROM cars_equipements WHERE car_id = ?`
+
+    database.dbconnect.query(query,[car_id],(err) => {
+        if(err) {
+            logger.log({
+                level:'error',
+                module:'Cars',
+                message:`Sql Error : ${err.sqlMessage}`
+            })
+            return res.status(500).send(`Sql error : ${err.sqlMessage}`)
+        }
+
+        logger.log({
+            level:'info',
+            module:'Cars',
+            message:`Suppress photo for the car id ${car_id}`
+        })
+        // Suppress the photo file and bdd records
+
+        photoController.deletePhotos(req,res)
+        // Suppress the car
+
+        logger.log({
+            level:'info',
+            module:'Cars',
+            message:'Bdd request for suppress car'
+        })
+
+        query = " DELETE FROM cars WHERE car_id = ?"
+        database.dbconnect.query(query,[car_id],(err,result) => {
+            if(err) {
+                logger.log({
+                    level:'error',
+                    module:'Cars',
+                    message:`Sql error : ${err.sqlMessage}`
+                })
+                return res.status(500).send(`Sql error ${err.sqlMessage}`)
+            }
+            logger.log({
+                level:'info',
+                module:'Cars',
+                message:`Suppress car ${car_id} successfully`
+            })
+return res.status(200).send('Suppression ok')
+        })
+
+    })
+
+
+
+
+
+
+
+
 
 
 }

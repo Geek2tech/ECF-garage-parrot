@@ -13,6 +13,6 @@ router.post('/car',carController.addCar)
 router.put('/car',carController.updateCar)
 
 // delete car
-router.delete('./car',carController.deleteCar)
+router.delete('/car/:car_id',carController.deleteCar)
 
 module.exports = router
