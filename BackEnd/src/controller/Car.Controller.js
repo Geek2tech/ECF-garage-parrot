@@ -168,13 +168,12 @@ return res.status(200).send('Suppression ok')
 
 }
 
-async function updateCar(req,res) {
 
-}
+
 
 module.exports = {
     getCars,
     addCar,
-    deleteCar,
-    updateCar
+    deleteCar
+
 }
