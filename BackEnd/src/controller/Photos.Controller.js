@@ -3,6 +3,7 @@ const fs = require("fs")
 const logger = require('../services/Logger')
 const database = require('../services/db')
 const paginatedSelectQuery = require('../helpers/paginatedSelectQuery')
+const {suppressSpecialChar} = require("../helpers/fieldControl");
 
 const getPhotos =function (req,res) {
     try {
@@ -155,8 +156,25 @@ const deletePhotos = (req, res) => {
 
 }
 
+const getPrimaryPhoto = (req,res) => {
+
+    const car_id = suppressSpecialChar(req.params.car_id)
+
+    logger.log({
+        level:'info',
+        module:'Photo',
+        message:`Call get primaryPhoto with params ${car_id}`
+    })
+
+    const query = `SELECT photo_name FROM photos WHERE car_id = ${car_id} `
+    paginatedSelectQuery(req,res,query)
+
+
+}
+
 module.exports = {
     getPhotos,
+    getPrimaryPhoto,
     addPhoto,
     downloadPhoto,
     deletePhotos
