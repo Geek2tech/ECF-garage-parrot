@@ -3,7 +3,7 @@ const photoController = require("../../controller/Photos.Controller")
 const router = express.Router()
 
 //get photo list
-router.get('/photos',photoController.getPhotos)
+router.get('/photos/:car_id',photoController.getPhotos)
 // get Primary photo
 router.get('/primary/:car_id',photoController.getPrimaryPhoto)
 //upload a file

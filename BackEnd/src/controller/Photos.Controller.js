@@ -7,7 +7,9 @@ const {suppressSpecialChar} = require("../helpers/fieldControl");
 
 const getPhotos =function (req,res) {
     try {
-        const query = 'SELECT * FROM photos'
+        const car_id = suppressSpecialChar(req.params.car_id)
+
+        const query = 'SELECT * FROM photos WHERE car_id = ' + car_id
         logger.log({
             level: 'info',
             module: 'Photos',
