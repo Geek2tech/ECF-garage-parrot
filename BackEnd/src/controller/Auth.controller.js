@@ -93,7 +93,8 @@ async function authentification(req, res) {
                             });
                         res.cookie('token', token, {
                             httpOnly: true,
-                            secure: true,
+                            SameSite:"None",
+                            secure:false,
                             maxAge: expireIn
                         })
                         logger.log({
@@ -106,9 +107,12 @@ async function authentification(req, res) {
                             module: 'Authentification',
                             message: `user ${userFirstName} ${userLastName} is connected`
                         })
+
+
                         res.send({
                             tokenExpiresIn: expireIn,
-                            xsrfToken
+                            xsrfToken,
+
                         })
 
                     } else {

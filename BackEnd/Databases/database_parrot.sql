@@ -189,8 +189,8 @@ CREATE TABLE cars_equipements
 
 /* création de la vue car_view */
 
-create view car_view as
-select c.car_id,
+CREATE VIEW car_view AS
+SELECT c.car_id,
        c2.constructor_name,
        c.color,
        c.price,
@@ -206,18 +206,18 @@ select c.car_id,
        tm.mode_name,
        tt.transmission_type_name
 
-from cars as c
-         join ParrotDB.constructor c2 on c2.constructor_id = c.constructor_id
-         join ParrotDB.fuels f on f.fuel_id = c.fuel_id
-         join ParrotDB.towing_modes tm on tm.towing_id = c.towing_id
-         join ParrotDB.transmission_types tt on tt.transmission_type_id = c.transmission_type_id;
+FROM cars AS c
+         JOIN ParrotDB.constructor c2 on c2.constructor_id = c.constructor_id
+         JOIN ParrotDB.fuels f on f.fuel_id = c.fuel_id
+         JOIN ParrotDB.towing_modes tm on tm.towing_id = c.towing_id
+         JOIN ParrotDB.transmission_types tt on tt.transmission_type_id = c.transmission_type_id;
 
-create view car_equipements_view as
-    select c.car_id,
+CREATE VIEW car_equipements_view AS
+    SELECT c.car_id,
            e.equipement_name
-from cars_equipements
-join cars c on c.car_id = cars_equipements.car_id
-join equipements e on cars_equipements.equipement_id = e.equipement_id
+FROM cars_equipements
+JOIN cars c on c.car_id = cars_equipements.car_id
+JOIN equipements e on cars_equipements.equipement_id = e.equipement_id
 
 CREATE TRIGGER UpdateCarsID
     BEFORE INSERT ON ParrotDB.photos FOR EACH ROW

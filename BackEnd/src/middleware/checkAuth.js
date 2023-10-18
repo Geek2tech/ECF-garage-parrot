@@ -20,11 +20,10 @@ async function checkAuth(req, res, next) {
     })
 
     try {
-        const {cookies, headers} = req
-
+        const {Cookies, headers} = req
 
         /* On vérifie que le JWT est présent dans les cookies de la requête */
-        if (!cookies || !cookies.token) {
+        if (!Cookies || !Cookies.token) {
 
             logger.log({
                 level: 'error',

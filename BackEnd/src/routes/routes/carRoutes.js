@@ -6,7 +6,7 @@ const router = express.Router()
 router.get('/cars',carController.getCars)
 
 // add Car
-router.post('/car',carController.addCar)
+router.post('/protected/car',carController.addCar)
 
 // delete car
 router.delete('/car/:car_id',carController.deleteCar)
