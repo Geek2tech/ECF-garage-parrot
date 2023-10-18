@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const SECRET_KEY = process.env.APP_SECRET_KEY
 const logger = require('../services/Logger')
+const {token} = require("mysql/lib/protocol/Auth");
 
 /**
  * @function
@@ -20,10 +21,12 @@ async function checkAuth(req, res, next) {
     })
 
     try {
-        const {Cookies, headers} = req
+        const headers  = req.headers
+
+
 
         /* On vérifie que le JWT est présent dans les cookies de la requête */
-        if (!Cookies || !Cookies.token) {
+        if (!headers['cookie']) {
 
             logger.log({
                 level: 'error',
@@ -33,8 +36,9 @@ async function checkAuth(req, res, next) {
 
             return res.status(401).json({message: 'Missing token in cookie'})
         }
-
-        const accessToken = cookies.token
+        const cookies = headers['cookie'].split("token=")
+        const cookie = cookies[1]
+        const accessToken = cookie
 
         /* On vérifie que le token CSRF est présent dans les en-têtes de la requête */
         if (!headers || !headers['x-xsrf-token']) {
