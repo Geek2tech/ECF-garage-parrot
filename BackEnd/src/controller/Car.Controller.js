@@ -22,13 +22,11 @@ async function getCars(req, res) {
             const circulationYearFilter = suppressSpecialChar(req.body.circulationYearFilter)
             const mileageFilter = suppressSpecialChar(req.body.mileageFilter)
 
-            query = "SELECT * FROM car_view WHERE circulation_year >= " + circulationYearFilter + " and price <= " + priceFilter + " and mileage <= " + mileageFilter
+            query = "SELECT c.* , p.photo_name FROM car_view AS c JOIN photos AS p ON c.car_id = p.car_id WHERE circulation_year >= " + circulationYearFilter + " and price <= " + priceFilter + " and mileage <= " + mileageFilter + " and p.primary_photo = 'Y'"
 
         } else {
 
-            query = `SELECT *
-                     FROM car_view
-                     WHERE car_id = ${carId}`
+            query = `SELECT c.*, p.photo_name FROM car_view as c JOIN photos AS p ON c.car_id = p.car_id  WHERE c.car_id = ${carId} and p.primary_photo = "Y"`
 
         }
 

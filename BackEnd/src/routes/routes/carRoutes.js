@@ -3,10 +3,10 @@ const express = require('express')
 const router = express.Router()
 
 // get list of cars
-router.get('/api/cars',carController.getCars)
+router.post('/api/cars',carController.getCars)
 
 // add Car
-router.post('/protected/car',carController.addCar)
+router.post('/api/protected/car',carController.addCar)
 
 // delete car
 router.delete('/api/car/:car_id',carController.deleteCar)
