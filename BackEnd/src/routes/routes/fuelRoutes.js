@@ -5,9 +5,9 @@ const router = express.Router()
 // list of fuel
 router.get('/api/fuels', fuelController.getFuel)
 // add a fuel
-router.post('/protected/fuel', fuelController.addFuel)
+router.post('/api/protected/fuel', fuelController.addFuel)
 // update fuel
-router.put('/protected/fuel', fuelController.updateFuel)
+router.put('/api/protected/fuel', fuelController.updateFuel)
 
 
 module.exports = router

@@ -6,11 +6,11 @@ const router = express.Router()
 router.get('/api/comments',commentController.getValidatedComment)
 
 // get unvalidated comment
-router.get('/protected/commentsPending',commentController.getUnvalidatedComment)
+router.get('/api/protected/commentsPending',commentController.getUnvalidatedComment)
 
 // Add comment
 router.post('/api/comment',commentController.addComment)
 // Delete comment
-router.delete('/protected/comment',commentController.deleteComment)
+router.delete('/api/protected/comment',commentController.deleteComment)
 
 module.exports = router

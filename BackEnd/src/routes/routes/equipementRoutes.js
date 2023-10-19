@@ -8,10 +8,10 @@ router.get('/api/equipements',equipementController.getEquipements)
 
 // Add an equipement
 
-router.post('/protected/equipement',equipementController.addEquipement)
+router.post('/api/protected/equipement',equipementController.addEquipement)
 
 // Update Equipement
 
-router.put('/protected/equipement',equipementController.updateEquipement)
+router.put('/api/protected/equipement',equipementController.updateEquipement)
 
 module.exports = router

@@ -3,12 +3,12 @@ const carEquipementsController = require("../../controller/CarEquipement.Control
 const router = express.Router()
 
 // get list of equipements
-router.get('/api/carEquipements' , carEquipementsController.getCarEquipements)
+router.post('/api/carEquipements' , carEquipementsController.getCarEquipements)
 
 // Add a car equipements
-router.post('/protected/carEquipement',carEquipementsController.addCarEquipements)
+router.post('/api/protected/carEquipement',carEquipementsController.addCarEquipements)
 
 // Delete an car equipements
-router.delete('/protected/carEquipement',carEquipementsController.deleteCarEquipements)
+router.delete('/api/protected/carEquipement',carEquipementsController.deleteCarEquipements)
 
 module.exports = router
