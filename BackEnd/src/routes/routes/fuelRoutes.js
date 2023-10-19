@@ -3,7 +3,7 @@ const fuelController = require("../../controller/Fuel.Controller")
 const router = express.Router()
 
 // list of fuel
-router.get('/fuels', fuelController.getFuel)
+router.get('/api/fuels', fuelController.getFuel)
 // add a fuel
 router.post('/protected/fuel', fuelController.addFuel)
 // update fuel

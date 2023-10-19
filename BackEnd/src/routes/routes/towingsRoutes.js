@@ -3,7 +3,7 @@ const towingController = require("../../controller/Towing.Controller")
 const router = express.Router()
 
 // Get list of towing modes
-router.get('/towings', towingController.getTowing)
+router.get('/api/towings', towingController.getTowing)
 
 
 

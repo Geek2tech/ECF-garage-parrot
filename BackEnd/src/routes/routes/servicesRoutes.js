@@ -3,7 +3,7 @@ const servicesController = require("../../controller/Services.Controller")
 const router = express.Router()
 
 // Get list of services
-router.get('/services', servicesController.getServices)
+router.get('/api/services', servicesController.getServices)
 // Add a services
 router.post('/protected/service', servicesController.addServices)
 // Update a service

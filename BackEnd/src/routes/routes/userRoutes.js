@@ -12,7 +12,7 @@ router.post('/protected/user',userController.addUser)
 router.put('/protected/user',userController.updateUser)
 
 // request an update user password
-router.post('/password',userController.updateUserPassword)
+router.post('/api/password',userController.updateUserPassword)
 
 
 //delete user

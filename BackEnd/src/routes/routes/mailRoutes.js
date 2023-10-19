@@ -4,6 +4,6 @@ const router = express.Router()
 
 
  // send mail
-router.post("/mail", mailController.sendMail)
+router.post("/api/mail", mailController.sendMail)
 
 module.exports = router

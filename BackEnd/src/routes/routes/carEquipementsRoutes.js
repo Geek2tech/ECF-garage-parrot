@@ -3,7 +3,7 @@ const carEquipementsController = require("../../controller/CarEquipement.Control
 const router = express.Router()
 
 // get list of equipements
-router.get('/carEquipements' , carEquipementsController.getCarEquipements)
+router.get('/api/carEquipements' , carEquipementsController.getCarEquipements)
 
 // Add a car equipements
 router.post('/protected/carEquipement',carEquipementsController.addCarEquipements)

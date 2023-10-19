@@ -3,7 +3,7 @@ const openningController = require("../../controller/Opening.Controller")
 const router = express.Router()
 
 // Get list of opening hours
-router.get('/openinghours', openningController.getOpeningHours)
+router.get('/api/openinghours', openningController.getOpeningHours)
 // Update opening hours
 router.put('/protected/opening', openningController.updateOpenningHours)
 

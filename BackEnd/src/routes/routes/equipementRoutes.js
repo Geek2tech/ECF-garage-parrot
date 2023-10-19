@@ -4,7 +4,7 @@ const router = express.Router()
 
 // get List of equipement
 
-router.get('/equipements',equipementController.getEquipements)
+router.get('/api/equipements',equipementController.getEquipements)
 
 // Add an equipement
 

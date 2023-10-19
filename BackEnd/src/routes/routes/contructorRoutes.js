@@ -3,7 +3,7 @@ const express = require('express')
 const router = express.Router()
 
 // constructor list
-router.get("/constructors", constructorController.getContructor)
+router.get("/api/constructors", constructorController.getContructor)
 // add a contructor
 router.post('/protected/constructor', constructorController.addConstructor)
 // update a constructor
