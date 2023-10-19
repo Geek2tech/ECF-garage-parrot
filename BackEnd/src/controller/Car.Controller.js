@@ -8,14 +8,14 @@ const photoController = require('../controller/Photos.Controller')
 async function getCars(req, res) {
     try {
 
-
-        const carId = suppressSpecialChar(req.body.car_id)
-
         logger.log({
             level: 'info',
             module: 'Cars',
             message: 'Call getCars'
         })
+        const carId = suppressSpecialChar(req.body.car_id)
+
+
         let query
         if (carId === "*") {
             const priceFilter = suppressSpecialChar(req.body.priceFilter)
@@ -36,7 +36,7 @@ async function getCars(req, res) {
     } catch (err) {
 
         logger.log({
-            level: 'info',
+            level: 'error',
             module: 'Cars',
             message: `Internal error ${err}`
         })

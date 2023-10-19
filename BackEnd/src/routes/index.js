@@ -9,7 +9,7 @@ const logger = require('../services/Logger')
 let routes = (app) => {
 
     app.all('/photo/*')
-    app.all('/api', checkApiKey)
+    app.all('/api/*', checkApiKey)
     app.all('*/protected/*', checkAuth)
 
     const routes_directory = require('path').resolve(__dirname) + "/routes/"
