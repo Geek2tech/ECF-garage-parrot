@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 
 app.use(helmet())
-const allowedOrigins = [process.env.APP_AUTHORIZED_URL]
+const allowedOrigins = [process.env.APP_AUTHORIZED_URL1,process.env.APP_AUTHORIZED_URL2]
 const corsOptions = {
     origin: function(origin, callback){    // allow requests with no origin
         // (like mobile apps or curl requests)

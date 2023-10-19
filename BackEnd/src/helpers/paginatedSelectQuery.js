@@ -9,8 +9,10 @@
  * @return {object}  number of rows ,if exist the number of previous and next page  and the result of the query
  */
 const logger = require('../services/Logger')
+const database = require("../services/db");
 
 async function paginatedResult(req, res,  query) {
+try {
 
     logger.log({
         level: 'info',
@@ -91,6 +93,18 @@ async function paginatedResult(req, res,  query) {
         })
         res.send(results)
     })
+}catch (err) {
+    logger.log({
+        level:'error',
+        module:'Cars',
+        message:`internal error ${err}`
+    })
+
+    return res.status(500).send(`Erreur interne ${err}`)
+
+
+}
+
 
 
 

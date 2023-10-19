@@ -5,7 +5,7 @@ const {suppressSpecialChar} = require("../helpers/fieldControl")
 const photoController = require('../controller/Photos.Controller')
 const deleteItem = require('../helpers/deleteItem')
 async function getCars (req,res) {
-
+try {
     const priceFilter = suppressSpecialChar(req.body.priceFilter)
     const circulationYearFilter = suppressSpecialChar(req.body.circulationYearFilter)
     const mileageFilter = suppressSpecialChar(req.body.mileageFilter)
@@ -20,6 +20,16 @@ async function getCars (req,res) {
     query = "SELECT * FROM car_view WHERE circulation_year >= " + circulationYearFilter + " and price <= " + priceFilter + " and mileage <= " + mileageFilter
 
     paginatedSelectQuery(req,res,query)
+}catch (err) {
+
+    logger.log({
+        level:'info',
+        module:'Cars',
+        message:`Internal error ${err}`
+    })
+
+}
+
 
 }
 
