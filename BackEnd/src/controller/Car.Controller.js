@@ -6,13 +6,18 @@ const photoController = require('../controller/Photos.Controller')
 const deleteItem = require('../helpers/deleteItem')
 async function getCars (req,res) {
 
+    const priceFilter = suppressSpecialChar(req.body.priceFilter)
+    const circulationYearFilter = suppressSpecialChar(req.body.circulationYearFilter)
+    const mileageFilter = suppressSpecialChar(req.body.mileageFilter)
+
+
     logger.log({
         level:'info',
         module:'Cars',
         message:'Call getCars'
     })
 
-    query = "SELECT * FROM car_view"
+    query = "SELECT * FROM car_view WHERE circulation_year >= " + circulationYearFilter + " and price <= " + priceFilter + " and mileage <= " + mileageFilter
 
     paginatedSelectQuery(req,res,query)
 
@@ -168,12 +173,52 @@ return res.status(200).send('Suppression ok')
 
 }
 
+async function getPriceMinMax(req,res) {
 
+    const query = 'SELECT MIN(price) as min , MAX(price) as max FROM car_view'
 
+    logger.log({
+        level:'info',
+        module:'Cars',
+        message:`Call getMaxPrice`
+    })
+
+    paginatedSelectQuery(req,res,query)
+}
+
+async function getCirculationYearMinMax(req,res) {
+
+    const query = 'SELECT MIN(circulation_year) as min , MAX(circulation_year) as max FROM car_view'
+
+    logger.log({
+        level:'info',
+        module:'Cars',
+        message:`Call getMaxCirculationYear`
+    })
+
+    paginatedSelectQuery(req,res,query)
+
+}
+
+async function getMileageMinMax(req,res) {
+
+    const query = 'SELECT MIN(mileage) as min,MAX(mileage) as max FROM car_view'
+    logger.log({
+        level:'info',
+        module:'Cars',
+        message:`Call getMaxMileage`
+    })
+
+    paginatedSelectQuery(req,res,query)
+
+}
 
 module.exports = {
     getCars,
     addCar,
-    deleteCar
+    deleteCar,
+    getMileageMinMax,
+    getPriceMinMax,
+    getCirculationYearMinMax
 
 }
