@@ -7,9 +7,8 @@ const photoController = require('../controller/Photos.Controller')
 
 async function getCars(req, res) {
     try {
-        const priceFilter = suppressSpecialChar(req.body.priceFilter)
-        const circulationYearFilter = suppressSpecialChar(req.body.circulationYearFilter)
-        const mileageFilter = suppressSpecialChar(req.body.mileageFilter)
+
+
         const carId = suppressSpecialChar(req.body.car_id)
 
         logger.log({
@@ -17,13 +16,21 @@ async function getCars(req, res) {
             module: 'Cars',
             message: 'Call getCars'
         })
-if(carId === "*"){
-    query = "SELECT * FROM car_view WHERE circulation_year >= " + circulationYearFilter + " and price <= " + priceFilter + " and mileage <= " + mileageFilter
+        let query
+        if (carId === "*") {
+            const priceFilter = suppressSpecialChar(req.body.priceFilter)
+            const circulationYearFilter = suppressSpecialChar(req.body.circulationYearFilter)
+            const mileageFilter = suppressSpecialChar(req.body.mileageFilter)
 
-}else {
-    query = "SELECT * FROM car_view WHERE car_id = " +carId
+            query = "SELECT * FROM car_view WHERE circulation_year >= " + circulationYearFilter + " and price <= " + priceFilter + " and mileage <= " + mileageFilter
 
-}
+        } else {
+
+            query = `SELECT *
+                     FROM car_view
+                     WHERE car_id = ${carId}`
+
+        }
 
         paginatedSelectQuery(req, res, query)
     } catch (err) {
