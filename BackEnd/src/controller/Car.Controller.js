@@ -17,7 +17,7 @@ async function getCars(req, res) {
 
 
         let query
-        if (carId === "*") {
+        if (carId === "all") {
             const priceFilter = suppressSpecialChar(req.body.priceFilter)
             const circulationYearFilter = suppressSpecialChar(req.body.circulationYearFilter)
             const mileageFilter = suppressSpecialChar(req.body.mileageFilter)
