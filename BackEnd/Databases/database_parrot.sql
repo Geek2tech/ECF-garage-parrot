@@ -206,6 +206,7 @@ SELECT c.car_id,
        tm.mode_name,
        tt.transmission_type_name
 
+
 FROM cars AS c
          JOIN ParrotDB.constructor c2 on c2.constructor_id = c.constructor_id
          JOIN ParrotDB.fuels f on f.fuel_id = c.fuel_id

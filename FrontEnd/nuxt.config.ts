@@ -7,7 +7,9 @@ export default defineNuxtConfig({
       enabled: true
     },
   },
-  ssr:true,
+ meta: {
+   title : "Garage Vincent Parrot",
+ },
 
 
 

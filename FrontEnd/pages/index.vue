@@ -6,6 +6,8 @@ const route = useRoute()
 
 <template>
   <div>
-
+<head>
+  <title>Garage Vincent Parrot</title>
+</head>
   </div>
 </template>
