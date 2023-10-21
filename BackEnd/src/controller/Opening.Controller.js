@@ -98,7 +98,7 @@ async function updateOpenningHours(req,res) {
 async function getOpeningHours (req,res) {
 
     try {
-        const query = `SELECT * FROM opening_hours`
+        const query = `SELECT * FROM opening_hours WHERE morning !="Fermé" or afternoon !='Fermé'`
 
         logger.log({
             level:'info',

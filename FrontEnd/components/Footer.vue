@@ -94,13 +94,6 @@ const {pending, error, data: openingHours} = useAsyncData('opening', () => {
 })
 const openingHoursValue = await openingHours._rawValue?.results
 
-openingHoursValue?.forEach((opening) => {
-  if (opening.morning.indexOf("-") === -1 && opening.afternoon.indexOf("-") === -1) {
-    const idToSupress = opening.opening_id - 1
-    openingHoursValue.splice(idToSupress, idToSupress)
-
-  }
-})
 
 </script>
 
