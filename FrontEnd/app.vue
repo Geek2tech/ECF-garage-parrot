@@ -1,15 +1,13 @@
 <template>
 
-    <Header/>
+  <Header/>
 
   <NuxtPage />
 
   <Footer/>
 
-
-
-
 </template>
+
 <script setup lang="ts">
 
 import Header from "~/components/Header.vue";
