@@ -33,7 +33,7 @@
   <div v-else>
 
     <footer
-        class="fixed bottom-0 left-0 z-20 w-full p-4 bg-white border-t border-gray-200 shadow md:flex-row md:items-center
+        class="fixed bottom-0 z-20 w-full  p-4 bg-white border-t border-gray-200 shadow md:flex-row md:items-center
        md:justify-between md:p-6 dark:bg-gray-800 dark:border-gray-600  ">
       <div class="text-center m-5 text-2xl lg:text-4xl">Nous contacter</div>
 
@@ -78,7 +78,7 @@ const apiKey = process.env.APP_APIKEY
 
 const {pending, error, data: openingHours} = useAsyncData('opening', () => {
 
-  return $fetch('http://localhost:8081/api/openinghours', {
+  return $fetch(`${process.env.APP_BACKEND_URL}/api/openinghours`, {
         method: "GET",
         mode: "cors",
         headers: {

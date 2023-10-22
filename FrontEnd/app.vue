@@ -1,10 +1,9 @@
 <template>
+<Header/>
+<NuxtPage />
+<Footer/>
 
-  <Header/>
 
-  <NuxtPage />
-
-  <Footer/>
 
 </template>
 
@@ -23,6 +22,17 @@ import Footer from "~/components/Footer.vue";
 @font-face {
   font-family:"Rajdhani";
   src: url("./fonts/Rajdhani/Rajdhani-Regular.ttf");
+}
+h1 {
+  font-family: Rajdhani,sans-serif ;
+
+}
+h2 {
+  font-family: Rajdhani,sans-serif;
+}
+p {
+  font-family: Barlow-regular,sans-serif;
+
 }
 
 

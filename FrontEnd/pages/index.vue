@@ -5,7 +5,14 @@ const route = useRoute()
 </script>
 
 <template>
-  <div>
 
-  </div>
+
+<Presentation/>
+
+
 </template>
+
+<style scoped>
+
+
+</style>

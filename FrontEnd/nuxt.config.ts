@@ -7,11 +7,6 @@ export default defineNuxtConfig({
       enabled: true
     },
   },
- meta: {
-   title : "Garage Vincent Parrot",
- },
-
-
 
   modules: ["@nuxtjs/tailwindcss"]
 })
