@@ -3,7 +3,7 @@
 </script>
 
 <template>
-<div class="presentation bg-[#262526] text-center p-5">
+<div class="presentation bg-[#262526] text-center p-7">
   <h1 class=" text-4xl md:text-6xl text-[#D92332]">Bienvenue chez<strong> Vincent Parrot</strong></h1>
   <h2 class=" text-3xl md:text-5xl text-[#D94350] pb-5">Plus q'un métier une passion</h2>
   <p> Fort de plus de 15 ans d'expérience dans la mécanique automobile et entouré d'une équipe de passionnés</p>

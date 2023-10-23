@@ -91,6 +91,10 @@ try {
             module: 'paginatedSelectQuery',
             message: `Process ok : ${results.rows} results in ${results.pages} pages`
         })
+        if (process.env.NODE_ENV !== 'production') {
+            console.log(results)
+        }
+
         res.send(results)
     })
 }catch (err) {
