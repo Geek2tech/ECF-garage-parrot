@@ -9,6 +9,7 @@
           <span aria-hidden="true" class="text-lg lg:text-xl ">
           Garage <strong>Vincent Parot</strong>
         </span>
+
         </a>
         <button aria-label="toggle button" aria-expanded="false" v-on:click="toggleNav" id="menu-btn"
                 class="cursor-pointer w-7 md:hidden">
@@ -52,6 +53,7 @@ items-center md:static md:z-50 md:w-min md:transform-none md:border-none md:flex
         </ul>
 
       </nav>
+
     </header>
 
   </div>

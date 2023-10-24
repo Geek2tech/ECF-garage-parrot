@@ -60,7 +60,7 @@ alert(' Merci ! Votre commentaire est bien enregistré , il apparaitra bientôt 
 const commentMax = ref(false)
 const infoMaxChar = ref('')
 function checkLength(event){
-  const commentLimit = 80
+  const commentLimit = 82
 
   if (event.target.value.length >= commentLimit +1 ) {
     commentMax.value = true

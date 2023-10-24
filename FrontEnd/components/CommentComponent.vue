@@ -22,7 +22,22 @@ export default {
 
 <template>
 
-<UCard class="oneComment  barlow w-[250px] h-[250px] " >
+<UCard class="oneComment  barlow w-[250px] h-[250px] "
+       :ui="{
+    divide: 'divide-y divide-gray-300 dark:divide-white/50',
+    background:'bg-gray-50 dark:bg-gray-700/70',
+     header: {
+      base: ' h-1/4 text-center',
+    },
+    body: {
+      base: 'h-2/4'
+    },
+    footer: {
+      base : 'h-1/4',
+    }
+  }"
+
+>
   <template #header>
     <div class="text-center text-[#D92332]" >
       <strong>{{comment.sender_name}}</strong>
