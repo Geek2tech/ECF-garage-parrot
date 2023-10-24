@@ -5,7 +5,9 @@ export const useCommentStore = defineStore('comments', {
     state: () => {
         return {
             commentList: {},
-            comments: {}
+            nbPage: "",
+            activePage: 1
+
         }
     },
     // could also be defined as
@@ -15,13 +17,16 @@ export const useCommentStore = defineStore('comments', {
 
             this.count++
         },
-        addComment(comments) {
-            this.commentList = comments
+        activePageIncrement() {
+            this.activePage++
         },
-        loadComment(page) {
+        activePageDecrement() {
+            this.activePage--
+        },
+        loadComment() {
             const runTimeConfigs = useRuntimeConfig()
-            console.log('page from store ', page)
-            const {error, pending, refresh, status, data: comments} = useAsyncData(`Comments`, () => {
+
+            const {data: comments} = useAsyncData(`Comments`, () => {
                     return $fetch(`${runTimeConfigs.public.API_URL}/api/comments`, {
                             method: `GET`,
                             mode: "cors",
@@ -29,11 +34,11 @@ export const useCommentStore = defineStore('comments', {
                                 "content-Type": "application/json",
                                 "x-api-key": `${runTimeConfigs.public.API_KEY}`
                             },
-                            key: `commentList-${page}`,
+                            key: `commentList-${this.activePage}`,
                             lazy: true,
                             suspense: false,
                             params: {
-                                page: page,
+                                page: this.activePage,
                                 limit: 4
                             },
 
@@ -45,6 +50,41 @@ export const useCommentStore = defineStore('comments', {
                 },
             )
             this.commentList = comments
+            this.nbPage = this.commentList?.pages
+
+        },
+        addComment(nom, comment, note) {
+
+            const body = {
+                sender_name: nom,
+                comment_text:comment,
+                garage_note:note
+            }
+
+            const runTimeConfigs = useRuntimeConfig()
+
+            const {data: commentAdded} = useAsyncData(`Comments`, () => {
+                    return $fetch(`${runTimeConfigs.public.API_URL}/api/comment`, {
+                            method: `POST`,
+                            mode: "cors",
+                            headers: {
+                                "content-Type": "application/json",
+                                "x-api-key": `${runTimeConfigs.public.API_KEY}`
+                            },
+                            key: `commentList-${this.activePage}`,
+                            lazy: true,
+                            suspense: false,
+                           body:JSON.stringify(body)
+
+
+                        },
+                    )
+
+
+                },
+            )
+
+
 
         }
     },

@@ -22,14 +22,14 @@ export default {
 
 <template>
 
-<UCard class="oneComment barlow">
+<UCard class="oneComment  barlow w-[250px] h-[250px] " >
   <template #header>
     <div class="text-center text-[#D92332]" >
       <strong>{{comment.sender_name}}</strong>
     </div>
 
   </template>
-<div class="justify-center" >
+<div class="justify-center text-center " >
   {{comment.comment_text}}
 </div>
 
