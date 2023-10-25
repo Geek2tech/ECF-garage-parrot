@@ -6,7 +6,8 @@ export const useCommentStore = defineStore('comments', {
         return {
             commentList: {},
             nbPage: "",
-            activePage: 1
+            activePage: 1,
+            addModalActive: ref(false)
 
         }
     },
@@ -15,15 +16,44 @@ export const useCommentStore = defineStore('comments', {
 
    },
     actions: {
-        increment() {
-
-            this.count++
+        activePageDecrement() {
+            this.activePage--
         },
         activePageIncrement() {
             this.activePage++
         },
-        activePageDecrement() {
-            this.activePage--
+        addComment(nom, comment, note) {
+
+            const body = {
+                sender_name: nom,
+                comment_text: comment,
+                garage_note: note
+            }
+
+            const runTimeConfigs = useRuntimeConfig()
+
+            const {data: commentAdded} = useAsyncData(`Comments`, () => {
+                    return $fetch(`${runTimeConfigs.public.API_URL}/api/comment`, {
+                            method: `POST`,
+                            mode: "cors",
+                            headers: {
+                                "content-Type": "application/json",
+                                "x-api-key": `${runTimeConfigs.public.API_KEY}`
+                            },
+                            key: `commentList-${this.activePage}`,
+                            lazy: true,
+                            suspense: false,
+                            body: JSON.stringify(body)
+
+
+                        },
+                    )
+
+
+                },
+            )
+
+
         },
         loadComment() {
             const runTimeConfigs = useRuntimeConfig()
@@ -55,38 +85,14 @@ export const useCommentStore = defineStore('comments', {
             this.nbPage = this.commentList?.pages
 
         },
-        addComment(nom, comment, note) {
+        toggleModal: function () {
 
-            const body = {
-                sender_name: nom,
-                comment_text:comment,
-                garage_note:note
+            if (this.addModalActive === false) {
+                this.addModalActive = true
+            } else {
+                this.addModalActive = false
             }
-
-            const runTimeConfigs = useRuntimeConfig()
-
-            const {data: commentAdded} = useAsyncData(`Comments`, () => {
-                    return $fetch(`${runTimeConfigs.public.API_URL}/api/comment`, {
-                            method: `POST`,
-                            mode: "cors",
-                            headers: {
-                                "content-Type": "application/json",
-                                "x-api-key": `${runTimeConfigs.public.API_KEY}`
-                            },
-                            key: `commentList-${this.activePage}`,
-                            lazy: true,
-                            suspense: false,
-                           body:JSON.stringify(body)
-
-
-                        },
-                    )
-
-
-                },
-            )
-
-
+            //this.addModalActive = this.addModalActive.value === false
 
         }
     },

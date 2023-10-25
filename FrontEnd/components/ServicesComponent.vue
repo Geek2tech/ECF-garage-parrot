@@ -11,7 +11,7 @@ defineProps({
 <div class="m-5">
   <UCard
   :ui="{
-    base: ' text-xl md:text-3xl text-center font-[Barlow] md:w-min-[600px] md:w-max-[900px] h-min-[250px] ]',
+    base: ' text-xl md:text-3xl text-center font-[Barlow] md:w-min-[500px] md:w-max-[700px] h-min-[250px] ]',
     divide: 'divide-y divide-[#D92332] dark:divide-white/50',
     background: 'bg-white/80 dark:bg-gray-700/70',
     header:{
