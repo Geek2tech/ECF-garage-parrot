@@ -99,7 +99,7 @@ function checkLength(event) {
 
 <div id="descriptionService">
   <h1 class="  bg-black/70 p-4 text-4xl md:text-5xl text-center text-[#D92332]">Nos prestations</h1>
-  <p class="  md:text-4xl bg-black/70 text-center">Notre équipe de passionnée de mécanique et d'automobile vous propose les prestations suivantes</p>
+  <p class="  text-xl md:text-4xl bg-black/70 text-center">Notre équipe de passionnée de mécanique et d'automobile vous propose les prestations suivantes</p>
 <div class="serviceComponent  md:flex justify-center flex-wrap m-5" >
   <ServicesComponent v-for="service in serviceStore.services"  :service="service"/>
 </div>
@@ -211,7 +211,7 @@ function checkLength(event) {
 }
 p{
   color:#F2F2F2;
-  font-size:1.2em;
+
 }
 #descriptionService{
 

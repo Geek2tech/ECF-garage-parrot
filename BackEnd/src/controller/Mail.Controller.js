@@ -18,7 +18,7 @@ async function sendMail(req, res) {
                 address: process.env.APP_SMTPUSER
             },
             to: 'geek2tech@geek2tech.fr',
-            subject: 'Demande d information d un client',
+            subject: suppressSpecialChar(mailInfo.subject),
             text: suppressSpecialChar(mailInfo.message),
 
         })
