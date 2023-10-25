@@ -4,7 +4,9 @@
     <NuxtPage />
 
 
- <Footer/>
+  <Footer/>
+
+
 
 
 

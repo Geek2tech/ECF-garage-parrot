@@ -16,19 +16,9 @@
 
       <div class="  flex flex-col   md:flex-row xl:text-lg justify-evenly">
 
-        <div v-for="opening in openingHoursValue" class="flex-col   md:text-base lg:text-xl flex-wrap m-5 ">
-          <div class="text-center ">
-            {{ opening.day }}
-          </div>
-          <div class="text-center">
-            {{ opening.morning }}
-          </div>
-          <div class="text-center">
-            {{ opening.afternoon }}
+<OpeningComponent v-for="openingHour in openingHoursStore.openingHours" :opening="openingHour"/>
 
 
-          </div>
-        </div>
       </div>
       <ContactFormsComponent v-model="contactStore.ModalActive"/>
     </footer>
@@ -43,27 +33,17 @@ import {ClipboardType} from 'lucide-vue-next'
 import pinia from "~/stores/index.ts";
 import {useConstactStore} from "~/stores/contactFormsStore.js";
 import ContactFormsComponent from "~/components/ContactFormsComponent.vue";
+import {useOpeningStore} from "~/stores/OpeningStore.js";
+import OpeningComponent from "~/components/OpeningComponent.vue";
 const runTimeConfigs = useRuntimeConfig()
 
 
-const {error,data: openingHours} = useAsyncData(`OpeningHours`,() => {
-  return $fetch(`${runTimeConfigs.public.API_URL}/api/openinghours`, {
-        method: `GET`,
-        mode: "cors",
-        headers: {
-          "content-Type": "application/json",
-          "x-api-key": `${runTimeConfigs.public.API_KEY}`
-        },
-        lazy: true,
-        suspense: false,
 
 
-      }
-  )
 
-})
-
-const openingHoursValue = await openingHours._rawValue?.results
+// management of opening hours
+const openingHoursStore = useOpeningStore(pinia())
+openingHoursStore.getOpeningHours()
 // management of contact forms
 
 const contactStore = useConstactStore(pinia())

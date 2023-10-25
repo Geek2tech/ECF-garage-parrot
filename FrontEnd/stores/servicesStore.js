@@ -28,8 +28,7 @@ export const useServicesStore = defineStore('services',{
                                 "x-api-key": `${runTimeConfigs.public.API_KEY}`
                             },
                             key: `ServiceList`,
-                            lazy: true,
-                            suspense: false,
+
                             params: {
                                 page: "",
                                 limit: ""

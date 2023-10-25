@@ -41,8 +41,7 @@ export const useCommentStore = defineStore('comments', {
                                 "x-api-key": `${runTimeConfigs.public.API_KEY}`
                             },
                             key: `commentList-${this.activePage}`,
-                            lazy: true,
-                            suspense: false,
+
                             body: JSON.stringify(body)
 
 
@@ -67,8 +66,7 @@ export const useCommentStore = defineStore('comments', {
                                 "x-api-key": `${runTimeConfigs.public.API_KEY}`
                             },
                             key: `commentList-${this.activePage}`,
-                            lazy: true,
-                            suspense: false,
+
                             params: {
                                 page: this.activePage,
                                 limit: 4

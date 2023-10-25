@@ -24,25 +24,21 @@
         <ul
             id="toggled-menu"
             class=" hideMenu  w-full absolute top-full left-0  -z-50 bg-[#D9777F] md:bg-transparent border-b border-gray-200 flex flex-col
-items-center md:static md:z-50 md:w-min md:transform-none md:border-none md:flex-row "
+items-center md:static md:z-50 md:w-min md:transform-none md:border-none md:flex-row md:w-auto"
         >
           <li class="py-4 md:py-0 md:mr-6 ">
-            <a href="#" class="text-sm uppercase  w-full text-[#262526]
+            <a href="/" class="text-sm uppercase  w-full text-[#262526]
            md:text-[#F2F2F2] hover:text-[#F2F2F2] md:hover:text-[#262526] ">Acceuil
             </a>
           </li>
+
           <li class="py-4 md:py-0 md:mr-6">
-            <a href="#" class="text-sm uppercase  w-full text-[#262526]
-          md:text-[#F2F2F2] hover:text-[#F2F2F2] md:hover:text-[#262526]">Nos Prestations
-            </a>
-          </li>
-          <li class="py-4 md:py-0 md:mr-6">
-            <a href="#" class="text-sm uppercase  w-full text-[#262526] 
+            <a href="/occasions" class="text-sm uppercase  w-full text-[#262526]
            md:text-[#F2F2F2] hover:text-[#F2F2F2]  md:hover:text-[#262526] ">Nos occasions
             </a>
           </li>
           <li class="py-4 md:py-0 md:mr-6">
-            <a href="#" class="text-sm uppercase w-full text-[#262526] hover:text-[#F2F2F2]
+            <a href="#"  :onClick="toggleModal"  class="text-sm uppercase w-full text-[#262526] hover:text-[#F2F2F2]
           md:text-[#F2F2F2] md:hover:text-[#262526] ">Nous contacter
             </a>
           </li>
@@ -64,8 +60,13 @@ items-center md:static md:z-50 md:w-min md:transform-none md:border-none md:flex
 <script setup lang="js">
 import {Menu} from 'lucide-vue-next'
 import {X} from 'lucide-vue-next'
+import {useConstactStore} from "~/stores/contactFormsStore.js";
+import pinia from "~/stores/index.ts";
 
-
+const contactStore = useConstactStore(pinia())
+function toggleModal() {
+  contactStore.toggleModal()
+}
 </script>
 <script lang="js">
 import {render} from "vue";

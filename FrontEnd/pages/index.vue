@@ -6,7 +6,9 @@ import PresentationComponent from "~/components/PresentationComponent.vue";
 import ServicesComponent from "~/components/ServicesComponent.vue";
 import {useServicesStore} from "~/stores/servicesStore.js";
 
+
 const route = useRoute()
+
 
 // service part management
 
@@ -55,7 +57,7 @@ function toggleCommentModal() {
     <PresentationComponent/>
   </section>
 
-  <section id="servicesSection" class=" h-[800px]  bg-[url('/images/car-engine.jpg')] bg-cover overflow-auto">
+  <section id="servicesSection" class=" h-[800px]  bg-[url('/images/car-3504910_1920.jpg')]  overflow-auto">
 
 <div id="descriptionService">
   <h1 class="  bg-black/70 p-4 text-4xl md:text-5xl text-center text-[#D92332]">Nos prestations</h1>
