@@ -8,7 +8,7 @@
           <PhoneCall/>
           <span class="px-3 text-lg"> 06.66.66.66.66</span>
           <ClipboardType/>
-          <span class="px-3 text-lg"> Remplir le formulaire de contact</span>
+          <button  type=button :onClick="toggleModal" class=" hover:text-[#D9777F]  px-3 text-lg"> Remplir le formulaire de contact</button>
       </div>
 
 
@@ -30,6 +30,7 @@
           </div>
         </div>
       </div>
+      <ContactFormsComponent v-model="contactStore.ModalActive"/>
     </footer>
 
 
@@ -39,6 +40,9 @@
 <script setup lang="js">
 import {PhoneCall} from 'lucide-vue-next'
 import {ClipboardType} from 'lucide-vue-next'
+import pinia from "~/stores/index.ts";
+import {useConstactStore} from "~/stores/contactFormsStore.js";
+import ContactFormsComponent from "~/components/ContactFormsComponent.vue";
 const runTimeConfigs = useRuntimeConfig()
 
 
@@ -60,6 +64,13 @@ const {error,data: openingHours} = useAsyncData(`OpeningHours`,() => {
 })
 
 const openingHoursValue = await openingHours._rawValue?.results
+// management of contact forms
+
+const contactStore = useConstactStore(pinia())
+
+function toggleModal() {
+  contactStore.toggleModal()
+}
 
 </script>
 

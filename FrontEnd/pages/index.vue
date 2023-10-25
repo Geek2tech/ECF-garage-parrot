@@ -3,22 +3,20 @@ import {useCommentStore} from "~/stores/commentStore.js";
 import pinia from "~/stores/index.ts";
 import CommentComponent from "~/components/CommentComponent.vue";
 import PresentationComponent from "~/components/PresentationComponent.vue";
-import {suppressSpecialChar} from '../helpers/fieldControl.js'
 import ServicesComponent from "~/components/ServicesComponent.vue";
 import {useServicesStore} from "~/stores/servicesStore.js";
 
 const route = useRoute()
 
-// Gestion de la partie service
+// service part management
 
 const serviceStore = useServicesStore(pinia())
 serviceStore.loadServices()
 
 
-// Gestion de la partie Comment
+// comment part management
 
 const commentStore = useCommentStore(pinia())
-const commentModal = ref(false)
 commentStore.loadComment()
 
 function refresh(event) {
@@ -39,9 +37,9 @@ function refresh(event) {
     }
   }
 }
-// gestion  de la modal ajout commentaire
+// add comment modal management
 function toggleCommentModal() {
-  //commentModal.value = commentModal.value === false;
+
   commentStore.toggleModal()
 }
 
@@ -92,19 +90,11 @@ function toggleCommentModal() {
 
 
     <div class="flex flex-row flex-wrap m-4 justify-center max-w-[250px}">
-
-
       <div v-for="comment in commentStore.commentList?.results" class="m-3 max-w-[250px}">
-
         <CommentComponent :comment="comment"/>
-
       </div>
-
-
     </div>
     <div class="flex justify-center mb-6">
-
-
       <UButton
           label='<'
           color="red"

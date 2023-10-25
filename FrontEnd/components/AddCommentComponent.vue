@@ -26,7 +26,7 @@ async function submitComment(nom, comment, note) {
     return
   }
   commentStore.addComment(suppressSpecialChar(nom), suppressSpecialChar(comment), suppressSpecialChar(note))
-  //commentModal.value = false
+
 
   commentStore.loadComment()
   commentStore.toggleModal()
@@ -54,7 +54,7 @@ function checkLength(event) {
 </script>
 
 <template>
-  <UModal v-model="commentModal">
+  <UModal >
 
     <UCard :ui="{ divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
       <template #header>
