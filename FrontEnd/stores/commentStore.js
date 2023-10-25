@@ -10,8 +10,10 @@ export const useCommentStore = defineStore('comments', {
 
         }
     },
-    // could also be defined as
-    // state: () => ({ count: 0 })
+   getters:{
+
+
+   },
     actions: {
         increment() {
 

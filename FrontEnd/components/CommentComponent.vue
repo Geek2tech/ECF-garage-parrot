@@ -22,7 +22,7 @@ export default {
 
 <template>
 
-<UCard class="oneComment  barlow w-[250px] h-[250px] "
+<UCard class="oneComment  w-[250px] h-[250px] "
        :ui="{
     divide: 'divide-y divide-gray-300 dark:divide-white/50',
     background:'bg-gray-50 dark:bg-gray-700/70',

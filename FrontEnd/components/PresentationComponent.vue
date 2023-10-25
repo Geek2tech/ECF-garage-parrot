@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <section id="presentationSection" >
+
     <div class="bg-[#262526]  text-center p-7">
       <h1 class=" text-4xl md:text-6xl text-[#D92332]">Bienvenue chez<strong> Vincent Parrot</strong></h1>
       <h2 class=" text-3xl md:text-5xl text-[#D94350] pb-5">Plus q'un métier une passion</h2>
@@ -13,7 +13,7 @@
 
 
     </div>
-  </section>
+
 
 </template>
 

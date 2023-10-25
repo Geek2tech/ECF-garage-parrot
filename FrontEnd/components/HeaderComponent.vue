@@ -23,30 +23,31 @@
         </button>
         <ul
             id="toggled-menu"
-            class=" hideMenu  w-full absolute top-full left-0  -z-50  border-b border-gray-200 flex flex-col
-items-center md:static md:z-50 md:w-min md:transform-none md:border-none md:flex-row"
+            class=" hideMenu  w-full absolute top-full left-0  -z-50 bg-[#D9777F] md:bg-transparent border-b border-gray-200 flex flex-col
+items-center md:static md:z-50 md:w-min md:transform-none md:border-none md:flex-row "
         >
           <li class="py-4 md:py-0 md:mr-6 ">
-            <a href="#" class="text-sm uppercase  w-full text-[#262526] hover:text-[#D92332]
-           md:text-[#F2F2F2] md:hover:text-[#262526] ">Acceuil</a>
-          </li>
-          <li class="py-4 md:py-0 md:mr-6">
-            <a href="#" class="text-sm uppercase  w-full text-[#262526] hover:text-[#D92332]
-          md:text-[#F2F2F2] md:hover:text-[#262526]">Nos Prestations
+            <a href="#" class="text-sm uppercase  w-full text-[#262526]
+           md:text-[#F2F2F2] hover:text-[#F2F2F2] md:hover:text-[#262526] ">Acceuil
             </a>
           </li>
           <li class="py-4 md:py-0 md:mr-6">
-            <a href="#" class="text-sm uppercase  w-full text-[#262526] hover:text-[#D92332]
-           md:text-[#F2F2F2] md:hover:text-[#262526] ">Nos occasions
+            <a href="#" class="text-sm uppercase  w-full text-[#262526]
+          md:text-[#F2F2F2] hover:text-[#F2F2F2] md:hover:text-[#262526]">Nos Prestations
             </a>
           </li>
           <li class="py-4 md:py-0 md:mr-6">
-            <a href="#" class="text-sm uppercase w-full text-[#262526] hover:text-[#D92332]
+            <a href="#" class="text-sm uppercase  w-full text-[#262526] 
+           md:text-[#F2F2F2] hover:text-[#F2F2F2]  md:hover:text-[#262526] ">Nos occasions
+            </a>
+          </li>
+          <li class="py-4 md:py-0 md:mr-6">
+            <a href="#" class="text-sm uppercase w-full text-[#262526] hover:text-[#F2F2F2]
           md:text-[#F2F2F2] md:hover:text-[#262526] ">Nous contacter
             </a>
           </li>
           <li class="py-4 md:py-0 md:mr-6">
-            <a href="#" class="text-sm uppercase  w-full text-[#262526] hover:text-[#D92332]
+            <a href="#" class="text-sm uppercase  w-full text-[#262526] hover:text-[#F2F2F2]
           md:text-[#F2F2F2] md:hover:text-[#262526] ">Espace pro
             </a>
           </li>
