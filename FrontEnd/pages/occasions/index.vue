@@ -1,13 +1,21 @@
-<script setup lang="ts">
-import {useCarStore} from "~/stores/carsStore";
+<script setup lang="js">
+import {useCarStore} from "~/stores/carsStore.js";
 import pinia from "~/stores/index.ts";
 
 
+const route = useRoute()
 
 const carStore = useCarStore(pinia())
- carStore.getMinMax()
-const test = carStore.maxMileage
-console.log(test)
+ const minmax = await carStore.getMinMax()
+ carStore.setCarId('all')
+carStore.setPriceFilter(carStore.maxPrice)
+carStore.setYearFilter(carStore.minYear)
+
+carStore.setMileageFilter(carStore.maxMileage)
+console.log('maxmileage', carStore.maxMileage)
+carStore.getCars()
+
+
 
 
 
@@ -19,8 +27,7 @@ console.log(test)
     <div>
      <p>
 
-       {{carStore.minPrice}}
-       {{carStore.minYear}}
+
 
 
      </p>

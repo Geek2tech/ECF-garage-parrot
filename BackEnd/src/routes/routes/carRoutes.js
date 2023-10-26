@@ -11,16 +11,11 @@ router.post('/api/protected/car',carController.addCar)
 // delete car
 router.delete('/api/car/:car_id',carController.deleteCar)
 
-// get max price
+// get mmin max for filtering
 
-router.get('/api/car/priceMinMax',carController.getPriceMinMax)
+router.get('/api/car/MinMax',carController.getMinMax)
 
-// get max mielage
 
-router.get('/api/car/MileageMinMax',carController.getMileageMinMax)
 
-// get max circulation year
-
-router.get('/api/car/CirculationYearMinMax',carController.getCirculationYearMinMax)
 
 module.exports = router

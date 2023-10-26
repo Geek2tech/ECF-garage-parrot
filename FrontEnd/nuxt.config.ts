@@ -15,7 +15,10 @@ export default defineNuxtConfig({
       enabled: true
     },
   },
-  colorMode: {    preference: 'light'  },
+  colorMode: {
+    preference: 'light',
+
+  },
   modules: ["@nuxtjs/tailwindcss"],
   modules: ['@pinia/nuxt'],
   modules: ['@nuxt/ui']

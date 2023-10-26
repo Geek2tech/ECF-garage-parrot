@@ -7,8 +7,9 @@ import ServicesComponent from "~/components/ServicesComponent.vue";
 import {useServicesStore} from "~/stores/servicesStore.js";
 
 
-const route = useRoute()
 
+
+const route = useRoute()
 
 // service part management
 

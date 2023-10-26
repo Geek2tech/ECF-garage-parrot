@@ -14,13 +14,20 @@ async function getCars(req, res) {
             message: 'Call getCars'
         })
         const carId = suppressSpecialChar(req.body.car_id)
-
+console.log(req.body.priceFilter)
+        console.log(req.body.circulationYearFilter)
+        console.log(req.body.mileageFilter)
 
         let query
         if (carId === "all") {
+
             const priceFilter = suppressSpecialChar(req.body.priceFilter)
             const circulationYearFilter = suppressSpecialChar(req.body.circulationYearFilter)
             const mileageFilter = suppressSpecialChar(req.body.mileageFilter)
+
+            //const priceFilter = req.body.priceFilter
+            //const circulationYearFilter = req.body.circulationYearFilter
+            //const mileageFilter = req.body.mileageFilter
 
             query = `SELECT c.* , p.photo_name FROM car_view AS c JOIN photos AS p ON c.car_id = p.car_id WHERE circulation_year >=  ${circulationYearFilter}  and price <=  ${priceFilter} and mileage <=  ${mileageFilter} and p.primary_photo = "Y"`
 
@@ -217,9 +224,12 @@ async function getCirculationYearMinMax(req, res) {
 
 }
 
-async function getMileageMinMax(req, res) {
+async function getMinMax(req, res) {
 
-    const query = 'SELECT MIN(mileage) as min,MAX(mileage) as max FROM car_view'
+    const query = 'SELECT MIN(price) as min_price ,MAX(price) as max_rice ,' +
+        ' MIN(circulation_year) as min_circulation_year , ' +
+        'MAX(circulation_year) as max_circulation_year , ' +
+        'MIN(mileage) as min_mileage,MAX(mileage) as max_mileage from car_view'
     logger.log({
         level: 'info',
         module: 'Cars',
@@ -234,8 +244,7 @@ module.exports = {
     getCars,
     addCar,
     deleteCar,
-    getMileageMinMax,
-    getPriceMinMax,
-    getCirculationYearMinMax
+    getMinMax,
+
 
 }
