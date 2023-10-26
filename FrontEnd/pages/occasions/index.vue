@@ -25,11 +25,11 @@ function test() {
 
 
 
-  <FilterRangeComponent :min-max="carStore.minMaxYear" name="Filtrage sur l'année"/>
+  <FilterRangeComponent :min-max="carStore.minMaxYear" name="minMaxYear" title="Année minimum"/>
 
-  <FilterRangeComponent :min-max="carStore.minMaxMileage" name="Filtrage sur le kilométrage"/>
+  <FilterRangeComponent :min-max="carStore.minMaxMileage" name="minMaxMileage" title="Kilométrage maximum"/>
 
- <FilterRangeComponent :min-max="carStore.minMaxPrice" name="Filtrage sur le prix"/>
+ <FilterRangeComponent :min-max="carStore.minMaxPrice" name="minMaxPrice" title="Prix maximum"/>
 
 
 

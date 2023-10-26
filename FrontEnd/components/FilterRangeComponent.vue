@@ -16,11 +16,15 @@ value: ref(),
   },
   props:{
     minMax:Object,
-    name: String
+    name: String,
+    title:String
   },
   methods:{
-    test(){
+    storeValue(){
       console.log(this.value)
+      console.log(this.name)
+
+
     },
     setMax(){
       this.value = minMax.max
@@ -33,8 +37,9 @@ value: ref(),
 </script>
 <template>
   <div class="m-3">
-    <h1>{{name}}</h1>
-   <URange  :onChange="test"  :step="1"  size="md" color="red" :name="name" placeholder="name" :min="minMax.min" :max="minMax.max" v-model="value"/>
+    <h1>{{title}}</h1>
+    <p class="text-center">{{value}}</p>
+   <URange  :onChange="storeValue"  :step="1"  size="md" color="red" :name="title" placeholder="name" :min="minMax.min" :max="minMax.max" v-model="value"/>
 
 
   </div>
