@@ -1,127 +1,124 @@
 // stores/counter.js
-import {defineStore} from 'pinia'
+import {defineStore, skipHydrate} from 'pinia'
 
 
 export const useCarStore = defineStore('car', {
     state: () => {
         return {
 
-            carId: null,
-            yearFilter: null,
-            mileageFilter: null,
-            priceFilter: null,
-            minYear: null,
-            maxYear: null,
-            minMileage: null,
-            maxMileage: null,
-            minPrice:null,
-            maxPrice:null,
+            carId: 'all',
+            yearFilter: '',
+            mileageFilter: '',
+            priceFilter: '',
+            carList: {},
+
+            minMaxYear: {},
+           minMaxPrice: {},
+           minMaxMileage:{},
             activePage: 1
 
 
-        }},
-    getters:{
+        }
+    },
+    getters: {
 
     },
 
-    actions:{
+    actions: {
         setCarId(carId) {
             this.carId = carId
         },
         setPriceFilter(priceFilter) {
-          this.priceFilter = priceFilter
+            this.priceFilter = priceFilter?.toString()
         },
-        setYearFilter(yearFilter){
-            this.yearFilter = yearFilter
+        setYearFilter(yearFilter) {
+            this.yearFilter = yearFilter?.toString()
         },
-        setMileageFilter(mileageFilter){
-            this.mileageFilter = mileageFilter
+        setMileageFilter(mileageFilter) {
+            this.mileageFilter = mileageFilter?.toString()
+
         },
-           getMinMax(){
-             const runTimeConfigs = useRuntimeConfig()
+        setMinMaxMileage(min,max){
+            this.minMaxMileage ={
+                min : min,
+                max: max
+            }
+        },
+        setMinMaxPrice(min,max){
+            this.minMaxPrice = {
+                min: min,
+                max: max
+            }
 
-              const {data:minMaxMileage} =   useAsyncData('MinMaxMileage',() => {
-                  return $fetch(`${runTimeConfigs.public.API_URL}/api/car/mileageminmax`,{
-                      method: `GET`,
-                      mode: "cors",
-                      headers: {
-                          "content-Type": "application/json",
-                          "x-api-key": `${runTimeConfigs.public.API_KEY}`
-                      },
-                      key: `mileageminmax`,
-                      pick:['results']
-                  })
-              })
+        },
+        setMinMaxYear(min,max) {
+            this.minMaxYear = {
+                min: min,
+                max: max
+            }
+        },
 
-              this.minMileage =  minMaxMileage._rawValue?.results[0].min
-              this.maxMileage =    minMaxMileage._rawValue?.results[0].max
-
-
-              const {data:minMaxPrice} =   useAsyncData('MinMaxPrice',() => {
-                  return $fetch(`${runTimeConfigs.public.API_URL}/api/car/PriceMinMax`,{
-                      method: `GET`,
-                      mode: "cors",
-                      headers: {
-                          "content-Type": "application/json",
-                          "x-api-key": `${runTimeConfigs.public.API_KEY}`
-                      },
-                      key: `MinMaxPrice`,
-                      pick:['results']
-                  })
-              })
-
-              this.minPrice =  minMaxPrice._rawValue?.results[0].min
-              this.maxPrice =  minMaxPrice._rawValue?.results[0].max
-
-              const {data:minMaxYear} =   useAsyncData('MinMaxYear',() => {
-                  return $fetch(`${runTimeConfigs.public.API_URL}/api/car/CirculationYearMinMax`,{
-                      method: `GET`,
-                      mode: "cors",
-                      headers: {
-                          "content-Type": "application/json",
-                          "x-api-key": `${runTimeConfigs.public.API_KEY}`
-                      },
-                      key: `CirculationYearMinMax`,
-                      pick:['results']
-                  })
-              })
-
-              this.minYear =  minMaxYear._rawValue?.results[0].min
-              this.maxYear =  minMaxYear._rawValue?.results[0].max
-
-         },
-         getCars(){
-console.log("on rentre dans getcars")
-              const body ={
-
-                  priceFilter: this.priceFilter,
-                  circulationYearFilter:this.yearFilter,
-                  mileageFilter:this.mileageFilter,
-                  car_id:this.carId
-
-              }
-              console.log('body ',JSON.stringify(body))
-
+         async getMinMax() {
             const runTimeConfigs = useRuntimeConfig()
 
-            const {error , data: cars} =  useAsyncData('Cars',() => {
-                return $fetch(`${runTimeConfigs.public.API_URL}/api/cars`,{
-                    method:'POST',
-                    mode:'cors',
+            const {data: carMinMax} = await  useAsyncData('CarMinMax', () => {
+                return $fetch(`${runTimeConfigs.public.API_URL}/api/car/minmax`, {
+                    method: `GET`,
+                    mode: "cors",
                     headers: {
                         "content-Type": "application/json",
                         "x-api-key": `${runTimeConfigs.public.API_KEY}`
                     },
-                    key:'Cars',
+                    key: `CarMinMax`,
+
+                    pick: ['results']
+                })
+            })
+
+
+            this.setMinMaxMileage(carMinMax._rawValue?.results[0].min_mileage,carMinMax._rawValue?.results[0].max_mileage)
+            this.setMinMaxPrice(carMinMax._rawValue?.results[0].min_price,carMinMax._rawValue?.results[0].max_price)
+            this.setMinMaxYear(carMinMax._rawValue?.results[0].min_year,carMinMax._rawValue?.results[0].max_year)
+             console.log(this.minMaxMileage.min)
+             console.log(this.minMaxPrice.min)
+             console.log(this.minMaxYear)
+
+        },
+       async getCars(price,year,mileage,carId) {
+            console.log("on rentre dans getcars")
+           console.log(this.priceFilter)
+            const  body = {
+
+
+                "priceFilter":  price,
+                "circulationYearFilter": year,
+                "mileageFilter": mileage,
+                "car_id": carId
+
+            }
+            console.log('body ', JSON.stringify(body))
+
+            const runTimeConfigs = useRuntimeConfig()
+
+            const {error, data: cars} = useAsyncData('Cars', () => {
+                return $fetch(`${runTimeConfigs.public.API_URL}/api/cars`, {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: {
+                        "content-Type": "application/json",
+                        "x-api-key": `${runTimeConfigs.public.API_KEY}`
+                    },
+                    key: 'Cars',
+                    lazy:true,
                     body: JSON.stringify(body),
                     params: {
-                        page:this.activePage,
-                        limit:10
+                        page: this.activePage,
+                        limit: 10
                     }
 
                 })
             })
-             console.log(error)
+this.carList =cars
 
 
 

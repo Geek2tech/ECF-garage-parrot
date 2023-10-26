@@ -35,7 +35,7 @@ import {useConstactStore} from "~/stores/contactFormsStore.js";
 import ContactFormsComponent from "~/components/ContactFormsComponent.vue";
 import {useOpeningStore} from "~/stores/OpeningStore.js";
 import OpeningComponent from "~/components/OpeningComponent.vue";
-const runTimeConfigs = useRuntimeConfig()
+
 
 
 

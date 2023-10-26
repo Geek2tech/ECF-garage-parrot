@@ -8,6 +8,7 @@ export default defineNuxtConfig({
       API_KEY:process.env.APP_APIKEY,
     }
   },
+
   devtools: {
     enabled: true,
 
@@ -19,7 +20,10 @@ export default defineNuxtConfig({
     preference: 'light',
 
   },
-  modules: ["@nuxtjs/tailwindcss"],
+  modules: [
+    "@nuxtjs/tailwindcss",
+
+  ],
   modules: ['@pinia/nuxt'],
   modules: ['@nuxt/ui']
 })

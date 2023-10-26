@@ -1,25 +1,19 @@
 import {defineStore} from "pinia";
 
-export const useServicesStore = defineStore('services',{
+export const useServicesStore = defineStore('services', {
 
-    state:() => {
+    state: () => {
         return {
-            services:null
+            services: null
         }
     },
-    getters:{
+    getters: {},
+    actions: {
 
-
-
-
-
-    },
-    actions:{
-
-        async loadServices() {
+         async loadServices() {
             const runTimeConfigs = useRuntimeConfig()
 
-            const {data: services} = useAsyncData(`Services`, () => {
+            const {data: services} =  await useAsyncData(`Services`, () => {
                     return $fetch(`${runTimeConfigs.public.API_URL}/api/services`, {
                             method: `GET`,
                             mode: "cors",
@@ -28,7 +22,7 @@ export const useServicesStore = defineStore('services',{
                                 "x-api-key": `${runTimeConfigs.public.API_KEY}`
                             },
                             key: `ServiceList`,
-
+                            lazy: true,
                             params: {
                                 page: "",
                                 limit: ""
@@ -41,9 +35,9 @@ export const useServicesStore = defineStore('services',{
 
                 },
             )
-this.services= await services._rawValue?.results
+            this.services = services._rawValue?.results
 
-        }
+        },
 
 
     }

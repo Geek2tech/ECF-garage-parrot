@@ -14,6 +14,7 @@ async function getCars(req, res) {
             message: 'Call getCars'
         })
         const carId = suppressSpecialChar(req.body.car_id)
+        console.log(carId)
 console.log(req.body.priceFilter)
         console.log(req.body.circulationYearFilter)
         console.log(req.body.mileageFilter)
@@ -21,13 +22,13 @@ console.log(req.body.priceFilter)
         let query
         if (carId === "all") {
 
-            const priceFilter = suppressSpecialChar(req.body.priceFilter)
-            const circulationYearFilter = suppressSpecialChar(req.body.circulationYearFilter)
-            const mileageFilter = suppressSpecialChar(req.body.mileageFilter)
+            //const priceFilter = suppressSpecialChar(req.body.priceFilter)
+            //const circulationYearFilter = suppressSpecialChar(req.body.circulationYearFilter)
+            //const mileageFilter = suppressSpecialChar(req.body.mileageFilter)
 
-            //const priceFilter = req.body.priceFilter
-            //const circulationYearFilter = req.body.circulationYearFilter
-            //const mileageFilter = req.body.mileageFilter
+            const priceFilter = req.body.priceFilter
+            const circulationYearFilter = req.body.circulationYearFilter
+            const mileageFilter = req.body.mileageFilter
 
             query = `SELECT c.* , p.photo_name FROM car_view AS c JOIN photos AS p ON c.car_id = p.car_id WHERE circulation_year >=  ${circulationYearFilter}  and price <=  ${priceFilter} and mileage <=  ${mileageFilter} and p.primary_photo = "Y"`
 
@@ -194,41 +195,13 @@ async function deleteCar(req, res) {
 
     })
 
-
-}
-
-async function getPriceMinMax(req, res) {
-
-    const query = 'SELECT MIN(price) as min , MAX(price) as max FROM car_view'
-
-    logger.log({
-        level: 'info',
-        module: 'Cars',
-        message: `Call getMaxPrice`
-    })
-
-    paginatedSelectQuery(req, res, query)
-}
-
-async function getCirculationYearMinMax(req, res) {
-
-    const query = 'SELECT MIN(circulation_year) as min , MAX(circulation_year) as max FROM car_view'
-
-    logger.log({
-        level: 'info',
-        module: 'Cars',
-        message: `Call getMaxCirculationYear`
-    })
-
-    paginatedSelectQuery(req, res, query)
-
 }
 
 async function getMinMax(req, res) {
 
-    const query = 'SELECT MIN(price) as min_price ,MAX(price) as max_rice ,' +
-        ' MIN(circulation_year) as min_circulation_year , ' +
-        'MAX(circulation_year) as max_circulation_year , ' +
+    const query = 'SELECT MIN(price) as min_price ,MAX(price) as max_price ,' +
+        ' MIN(circulation_year) as min_year , ' +
+        'MAX(circulation_year) as max_year , ' +
         'MIN(mileage) as min_mileage,MAX(mileage) as max_mileage from car_view'
     logger.log({
         level: 'info',

@@ -56,10 +56,10 @@ export const useCommentStore = defineStore('comments', {
         },
 
 
-        loadComment() {
+         loadComment() {
             const runTimeConfigs = useRuntimeConfig()
 
-            const {data: comments} = useAsyncData(`Comments`, () => {
+            const {data: comments} =  useAsyncData(`Comments`, () => {
                     return $fetch(`${runTimeConfigs.public.API_URL}/api/comments`, {
                             method: `GET`,
                             mode: "cors",
@@ -85,6 +85,8 @@ export const useCommentStore = defineStore('comments', {
             this.nbPage = this.commentList?.pages
 
         },
+
+
         toggleModal: function () {
 
             if (this.addModalActive === false) {

@@ -45,10 +45,10 @@ alert('Votre demande est bien enregistré')
       <UForm
           :state="stateForm"
       >
-        <UFormGroup label="Votre adresse email" name="mail" class="mb-4">
+        <UFormGroup  label="Votre adresse email" name="mail"  help="Entrez votre email" class="mb-4">
           <UInput type="email" v-model="stateForm.mail" autofocus/>
         </UFormGroup>
-        <UFormGroup label="Votre Message" name="message" class="mb-4">
+        <UFormGroup label="Votre Message" name="message" help="Entrez votre message n'hésitez pas à nous laisser un numéro de téléphone" class="mb-4">
           <UTextarea v-model="stateForm.message"/>
 
         </UFormGroup>
