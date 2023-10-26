@@ -79,14 +79,11 @@ export const useCarStore = defineStore('car', {
             this.setMinMaxMileage(carMinMax._rawValue?.results[0].min_mileage,carMinMax._rawValue?.results[0].max_mileage)
             this.setMinMaxPrice(carMinMax._rawValue?.results[0].min_price,carMinMax._rawValue?.results[0].max_price)
             this.setMinMaxYear(carMinMax._rawValue?.results[0].min_year,carMinMax._rawValue?.results[0].max_year)
-             console.log(this.minMaxMileage.min)
-             console.log(this.minMaxPrice.min)
-             console.log(this.minMaxYear)
+
 
         },
-       async getCars(price,year,mileage,carId) {
-            console.log("on rentre dans getcars")
-           console.log(this.priceFilter)
+       async getCars(carId,price,year,mileage) {
+
             const  body = {
 
 

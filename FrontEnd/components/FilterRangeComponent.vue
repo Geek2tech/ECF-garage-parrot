@@ -5,7 +5,9 @@
 
 </script>
 <script lang="js">
-import {stringify} from "devalue";
+
+import {useCarStore} from "~/stores/carsStore.js";
+import pinia from "~/stores/index.ts";
 
 export default  {
   data(){
@@ -23,7 +25,13 @@ value: ref(),
     storeValue(){
       console.log(this.value)
       console.log(this.name)
-
+      const storage = `carStore.${this.name}=${this.value}`
+      console.log(storage)
+      eval(storage)
+      console.log(carStore.priceFilter)
+      console.log(carStore.yearFilter)
+      console.log(carStore.mileageFilter)
+carStore.getCars("noselect",carStore.priceFilter)
 
     },
     setMax(){
@@ -32,6 +40,7 @@ value: ref(),
   }
 
 }
+const carStore = useCarStore(pinia())
 
 
 </script>
