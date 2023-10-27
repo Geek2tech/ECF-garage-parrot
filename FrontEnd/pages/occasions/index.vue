@@ -1,39 +1,50 @@
 <script setup lang="js">
-
-import {useCommentStore} from "~/stores/commentStore.js";
-
-const route = useRoute()
-
-
 import {useCarStore} from "~/stores/carsStore.js";
 import pinia from "~/stores/index.ts";
+
+// management of filter
 const carStore = useCarStore(pinia())
 carStore.getMinMax()
+// management of carList
 carStore.getCars("noselect")
+// modify photo name to add backend url
 
-function test() {
-  console.log(test)
-}
+
+
+
+
+
 
 
 
 </script>
 
 <template>
-  <section id="Cars" class="h-[800px]">
-<h1>Nos véhicules d'occasions</h1>
-{{carStore.carList}}
+  <section id="filters" >
+<h1 class="text-6xl text-center m-3">Nos véhicules d'occasions</h1>
 
 
-  <FilterRangeComponent :min-max="carStore.minMaxYear" name="yearFilter" title="Année minimum"/>
-
-  <FilterRangeComponent :min-max="carStore.minMaxMileage" name="mileageFilter" title="Kilométrage maximum"/>
-
- <FilterRangeComponent :min-max="carStore.minMaxPrice" name="priceFilter" title="Prix maximum"/>
+    <div class=" text-center flex  flex-wrap md:justify-around lg:justify-center justify-center">
 
 
+      <FilterRangeComponent :min-max="carStore.minMaxYear" name="yearFilter" title="Année minimum" class="w-[250px]"/>
+
+      <FilterRangeComponent :min-max="carStore.minMaxMileage" name="mileageFilter" title="Kilométrage maximum" class="w-[250px]"/>
+
+      <FilterRangeComponent :min-max="carStore.minMaxPrice" name="priceFilter" title="Prix maximum" class="w-[250px]"/>
+
+    </div>
+    <div class="border-b-2 border-[#D92332]"></div>
 
 
+
+
+<section id="carList" class="flex flex-wrap  ">
+
+    <CarsComponent v-for="carData in carStore.carList?.results"  :car="carData"  />
+
+
+</section>
 
   </section>
 

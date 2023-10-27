@@ -93,7 +93,7 @@ export const useCarStore = defineStore('car', {
                 "car_id": carId
 
             }
-            console.log('body ', JSON.stringify(body))
+
 
             const runTimeConfigs = useRuntimeConfig()
 

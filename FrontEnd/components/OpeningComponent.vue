@@ -1,8 +1,9 @@
 <script setup lang="ts">
 defineProps({
   opening:Object
-})
 
+
+})
 
 </script>
 

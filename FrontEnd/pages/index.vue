@@ -50,6 +50,7 @@ function toggleCommentModal() {
 </script>
 
 
+
 <template>
 
 
@@ -58,12 +59,12 @@ function toggleCommentModal() {
     <PresentationComponent/>
   </section>
 
-  <section id="servicesSection" class=" h-[800px]  bg-[url('/images/car-3504910_1920.jpg')]  overflow-auto">
+  <section id="servicesSection" class="   bg-[url('/images/car-3504910_1920.jpg')] h-auto ">
 
 <div id="descriptionService">
   <h1 class="  bg-black/70 p-4 text-4xl md:text-5xl text-center text-[#D92332]">Nos prestations</h1>
   <p class="  text-xl md:text-4xl bg-black/70 text-center">Notre équipe de passionnée de mécanique et d'automobile vous propose les prestations suivantes</p>
-<div class="serviceComponent  md:flex justify-center flex-wrap m-5" >
+<div class="serviceComponent  p-4  flex container items-center justify-center  flex-wrap m-5   " >
   <ServicesComponent v-for="service in serviceStore.services"  :service="service"/>
 </div>
 
@@ -123,16 +124,13 @@ function toggleCommentModal() {
 
 <style scoped>
 
-#servicesSection {
+
+p {
+  color: #F2F2F2;
 
 }
-p{
-  color:#F2F2F2;
 
-}
-#descriptionService{
 
-}
 
 
 </style>
