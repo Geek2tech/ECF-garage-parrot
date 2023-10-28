@@ -14,6 +14,7 @@ async function getCars(req, res) {
             message: 'Call getCars'
         })
         const carId = suppressSpecialChar(req.body.car_id)
+        console.log('From Back')
         console.log(carId)
 console.log(req.body.priceFilter)
         console.log(req.body.circulationYearFilter)
@@ -22,13 +23,13 @@ console.log(req.body.priceFilter)
         let query
         if (carId === "all") {
 
-            //const priceFilter = suppressSpecialChar(req.body.priceFilter)
-            //const circulationYearFilter = suppressSpecialChar(req.body.circulationYearFilter)
-            //const mileageFilter = suppressSpecialChar(req.body.mileageFilter)
+            const priceFilter = suppressSpecialChar(req.body.priceFilter.toString())
+            const circulationYearFilter = suppressSpecialChar(req.body.circulationYearFilter.toString())
+            const mileageFilter = suppressSpecialChar(req.body.mileageFilter.toString())
 
-            const priceFilter = req.body.priceFilter
-            const circulationYearFilter = req.body.circulationYearFilter
-            const mileageFilter = req.body.mileageFilter
+            //const priceFilter = req.body.priceFilter
+            //const circulationYearFilter = req.body.circulationYearFilter
+            //const mileageFilter = req.body.mileageFilter
 
             query = `SELECT c.* , p.photo_name FROM car_view AS c JOIN photos AS p ON c.car_id = p.car_id WHERE circulation_year >=  ${circulationYearFilter}  and price <=  ${priceFilter} and mileage <=  ${mileageFilter} and p.primary_photo = "Y"`
 

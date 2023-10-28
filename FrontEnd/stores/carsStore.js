@@ -15,7 +15,8 @@ export const useCarStore = defineStore('car', {
             minMaxYear: {},
            minMaxPrice: {},
            minMaxMileage:{},
-            activePage: 1
+            activePage: 1,
+            nbPage:""
 
 
         }
@@ -28,16 +29,7 @@ export const useCarStore = defineStore('car', {
         setCarId(carId) {
             this.carId = carId
         },
-        setPriceFilter(priceFilter) {
-            this.priceFilter = priceFilter?.toString()
-        },
-        setYearFilter(yearFilter) {
-            this.yearFilter = yearFilter?.toString()
-        },
-        setMileageFilter(mileageFilter) {
-            this.mileageFilter = mileageFilter?.toString()
 
-        },
         setMinMaxMileage(min,max){
             this.minMaxMileage ={
                 min : min,
@@ -56,6 +48,14 @@ export const useCarStore = defineStore('car', {
                 min: min,
                 max: max
             }
+        },
+        activePageDecrement() {
+            this.activePage--
+            console.log(this.activePage)
+        },
+        activePageIncrement() {
+            this.activePage++
+            console.log(this.activePage)
         },
 
          async getMinMax() {
@@ -110,12 +110,13 @@ export const useCarStore = defineStore('car', {
                     body: JSON.stringify(body),
                     params: {
                         page: this.activePage,
-                        limit: 10
+                        limit: 1
                     }
 
                 })
             })
 this.carList =cars
+           this.nbPage = this.carList?.pages
 
 
 

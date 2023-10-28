@@ -4,11 +4,16 @@ const props =defineProps({
   car : Object
 })
 
+
+
+
+
 // URl of photo ( add url for backend
-const url=`${runTimeConfigs.public.API_URL}/photo/${props.car.photo_name}`
+console.log(props.car)
+const url=`${runTimeConfigs.public.API_URL}/photo/`
 
 function test(){
-  alert('test')
+  alert(props.car.car_id)
 }
 
 </script>
@@ -17,7 +22,7 @@ function test(){
 
 <div  class=" cursor-pointer container border-b-2 lg:flex lg:justify-center lg:mt-2  " :onClick="test" >
   <div class="lg:w-1/3 justify-end">
-    <img crossorigin="anonymous" :src="url" :alt="car.model_name" class="rounded-3xl p-2 object-cover  ">
+    <img crossorigin="anonymous" :src="url+car.photo_name" :alt="car.model_name" class="rounded-3xl p-2 object-cover  ">
   </div>
 
   <div class="p-2 w-2/5">

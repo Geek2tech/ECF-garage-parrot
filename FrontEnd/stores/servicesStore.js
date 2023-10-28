@@ -10,10 +10,10 @@ export const useServicesStore = defineStore('services', {
     getters: {},
     actions: {
 
-          loadServices() {
+         async loadServices() {
             const runTimeConfigs = useRuntimeConfig()
 
-            const {data: services} =   useAsyncData(`Services`, () => {
+            const {data: services} = await  useAsyncData(`Services`, () => {
                     return $fetch(`${runTimeConfigs.public.API_URL}/api/services`, {
                             method: `GET`,
                             mode: "cors",
