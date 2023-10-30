@@ -28,7 +28,8 @@ function submitMail(mail,message){
     alert('Votre email ne semble pas correct')
     return;
   }
-contactStore.sendMail(suppressSpecialChar(mail),suppressSpecialChar(message))
+  const subject = `demande d'information de ${mail} `
+contactStore.sendMail(suppressSpecialChar(subject),suppressSpecialChar(message))
 alert('Votre demande est bien enregistré')
   contactStore.toggleModal()
 }

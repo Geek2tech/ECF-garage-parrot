@@ -14,13 +14,13 @@ const route = useRoute()
 // service part management
 
 const serviceStore =  useServicesStore(pinia())
-serviceStore.loadServices()
+ await serviceStore.loadServices()
 
 
 // comment part management
 
 const commentStore = useCommentStore(pinia())
-commentStore.loadComment()
+await commentStore.loadComment()
 
 function refresh(event) {
 

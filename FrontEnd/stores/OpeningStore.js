@@ -18,7 +18,7 @@ export const useOpeningStore = defineStore('opening', {
             const runTimeConfigs = useRuntimeConfig()
 
 
-            const {data: openingHours} = useAsyncData(`OpeningHours`,() => {
+            const {data: openingHours} = await useAsyncData(`OpeningHours`,() => {
                 return $fetch(`${runTimeConfigs.public.API_URL}/api/openinghours`, {
                         method: `GET`,
                         mode: "cors",

@@ -10,11 +10,12 @@ const props =defineProps({
 const url=`${runTimeConfigs.public.API_URL}/photo/`
 
  function goDetails(event){
-console.log(event.target.value)
+//console.log(event.target.value)
  // console.log(event.target.attributes.value.value)
-   event.target.value
+  //console.log( event.target.value)
+   console.log(props.car.car_id)
 //navigateTo({path:`/occasions/${event.target.attributes.value.value}`})
-navigateTo({path:`/occasions/${event.target.value}`})
+navigateTo({path:`/occasions/${props.car.car_id}`})
 
 }
 

@@ -23,11 +23,11 @@ export const useConstactStore = defineStore('contact', {
             }
 
         },
-        sendMail(mail,message){
+        sendMail(subject,message){
 
             const body = {
                 to: 'geek2tech@geek2tech.fr',
-                subject:`Demande d'information de ${mail}`,
+                subject:`${subject} `,
                 message: message
             }
 

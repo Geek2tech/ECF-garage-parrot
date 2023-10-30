@@ -14,7 +14,7 @@
 
       <div class="text-center m-5 text-2xl lg:text-4xl"> Nos horaires d'ouvertures</div>
 
-      <div class="  flex flex-col   md:flex-row xl:text-lg justify-evenly">
+      <div class="  flex flex-wrap  md:flex-row xl:text-lg justify-evenly">
 
 <OpeningComponent v-for="openingHour in openingHoursStore.openingHours" :opening="openingHour"/>
 
@@ -43,7 +43,7 @@ import OpeningComponent from "~/components/OpeningComponent.vue";
 
 // management of opening hours
 const openingHoursStore = useOpeningStore(pinia())
-openingHoursStore.getOpeningHours()
+await openingHoursStore.getOpeningHours()
 // management of contact forms
 
 const contactStore = useConstactStore(pinia())
