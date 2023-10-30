@@ -7,7 +7,7 @@ import CommentComponent from "~/components/CommentComponent.vue";
 const carStore = useCarStore(pinia())
 carStore.getMinMax()
 // management of carList
-carStore.getCars("noselect")
+await carStore.getCars("noselect")
 // modify photo name to add backend url
 
 

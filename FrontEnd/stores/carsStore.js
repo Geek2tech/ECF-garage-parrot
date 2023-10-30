@@ -11,6 +11,8 @@ export const useCarStore = defineStore('car', {
             mileageFilter: '',
             priceFilter: '',
             carList: {},
+            equipementList:{},
+            photoList:{},
 
             minMaxYear: {},
            minMaxPrice: {},
@@ -120,8 +122,59 @@ this.carList =cars
 
 
 
-        }
+        },
+        async getCarEquipement(id){
+            const runTimeConfigs = useRuntimeConfig()
+            const body = {
+                car_id: id
+            }
 
-    }
+            const { data: equipements} = await useAsyncData('equipements', () => {
+                return $fetch(`${runTimeConfigs.public.API_URL}/api/carEquipements`, {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: {
+                        "content-Type": "application/json",
+                        "x-api-key": `${runTimeConfigs.public.API_KEY}`
+                    },
+                    key: 'equipements',
+                    lazy:true,
+                    body: JSON.stringify(body),
+                    params: {
+                        page: "",
+                        limit: ""
+                    }
+
+                })
+            })
+            this.equipementList = equipements
+
+        },
+        async getCarPhotos(id) {
+            const runTimeConfigs = useRuntimeConfig()
+
+
+            const { data: carPhotos} = await useAsyncData('carPhotos', () => {
+                return $fetch(`${runTimeConfigs.public.API_URL}/api/photos/${id}`, {
+                    method: 'GET',
+                    mode: 'cors',
+                    headers: {
+                        "content-Type": "application/json",
+                        "x-api-key": `${runTimeConfigs.public.API_KEY}`
+                    },
+                    key: 'carPhotos',
+                    lazy:true,
+
+                    params: {
+                        page: "",
+                        limit: ""
+                    }
+
+                })
+            })
+            this.photoList = carPhotos
+        }
+    },
+
 
 })

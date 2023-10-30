@@ -1,4 +1,6 @@
 <script setup lang="js">
+import {navigateTo} from "#app";
+
 const runTimeConfigs = useRuntimeConfig()
 const props =defineProps({
   car : Object
@@ -7,15 +9,18 @@ const props =defineProps({
 // URl of photo
 const url=`${runTimeConfigs.public.API_URL}/photo/`
 
-function test(){
-  alert(props.car.car_id)
+function goDetails(event){
+  console.log(event)
+console.log(event.target.attributes.value)
+navigateTo({path:`/occasions/${event.target.attributes.value.value}`})
+
 }
 
 </script>
 
 <template>
 
-<div  class=" cursor-pointer container border-b-2 lg:flex lg:justify-center lg:mt-2  " :onClick="test" >
+<div   class=" cursor-pointer container border-b-2 lg:flex lg:justify-center lg:mt-2 " :value="car.car_id"  >
   <div class="lg:w-1/3 justify-end">
     <img crossorigin="anonymous" :src="url+car.photo_name" :alt="car.model_name" class="rounded-3xl p-2 object-cover  ">
   </div>
@@ -25,6 +30,14 @@ function test(){
     <p class="lg:mb-4"> {{car.circulation_year}} - {{car.mileage}} km - {{ car.fuel_name}} - {{car.transmission_type_name}}</p>
     <p class="font-bold ">{{car.price}} €</p>
   </div>
+  <UButton
+      label="Voir le détail de l'annonce"
+      color="red"
+      :onClick="goDetails"
+      :value="car.car_id"
+       />
+
+
 
 
 

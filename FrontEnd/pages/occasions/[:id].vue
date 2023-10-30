@@ -1,20 +1,94 @@
-<script setup lang="ts">
+<script setup lang="js">
 import {useCarStore} from "~/stores/carsStore";
 
 const route = useRoute()
-console.log(route.params)
+// init data
 const carStore = useCarStore()
+const runTimeConfigs = useRuntimeConfig()
+await carStore.getCars(route.params.id)
+await carStore.getCarEquipement(route.params.id)
+await carStore.getCarPhotos(route.params.id)
 
-carStore.getCars(route.params.id)
-console.log(carStore.carList.results)
+
+console.log('photos',carStore.photoList)
+console.log('equipement',carStore.equipementList)
+// Set url to get photos
+const urlPHotos=`${runTimeConfigs.public.API_URL}/photo/`
+
+
+
+
 
 </script>
 
 <template>
-Page de détails
-  {{ $route.params.id }}
-  {{ carStore.carList.constructor_name}}
 
+<section id="carDetails" class="=container lg:w-[1200px]   m-auto">
+
+
+
+  <h1 class="text-center text-3xl lg:text-5xl">{{ carStore.carList.results[0]?.constructor_name}} - {{carStore.carList.results[0]?.model_name}} - {{carStore.carList.results[0]?.circulation_year}} </h1>
+  <h2 class="text-center text-2xl lg:text-4xl"> {{carStore.carList.results[0]?.color}} - {{carStore.carList.results[0]?.doors}} portes  </h2>
+  <h2 class="text-center text-2xl  lg:text-4xl">{{carStore.carList.results[0]?.mileage}} Km  -  {{carStore.carList.results[0]?.price}} €</h2>
+
+
+
+
+  <img crossorigin="anonymous" :src="urlPHotos + carStore.carList.results[0]?.photo_name" alt="photo" class="object-cover">
+  <div v-if="carStore.photoList.rows !== 0" class=" flex flex-wrap  align-middle justify-center  ">
+
+    <div v-for="photo in carStore.photoList.results" class= "  w-1/2 md:w-1/3 p-3  ">
+      <img crossorigin="anonymous" :src="urlPHotos + photo.photo_name" alt="">
+
+    </div>
+  </div>
+<div class=" text-center md:justify-evenly md:flex">
+  <section id="motor" class="border-b-2 border-gray-400 md:border-none mt-1">
+    <h2 class="font-bold text-2xl ">Motorisation</h2>
+    <div>
+      Puissance : {{carStore.carList.results[0].horse_power}}
+    </div>
+    <div>
+      Puissance Fiscal : {{carStore.carList.results[0].fiscal_power}}
+    </div>
+    <div>
+      cylindrée : {{carStore.carList.results[0].cylinder_capacity}} cm3
+    </div>
+    <div>
+      Type motorisation : {{carStore.carList.results[0].motor_type}}
+    </div>
+    <div>
+      Carburant : {{carStore.carList.results[0].fuel_name}}
+    </div>
+
+  </section>
+  <section id="transmission" class="border-b-2 border-gray-400 md:border-none mt-1">
+    <h2 class="font-bold text-2xl ">Transmission</h2>
+<div>
+  Type de boite : {{carStore.carList.results[0].transmission_type_name}}
+</div>
+  <div>
+    Type de transmission : {{carStore.carList.results[0].mode_name}}
+  </div>
+
+
+  </section>
+  <section id="equipements" class="border-b-2 border-gray-400 md:border-none mt-1">
+    <h2 class="font-bold text-2xl ">Equipements</h2>
+    <div v-if="carStore.equipementList.rows === 0" >
+      Pas d'équipements particulier
+
+    </div>
+
+    <div v-for="equipement in carStore.equipementList.results">
+
+      {{equipement.equipement_name}}
+
+    </div>
+  </section>
+
+</div>
+</section>
 </template>
 
 <style scoped>
