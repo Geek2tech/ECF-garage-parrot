@@ -2,6 +2,7 @@
 import {defineStore, skipHydrate} from 'pinia'
 
 
+
 export const useCarStore = defineStore('car', {
     state: () => {
         return {
@@ -57,7 +58,7 @@ export const useCarStore = defineStore('car', {
         },
         activePageIncrement() {
             this.activePage++
-            console.log(this.activePage)
+
         },
 
          async getMinMax() {
@@ -99,7 +100,7 @@ export const useCarStore = defineStore('car', {
 
             const runTimeConfigs = useRuntimeConfig()
 
-            const {error, data: cars} = useAsyncData('Cars', () => {
+            const {error, data: cars} = await useAsyncData('Cars', () => {
                 return $fetch(`${runTimeConfigs.public.API_URL}/api/cars`, {
                     method: 'POST',
                     mode: 'cors',
@@ -112,11 +113,15 @@ export const useCarStore = defineStore('car', {
                     body: JSON.stringify(body),
                     params: {
                         page: this.activePage,
-                        limit: 10
-                    }
+                        limit: 2
+                    },
 
-                })
-            })
+
+                }
+                )
+
+            }
+            )
 this.carList =cars
            this.nbPage = this.carList?.pages
 

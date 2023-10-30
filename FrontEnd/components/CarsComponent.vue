@@ -9,10 +9,12 @@ const props =defineProps({
 // URl of photo
 const url=`${runTimeConfigs.public.API_URL}/photo/`
 
-function goDetails(event){
-  console.log(event)
-console.log(event.target.attributes.value)
-navigateTo({path:`/occasions/${event.target.attributes.value.value}`})
+ function goDetails(event){
+console.log(event.target.value)
+ // console.log(event.target.attributes.value.value)
+   event.target.value
+//navigateTo({path:`/occasions/${event.target.attributes.value.value}`})
+navigateTo({path:`/occasions/${event.target.value}`})
 
 }
 
@@ -26,16 +28,19 @@ navigateTo({path:`/occasions/${event.target.attributes.value.value}`})
   </div>
 
   <div class="p-2 w-2/5">
-    <h1 class="text-center lg:text-justify lg:text-4xl lg:p2 lg:mb-6 text-2xl"><strong>{{car.constructor_name}} {{car.model_name}}</strong>  </h1>
+    <h1 class=" font-bold lg:text-center lg:text-justify lg:text-4xl lg:p2 lg:mb-6 text-2xl"><strong>{{car.constructor_name}} {{car.model_name}}</strong>  </h1>
     <p class="lg:mb-4"> {{car.circulation_year}} - {{car.mileage}} km - {{ car.fuel_name}} - {{car.transmission_type_name}}</p>
     <p class="font-bold ">{{car.price}} €</p>
   </div>
+
   <UButton
       label="Voir le détail de l'annonce"
       color="red"
       :onClick="goDetails"
       :value="car.car_id"
+      class="mb-4 lg:mb-0"
        />
+
 
 
 

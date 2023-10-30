@@ -44,6 +44,7 @@ alert('Votre demande est bien enregistré')
 
       <UForm
           :state="stateForm"
+
       >
         <UFormGroup  label="Votre adresse email" name="mail"  help="Entrez votre email" class="mb-4">
           <UInput type="email" v-model="stateForm.mail" autofocus/>

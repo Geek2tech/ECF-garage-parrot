@@ -27,20 +27,20 @@
 items-center md:static md:z-50 md:w-min md:transform-none md:border-none md:flex-row md:w-auto"
         >
           <li class="py-4 md:py-0 md:mr-6 ">
-            <nuxt-link to="/" class="text-sm uppercase  w-full text-[#262526]
+            <a href="/" class="text-sm uppercase  w-full text-[#262526]
            md:text-[#F2F2F2] hover:text-[#F2F2F2] md:hover:text-[#262526] ">Acceuil
-            </nuxt-link>
+            </a>
           </li>
 
           <li class="py-4 md:py-0 md:mr-6">
-            <nuxt-link to="/occasions" class="text-sm uppercase  w-full text-[#262526]
+            <a href="/occasions" class="text-sm uppercase  w-full text-[#262526]
            md:text-[#F2F2F2] hover:text-[#F2F2F2]  md:hover:text-[#262526] ">Nos occasions
-            </nuxt-link>
+            </a>
           </li>
           <li class="py-4 md:py-0 md:mr-6">
-            <nuxt-link to="#"  :onClick="toggleModal"  class="text-sm uppercase w-full text-[#262526] hover:text-[#F2F2F2]
+            <a href="#"  :onClick="toggleModal"  class="text-sm uppercase w-full text-[#262526] hover:text-[#F2F2F2]
           md:text-[#F2F2F2] md:hover:text-[#262526] ">Nous contacter
-            </nuxt-link>
+            </a>
           </li>
           <li class="py-4 md:py-0 md:mr-6">
             <a href="#" class="text-sm uppercase  w-full text-[#262526] hover:text-[#F2F2F2]

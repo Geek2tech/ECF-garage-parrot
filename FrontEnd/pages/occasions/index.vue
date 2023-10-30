@@ -4,28 +4,31 @@ import pinia from "~/stores/index.ts";
 import CommentComponent from "~/components/CommentComponent.vue";
 
 // management of filter
-const carStore = useCarStore(pinia())
-carStore.getMinMax()
+ const carStore = useCarStore(pinia())
+await carStore.getMinMax()
 // management of carList
-await carStore.getCars("noselect")
-// modify photo name to add backend url
+  carStore.getCars("noselect")
 
 
-function refresh(event) {
+
+ function refresh(event) {
 
 
   if (event.target.innerText === ">") {
 
     if (carStore.activePage < carStore.nbPage) {
       carStore.activePageIncrement()
-      carStore.getCars("noselect")
+
+     // carStore.getCars("noselect")
+       carStore.getCars("all", carStore.priceFilter, carStore.yearFilter, carStore.mileageFilter)
     }
 
   } else {
 
     if (carStore.activePage > 1) {
       carStore.activePageDecrement()
-      carStore.getCars("noselect")
+     // carStore.getCars("noselect")
+      carStore.getCars("all", carStore.priceFilter, carStore.yearFilter, carStore.mileageFilter)
     }
   }
 }
@@ -53,7 +56,7 @@ function refresh(event) {
 
 
 
-<section id="carList" class="flex flex-wrap  ">
+<section id="carList" class="flex flex-wrap justify-center ">
 
     <CarsComponent v-for="carData in carStore.carList?.results"  :car="carData"  />
 

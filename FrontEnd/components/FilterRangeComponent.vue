@@ -20,22 +20,14 @@ export default {
 
   },
   methods: {
-    storeValue() {
+    async storeValue() {
 
       const storage = `carStore.${this.name}=${this.value}`
 
       eval(storage)
-      if (!carStore.yearFilter) {
-        carStore.yearFilter = carStore.minMaxYear.min
-      }
-      if (!carStore.mileageFilter) {
-        carStore.mileageFilter = carStore.minMaxMileage.max
-      }
-      if (!carStore.priceFilter) {
-        carStore.priceFilter = carStore.minMaxPrice.max
-      }
 
-      carStore.getCars("all", carStore.priceFilter, carStore.yearFilter, carStore.mileageFilter)
+carStore.activePage=1
+      await carStore.getCars("all", carStore.priceFilter, carStore.yearFilter, carStore.mileageFilter)
 
     },
 
@@ -47,7 +39,17 @@ export default {
       } else {
         this.value =  this.minMax.max
       }
-
+       const storage = `carStore.${this.name}=${this.value}`
+       eval(storage)
+       if (!carStore.yearFilter) {
+         carStore.yearFilter = carStore.minMaxYear.min
+       }
+       if (!carStore.mileageFilter) {
+         carStore.mileageFilter = carStore.minMaxMileage.max
+       }
+       if (!carStore.priceFilter) {
+         carStore.priceFilter = carStore.minMaxPrice.max
+       }
 
     }
   },
@@ -65,9 +67,9 @@ const carStore = useCarStore(pinia())
 </script>
 <template>
   <div  class="m-3">
-    <h1>{{ title }}</h1>
+    <h1 class="text-xl font-bold">{{ title }}</h1>
     <p class="text-center">{{ value }}</p>
-    <URange :onload="init" :onChange="storeValue"  :step="1" size="md" color="red" :name="title" placeholder="name" :min="minMax.min"
+    <URange :onChange="storeValue"  :step="1" size="md" color="red" :name="title" placeholder="name" :min="minMax.min"
             :max="minMax.max" v-model="value"/>
 
 

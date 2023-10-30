@@ -13,7 +13,7 @@ const route = useRoute()
 
 // service part management
 
-const serviceStore = useServicesStore(pinia())
+const serviceStore =  useServicesStore(pinia())
 serviceStore.loadServices()
 
 
