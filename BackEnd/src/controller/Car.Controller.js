@@ -34,7 +34,7 @@ console.log(req.body.priceFilter)
             query = `SELECT c.* , p.photo_name FROM car_view AS c JOIN photos AS p ON c.car_id = p.car_id WHERE circulation_year >=  ${circulationYearFilter}  and price <=  ${priceFilter} and mileage <=  ${mileageFilter} and p.primary_photo = "Y"`
 
         }else if (carId === "noselect") {
-            query = `SELECT c.* , p.photo_name FROM car_view AS c JOIN photos AS p ON c.car_id = p.car_id`
+            query = `SELECT c.* , p.photo_name FROM car_view AS c JOIN photos AS p ON c.car_id = p.car_id where p.primary_photo ='Y'`
         } 
         
         else {

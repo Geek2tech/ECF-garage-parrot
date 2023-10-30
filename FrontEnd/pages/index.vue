@@ -47,6 +47,7 @@ function toggleCommentModal() {
 }
 
 
+
 </script>
 
 
@@ -59,7 +60,7 @@ function toggleCommentModal() {
     <PresentationComponent/>
   </section>
 
-  <section id="servicesSection" class="   bg-[url('/images/car-3504910_1920.jpg')] h-auto ">
+  <section id="servicesSection" class="   bg-[url('/images/car-3504910_1920.jpg')] h-auto  ">
 
 <div id="descriptionService" class="">
   <h1 class="  bg-black/70 p-4 text-4xl md:text-5xl text-center text-[#D92332]">Nos prestations</h1>
@@ -129,6 +130,7 @@ p {
   color: #F2F2F2;
 
 }
+
 
 
 

@@ -110,7 +110,7 @@ export const useCarStore = defineStore('car', {
                     body: JSON.stringify(body),
                     params: {
                         page: this.activePage,
-                        limit: 1
+                        limit: 10
                     }
 
                 })

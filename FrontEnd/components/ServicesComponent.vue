@@ -8,7 +8,7 @@ defineProps({
 </script>
 
 <template>
-<div class="m-5">
+<div class="m-5 ">
   <UCard
   :ui="{
     base: ' text-xl md:text-3xl text-center font-[Barlow] w-[300px] lg:w-[500px] h-min-[250px] ]',

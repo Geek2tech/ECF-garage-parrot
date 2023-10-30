@@ -4,12 +4,7 @@ const props =defineProps({
   car : Object
 })
 
-
-
-
-
-// URl of photo ( add url for backend
-console.log(props.car)
+// URl of photo
 const url=`${runTimeConfigs.public.API_URL}/photo/`
 
 function test(){
