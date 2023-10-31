@@ -1,6 +1,8 @@
 <script setup lang="js">
 import {useCarStore} from "~/stores/carsStore";
+import {useConstactStore} from "~/stores/contactFormsStore.js";
 
+const contactStore = useConstactStore()
 
 const route = useRoute()
 
@@ -16,6 +18,44 @@ await carStore.getCars(route.params.id)
 // Set url to get photos
 const urlPhotos=`${runTimeConfigs.public.API_URL}/photo/`
 
+//modal
+const modalActive = ref(false)
+const stateForm = ref({
+  mail: undefined,
+  message: undefined,
+
+
+})
+function toggleModal (){
+  modalActive.value === true ? modalActive.value =false : modalActive.value  = true
+console.log(modalActive)
+}
+function submitMail(mail,message){
+  const validateEmail = (mail) => {
+    return mail.match(
+        /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
+  };
+  const emailValidation = validateEmail(mail)
+
+  if (!mail || !message ) {
+    alert('Merci de remplir tout les champs')
+
+    return
+  }
+  if (emailValidation === null ){
+    alert('Votre email ne semble pas correct')
+    return;
+  }
+  const subject = `demande d'information pour l'annonce n° ${carStore.carList.results[0].car_id}`
+
+  const newMessage = `demande de la part de ${mail}
+   - ${message}`
+
+  contactStore.sendMail(subject,newMessage)
+
+  toggleModal()
+}
 
 
 
@@ -109,19 +149,60 @@ const urlPhotos=`${runTimeConfigs.public.API_URL}/photo/`
 </div>
 </section>
 
+
   <UButton
       size="xl"
       icon="i-heroicons-pencil-square"
       label="Demander plus d'information"
       color="red"
       variant="outline"
+      :onclick="toggleModal"
       block
+
       :ui="{
     rounded: 'rounded-full',
 
      }"
       class="mb-4"
   />
+
+<!--- Modal --->
+
+  <UModal v-model="modalActive">
+
+    <UCard :ui="{ divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+      <template #header>
+        Merci de remplir les champs suivants
+      </template>
+
+      <UForm
+          :state="stateForm"
+
+      >
+        <UFormGroup  label="Votre adresse email" name="mail"  help="Entrez votre email" class="mb-4">
+          <UInput type="email" v-model="stateForm.mail" autofocus/>
+        </UFormGroup>
+        <UFormGroup label="Votre Message" name="message" help="Entrez votre message n'hésitez pas à nous laisser un numéro de téléphone" class="mb-4">
+          <UTextarea v-model="stateForm.message"/>
+
+        </UFormGroup>
+      </UForm>
+
+      <template #footer class="flex text-center">
+        <UButton
+            label="Envoyer"
+            type="submit"
+            @click="submitMail(stateForm.mail,stateForm.message)"
+        >
+
+        </UButton>
+
+      </template>
+    </UCard>
+
+  </UModal>
+
+
 </template>
 
 <style scoped>

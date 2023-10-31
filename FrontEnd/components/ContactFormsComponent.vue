@@ -3,6 +3,8 @@ import {useConstactStore} from "~/stores/contactFormsStore.js";
 import pinia from "~/stores/index.ts";
 import {suppressSpecialChar} from "~/helpers/fieldControl.js";
 
+
+
 const stateForm = ref({
   mail: undefined,
   message: undefined,
