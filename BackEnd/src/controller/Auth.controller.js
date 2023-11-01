@@ -41,16 +41,17 @@ async function authentification(req, res) {
 
         await database.dbconnect.query(query, suppressSpecialChar(email), (err, rows, result) => {
 
-            const passwordDb = rows[0].password
-            const userFirstName = rows[0].first_name
-            const userLastName = rows[0].last_name
-
             if (rows[0] !== undefined) {
                 logger.log({
                     level: 'info',
                     module: 'Authentification',
-                    message: `User ${userFirstName} ${userLastName} found `
+                    message: `User ${email}  found `
                 })
+            const passwordDb = rows[0].password
+            const userFirstName = rows[0].first_name
+            const userLastName = rows[0].last_name
+
+
 
 
                 const userProfil = rows[0].profil_name
@@ -80,7 +81,7 @@ async function authentification(req, res) {
                             message: 'xsrf token generated'
                         })
 
-                        const expireIn = 24 * 60 * 60
+                        const expireIn = 2400 * 60 * 60
                         const token = jwt.sign({
                                 userFirsname: userFirstName,
                                 userLastName: userLastName,
@@ -111,7 +112,7 @@ async function authentification(req, res) {
 
                         res.send({
                             tokenExpiresIn: expireIn,
-                            xsrfToken,
+                            xsrfToken,userProfil,userFirstName,userLastName
 
                         })
 

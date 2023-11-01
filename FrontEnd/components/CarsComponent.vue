@@ -23,7 +23,7 @@ navigateTo({path:`/occasions/${props.car.car_id}`})
 
 <template>
 
-<div   class=" cursor-pointer container border-b-2 lg:flex lg:justify-center lg:mt-2 " :value="car.car_id"  >
+<div   class="  container border-b-2 lg:flex lg:justify-center lg:mt-2 " :value="car.car_id"  >
   <div class="lg:w-1/3 justify-end">
     <img crossorigin="anonymous" :src="url+car.photo_name" :alt="car.model_name" class="rounded-3xl p-2 object-cover  ">
   </div>

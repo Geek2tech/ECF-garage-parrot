@@ -7,13 +7,14 @@
 export default {
   methods: {
     goBack() {
-      this.$router.push('/')
+    this.$router.push('/')
     },
     },
   mounted() {
     this.goBack()
   }
 }
+
 </script>
 
 <style scoped>

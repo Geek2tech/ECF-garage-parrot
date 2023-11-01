@@ -3,11 +3,16 @@ export default defineNuxtConfig({
   runtimeConfig:{
     API_URL:process.env.APP_BACKEND_URL,
     API_KEY:process.env.APP_APIKEY,
+    JWT_SECRET:process.env.APP_SECRET_KEY,
     public:{
       API_URL:process.env.APP_BACKEND_URL,
       API_KEY:process.env.APP_APIKEY,
+
+
     }
   },
+  ssr:false,
+
 
   devtools: {
     enabled: true,
@@ -21,10 +26,13 @@ export default defineNuxtConfig({
 
   },
   modules: [
-    "@nuxtjs/tailwindcss",
+    "@nuxtjs/tailwindcss",'@pinia/nuxt'
+
 
   ],
-  modules: ['@pinia/nuxt'],
+
   modules: ['@nuxt/ui'],
+
+
 
 })

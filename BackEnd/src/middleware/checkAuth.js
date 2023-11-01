@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const SECRET_KEY = process.env.APP_SECRET_KEY
 const logger = require('../services/Logger')
-const {token} = require("mysql/lib/protocol/Auth");
+
 
 /**
  * @function

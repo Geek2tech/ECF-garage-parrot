@@ -1,20 +1,21 @@
 <script setup lang="js">
 import {useCarStore} from "~/stores/carsStore";
 import {useConstactStore} from "~/stores/contactFormsStore.js";
+import pinia from "~/stores/index.ts";
 
 const contactStore = useConstactStore()
 
 const route = useRoute()
 
 // init data
-const carStore = useCarStore()
+const carStore = useCarStore(pinia())
 const runTimeConfigs = useRuntimeConfig()
 
 await carStore.getCarEquipement(route.params.id)
 await carStore.getCarPhotos(route.params.id)
 carStore.activePage=1
 await carStore.getCars(route.params.id)
-
+if (carStore.carList.rows === 0) navigateTo({path:"/"})
 // Set url to get photos
 const urlPhotos=`${runTimeConfigs.public.API_URL}/photo/`
 
