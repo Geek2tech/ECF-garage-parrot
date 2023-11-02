@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "cookie-universal-nuxt": "^2.2.2",
-    "jwt-decode": "^4.0.0"
-  }
-}
