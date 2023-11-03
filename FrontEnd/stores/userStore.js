@@ -10,9 +10,11 @@ export const useUserStore = defineStore('User', {
             xsrfToken: "",
             role: "",
             firstName: "",
-            lastName: ""
+            lastName: "",
+            userList:""
         }
     },
+
     actions: {
         async resetPassword(email) {
 
@@ -48,9 +50,49 @@ return emailToReset
 
         },
         logout() {
-            const token = useCookie('token')
-            this.isAuth = false
-            token.value = null
+            const router = useRouter()
+            this.isAuth=false
+            sessionStorage.clear()
+            router.push('/')
+        },
+        startSessionTimer(){
+            const router = useRouter()
+            setTimeout(function() {
+                console.log('Session timeout')
+                this.isAuth = false
+                sessionStorage.clear()
+                router.push('/')
+
+                }, (15 * 60 * 1000))
+        },
+        async getUser (token) {
+
+
+            const runTimeConfigs = useRuntimeConfig()
+
+            const {error, data: users} = await useAsyncData('users', () => {
+                    return $fetch(`${runTimeConfigs.public.API_URL}/api/protected/users`, {
+                            method: 'GET',
+                            mode: 'cors',
+                            credentials: 'include',
+                            headers: {
+                                "content-Type": "application/json",
+                                "x-api-key": `${runTimeConfigs.public.API_KEY}`,
+                                "x-xsrf-token":token
+                            },
+                            key: 'users',
+
+
+
+
+                        }
+                    )
+
+                }
+            )
+            this.userList = users._rawValue.results
+
+
         },
 
         async login(user, password) {
@@ -88,7 +130,7 @@ return emailToReset
 
                 if (userData._value === "wrong_credentials" || userData._value === "user_not_found") {
 
-                    this.isAuth = false
+                    this.logout()
                     return
                 }
                 this.isAuth = true
@@ -97,12 +139,17 @@ return emailToReset
                 this.role = userData._value.userProfil
                 this.firstName = userData._value.userFirstName
                 this.lastName = userData._value.userLastName
+                sessionStorage.setItem("xsrf",this.xsrfToken)
 
+
+this.startSessionTimer()
 
             } else {
                 console.log('user ko')
                 this.isAuth = false
                 this.xsrfToken = "none"
+                sessionStorage.removeItem("auth")
+                sessionStorage.removeItem('xsrf')
 
 
             }

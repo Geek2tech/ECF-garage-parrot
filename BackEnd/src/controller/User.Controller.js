@@ -535,12 +535,12 @@ async function updateUserPassword(req, res) {
                                         subject: 'Votre nouveau password',
                                         text: `Voici votre nouveau password : ${password}`,
                                         html: `<h1> Garage Parrot </h1><br><strong>Voici votre nouveau mot de passe</strong>
-<br><strong>pour l'accès au site du garage Parrot</strong>
+<br><>pour l'accès au site du garage Parrot
 <br>
 <br>
 <strong>${password}</strong>
  <br>
- <p>Cette information est sensible merci de la garder confidentielle</p>
+ <p>Cette information est sensible merci de la garder <strong>confidentielle</strong></p>
  <br
  ><p>En vous souhaitant une bonne journée</p>`
 

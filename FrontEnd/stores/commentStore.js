@@ -5,6 +5,7 @@ export const useCommentStore = defineStore('comments', {
     state: () => {
         return {
             commentList: {},
+            pendingCommentList:{},
             nbPage: "",
             activePage: 1,
             addModalActive: ref(false)
@@ -51,6 +52,36 @@ export const useCommentStore = defineStore('comments', {
 
                 },
             )
+
+
+        },
+        async getPendingComment(token){
+
+            const runTimeConfigs = useRuntimeConfig()
+
+            const {data: pendingComments} = await useAsyncData(`pendingComments`, () => {
+                    return $fetch(`${runTimeConfigs.public.API_URL}/api/protected/commentsPending`, {
+                            method: `GET`,
+                            mode: "cors",
+                        credentials: 'include',
+                            headers: {
+                                "content-Type": "application/json",
+                                "x-api-key": `${runTimeConfigs.public.API_KEY}`,
+                                "x-xsrf-token":token
+                            },
+                            key: `pendingCommentList`,
+
+
+
+
+                        },
+                    )
+
+
+                },
+            )
+            this.pendingCommentList = pendingComments._rawValue.results
+
 
 
         },

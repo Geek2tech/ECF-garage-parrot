@@ -3,7 +3,6 @@ export default defineNuxtConfig({
   runtimeConfig:{
     API_URL:process.env.APP_BACKEND_URL,
     API_KEY:process.env.APP_APIKEY,
-    JWT_SECRET:process.env.APP_SECRET_KEY,
     public:{
       API_URL:process.env.APP_BACKEND_URL,
       API_KEY:process.env.APP_APIKEY,
