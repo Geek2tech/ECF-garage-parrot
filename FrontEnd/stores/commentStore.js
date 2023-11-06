@@ -80,9 +80,8 @@ export const useCommentStore = defineStore('comments', {
 
                 },
             )
-            this.pendingCommentList = pendingComments._rawValue.results
 
-
+            this.pendingCommentList = pendingComments?._rawValue.results
 
         },
 

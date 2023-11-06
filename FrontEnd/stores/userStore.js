@@ -148,8 +148,7 @@ this.startSessionTimer()
                 console.log('user ko')
                 this.isAuth = false
                 this.xsrfToken = "none"
-                sessionStorage.removeItem("auth")
-                sessionStorage.removeItem('xsrf')
+               sessionStorage.clear()
 
 
             }

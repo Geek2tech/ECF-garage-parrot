@@ -3,14 +3,14 @@
     <header class=" relative z-50 fixed top-0 w-full shadow">
 
       <nav id="main-nav" class=" mx-auto p-6 lg:p-0 flex items-center justify-between">
-        <a href="" class="flex  items-center brand " aria-label="Page d'acceuil">
+        <nuxt-link to="/" class="flex  items-center brand " aria-label="Page d'acceuil">
 
           <img src="../images/logo.png" alt="" class="hidden  lg:w-30 lg:h-20 lg:inline lg:mr-4 ">
           <span aria-hidden="true" class="text-lg lg:text-xl ">
           Garage <strong>Vincent Parot</strong>
         </span>
 
-        </a>
+        </nuxt-link>
         <button aria-label="toggle button" aria-expanded="false" v-on:click="toggleNav" id="menu-btn"
                 class="cursor-pointer w-7 md:hidden">
         <span v-if="menuActive">
@@ -23,7 +23,7 @@
         </button>
         <ul
             id="toggled-menu"
-            class=" hideMenu  w-full absolute top-full left-0  -z-50 bg-[#D9777F] md:bg-transparent border-b border-gray-200 flex flex-col
+            class=" hideMenu  w-full absolute top-full left-0  z-50 bg-[#D9777F] md:bg-transparent border-b border-gray-200 flex flex-col
 items-center md:static md:z-50 md:w-min md:transform-none md:border-none md:flex-row md:w-auto"
         >
           <li class="py-4 md:py-0 md:mr-6 ">
@@ -115,7 +115,7 @@ header {
 
 @media (max-width: 768px ) {
   .hideMenu {
-    transform: translateY(-130%);
+    transform: translateY(-140%);
   }
 
 

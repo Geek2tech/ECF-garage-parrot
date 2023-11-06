@@ -49,14 +49,64 @@ await commentStore.getPendingComment(xsrfToken)
 await equipementStore.getEquipements()
 await userStore.getUser(xsrfToken)
 
+
+const links = [{
+  label: 'Commentaires à valider',
+  icon:'i-heroicons-clipboard-document-check',
+
+  click:setComponent
+
+}, {
+  label: 'Gestions des équipements',
+  icon:'i-heroicons-cpu-chip-20-solid',
+
+  click:setComponent
+},
+  {
+    label:'Gestion des carburants',
+    icon:'i-heroicons-beaker',
+
+    click:setComponent
+  },
+  {
+    label:'Gestion des annonces',
+    icon:'i-heroicons-document-text',
+
+    click:setComponent
+
+  },
+  {
+    label:'Gestion des horaires',
+    icon:'i-heroicons-face-smile-20-solid',
+
+    click:setComponent
+  }
+]
+const compoToSet = ref()
+ function setComponent(event){
+
+  compoToSet.value =  event.target.innerText
+}
+
 </script>
 
 <template>
 <h1>Admin page</h1>
-  <p>Bonjour - {{userStore.firstName}}   {{userStore.lastName}}</p>
-  <div v-if="userStore.role==='administrateur'">administrateur</div>
-  <div v-else >Utilisateur</div>
+  <p class="m-auto  text-2xl  mb-3">Bonjour - {{userStore.firstName}}   {{userStore.lastName}}</p>
 
+  <div class="grid grid-cols-5 grid-rows-5 gap-4 mb-4">
+    <div class="col-span-2 row-span-5 border-2">
+      <UVerticalNavigation :links="links">
+
+        <template #default="{ link }">
+          <span class="group-hover:text-[#D92332] text-xl relative">{{ link.label }}</span>
+        </template>
+      </UVerticalNavigation>
+    </div>
+    <div class="col-span-3 row-span-5 col-start-3">
+{{compoToSet}}
+    </div>
+  </div>
 </template>
 
 <style scoped>
