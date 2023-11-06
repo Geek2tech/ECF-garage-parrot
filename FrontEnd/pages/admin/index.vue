@@ -82,7 +82,7 @@ const links = [{
     click:setComponent
   }
 ]
-const compoToSet = ref()
+const compoToSet = ref("Commentaires à valider")
  function setComponent(event){
 
   compoToSet.value =  event.target.innerText
@@ -95,7 +95,7 @@ const compoToSet = ref()
   <p class="m-auto  text-2xl  mb-3">Bonjour - {{userStore.firstName}}   {{userStore.lastName}}</p>
 
   <div class="grid grid-cols-5 grid-rows-5 gap-4 mb-4">
-    <div class="col-span-2 row-span-5 border-2">
+    <div class="col-span-2 row-span-5 border-2 ">
       <UVerticalNavigation :links="links">
 
         <template #default="{ link }">
@@ -105,8 +105,11 @@ const compoToSet = ref()
     </div>
     <div class="col-span-3 row-span-5 col-start-3">
 {{compoToSet}}
+      <admin-pending-comments-component v-if="compoToSet==='Commentaires à valider'" :commentsList="commentStore.pendingCommentList" :token="xsrfToken" />
     </div>
   </div>
+
+
 </template>
 
 <style scoped>

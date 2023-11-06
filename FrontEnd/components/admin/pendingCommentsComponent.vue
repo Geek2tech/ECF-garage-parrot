@@ -1,9 +1,124 @@
-<script setup lang="ts">
+<script setup lang="js">
+import {useCommentStore} from "~/stores/commentStore.js";
+import pinia from "~/stores/index.ts";
+import {suppressSpecialChar} from "~/helpers/fieldControl.js";
+
+const props =defineProps({
+  commentsList : {},
+  token : null
+})
+const commentStore = useCommentStore(pinia())
+
+const columns = [{
+  key: 'comment_id',
+  label: 'ID'
+}, {
+  key: 'sender_name',
+  label: 'Nom'
+}, {
+  key: 'comment_text',
+  label: 'Commentaire'
+}, {
+  key: 'garage_note',
+  label: 'Note',
+  sortable:true
+},{
+  key:'actions'
+},
+
+]
+
+
+
+// cut data for pagination
+const rows = ref({
+  row:[]
+})
+//for (const comment of Object.entries(props.commentsList)) {
+
+function refresh() {
+  rows.value.row=[]
+  for (const comment of Object.entries(commentStore.pendingCommentList))  {
+    rows.value.row.push(comment[1])
+  }
+}
+refresh()
+
+const page = ref(1)
+const pageCount = 10
+
+const rowsPaginated = computed(() => {
+  return rows.value.row.slice((page.value - 1) * pageCount, (page.value) * pageCount)
+})
+
+
+async function validateComment(id) {
+
+  await commentStore.validePendingComment(id,props.token)
+  await commentStore.getPendingComment(props.token)
+
+  refresh()
+
+}
+async function rejectComment(id){
+
+  await commentStore.deletePendingComment(id,props.token)
+  await commentStore.getPendingComment(props.token)
+
+ refresh()
+
+
+}
+
+
+const items = (row) => [
+  [{
+    label: 'Valider',
+    icon: 'i-heroicons-document-check',
+    variant: "ghost",
+    color:'green',
+    click: () =>  validateComment(row.comment_id)
+  }, {
+    label: 'Refuser',
+    icon: 'i-heroicons-trash-20-solid'
+  }]
+]
+
 
 </script>
 
 <template>
 <h1>Pending comment</h1>
+
+  <UTable :rows="rowsPaginated" :columns="columns">
+
+
+  <template #actions-data="{ row }">
+
+          <UButton
+          color="green"
+          variant="ghost"
+          icon="i-heroicons-document-check"
+          @click="validateComment(row.comment_id)"
+      />
+
+    <UButton
+        color="red"
+        variant="ghost"
+        icon="i-heroicons-archive-box-x-mark"
+        @click="rejectComment(row.comment_id)"
+    />
+  </template>
+
+  </UTable>
+  <UPagination
+      v-model="page"
+     :active-button="{ color:'red'}"
+      color="red"
+      :page-count="pageCount"
+      :total="rows.length"
+  />
+
 </template>
 
 <style scoped>

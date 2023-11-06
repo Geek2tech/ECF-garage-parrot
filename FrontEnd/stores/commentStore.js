@@ -1,5 +1,6 @@
 // stores/counter.js
 import {defineStore} from 'pinia'
+import {suppressSpecialChar} from "~/helpers/fieldControl.js";
 
 export const useCommentStore = defineStore('comments', {
     state: () => {
@@ -22,6 +23,74 @@ export const useCommentStore = defineStore('comments', {
         },
         activePageIncrement() {
             this.activePage++
+        },
+        validePendingComment(id,token){
+            const body = {
+                "id":id
+            }
+
+
+            const runTimeConfigs = useRuntimeConfig()
+
+
+            const {data: commentUpdate} = useAsyncData(`CommentUpdate`, () => {
+                    return $fetch(`${runTimeConfigs.public.API_URL}/api/protected/comment`, {
+                            method: `PUT`,
+                            mode: "cors",
+                            credentials: 'include',
+                            headers: {
+                                "content-Type": "application/json",
+                                "x-api-key": `${runTimeConfigs.public.API_KEY}`,
+                                "x-xsrf-token":token
+                            },
+                            key: `CommentUpdate`,
+
+                            body: JSON.stringify(body)
+
+
+                        },
+                    )
+
+
+                },
+            )
+
+
+
+
+        },
+        deletePendingComment(id,token){
+          const body = {
+              "id":id
+          }
+            const runTimeConfigs = useRuntimeConfig()
+
+
+            const {data: commentremoved} = useAsyncData(`CommentRemoved`, () => {
+                    return $fetch(`${runTimeConfigs.public.API_URL}/api/protected/comment`, {
+                            method: `DELETE`,
+                            mode: "cors",
+                        credentials: 'include',
+                            headers: {
+                                "content-Type": "application/json",
+                                "x-api-key": `${runTimeConfigs.public.API_KEY}`,
+                                "x-xsrf-token":token
+                            },
+                            key: `CommentDeleted`,
+
+                            body: JSON.stringify(body)
+
+
+                        },
+                    )
+
+
+                },
+            )
+
+
+
+
         },
         addComment(nom, comment, note) {
 

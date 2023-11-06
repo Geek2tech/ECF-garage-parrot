@@ -75,7 +75,13 @@ async function getUnvalidatedComment(req, res) {
 
 }
 
-
+/**
+ * @function
+ * @description add a comment
+ * @param req
+ * @param res
+ * @return {Promise<void>}
+ */
 async function addComment(req, res) {
 
     try {
@@ -133,6 +139,13 @@ async function addComment(req, res) {
 
 }
 
+/**
+ * @funtion
+ * @description delete a comment
+ * @param req
+ * @param res
+ * @return {Promise<void>}
+ */
 async function deleteComment(req, res) {
 
     try {
@@ -200,9 +213,62 @@ async function deleteComment(req, res) {
 
 }
 
+async function validateComment(req,res) {
+    try {
+
+        const id = req.body.id
+        const query = ' UPDATE comments  SET status = 1 WHERE comment_id = ?'
+        await database.dbconnect.query(query,[id],(err,result) =>{
+            if(err){
+                logger.log({
+                    level:'error',
+                    module:'Comments',
+                    message:`SQL Error : ${err}`
+                })
+                res.status(500)
+                res.send(`SQL error : ${err}`)
+            }
+
+            if (result.affectedRows === 0){
+                logger.log({
+                    level:'info',
+                    module:'Comments',
+                    message:`Nothing to update`
+                })
+                res.status(204)
+                res.send('Nothing to update')
+            }else {
+                logger.log({
+                    level:'info',
+                    module:'Comments',
+                    message:`update successfully ${result.affectedRows}`
+                })
+                res.status(200)
+                res.send(`update Ok `)
+            }
+
+
+
+        })
+
+
+
+    }catch (err) {
+        logger.log({
+            level:'error',
+            module:'Comment',
+            message:`Internal Error : ${err}`
+        })
+        res.status(500)
+        res.send(`internal error ${err}`)
+    }
+
+}
+
 module.exports = {
     getUnvalidatedComment,
     getValidatedComment,
     addComment,
-    deleteComment
+    deleteComment,
+    validateComment
 }

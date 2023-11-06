@@ -12,5 +12,7 @@ router.get('/api/protected/commentsPending',commentController.getUnvalidatedComm
 router.post('/api/comment',commentController.addComment)
 // Delete comment
 router.delete('/api/protected/comment',commentController.deleteComment)
+// validate comment
+router.put('/api/protected/comment',commentController.validateComment)
 
 module.exports = router
