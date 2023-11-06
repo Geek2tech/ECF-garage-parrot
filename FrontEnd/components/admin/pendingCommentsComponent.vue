@@ -35,17 +35,21 @@ const rows = ref({
   row:[]
 })
 //for (const comment of Object.entries(props.commentsList)) {
-
+const page = ref(1)
+const pageCount = 10
+const total = ref()
 function refresh() {
   rows.value.row=[]
   for (const comment of Object.entries(commentStore.pendingCommentList))  {
     rows.value.row.push(comment[1])
+    total.value = rows.value.row.length
+    page.value=1
   }
-}
-refresh()
 
-const page = ref(1)
-const pageCount = 10
+}
+await refresh()
+
+
 
 const rowsPaginated = computed(() => {
   return rows.value.row.slice((page.value - 1) * pageCount, (page.value) * pageCount)
@@ -57,7 +61,7 @@ async function validateComment(id) {
   await commentStore.validePendingComment(id,props.token)
   await commentStore.getPendingComment(props.token)
 
-  refresh()
+ await  refresh()
 
 }
 async function rejectComment(id){
@@ -116,7 +120,7 @@ const items = (row) => [
      :active-button="{ color:'red'}"
       color="red"
       :page-count="pageCount"
-      :total="rows.length"
+      :total="total"
   />
 
 </template>

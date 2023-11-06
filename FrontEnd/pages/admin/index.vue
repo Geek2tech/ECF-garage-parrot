@@ -80,12 +80,25 @@ const links = [{
     icon:'i-heroicons-face-smile-20-solid',
 
     click:setComponent
-  }
+  },
+  {
+    label:'Gestions des services',
+    icon:'i-heroicons-newspaper',
+    click:setComponent
+  },{
+    label:'Gestions des utilisateurs',
+    icon:'i-heroicons-users',
+
+    click:setComponent
+  },
 ]
 const compoToSet = ref("Commentaires à valider")
  function setComponent(event){
 
   compoToSet.value =  event.target.innerText
+
+   // restart logout timer
+   userStore.startSessionTimer()
 }
 
 </script>
@@ -108,7 +121,6 @@ const compoToSet = ref("Commentaires à valider")
       <admin-pending-comments-component v-if="compoToSet==='Commentaires à valider'" :commentsList="commentStore.pendingCommentList" :token="xsrfToken" />
     </div>
   </div>
-
 
 </template>
 
