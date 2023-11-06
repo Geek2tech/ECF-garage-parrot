@@ -75,23 +75,19 @@ const links = [{
     click:setComponent
 
   },
-  {
-    label:'Gestion des horaires',
-    icon:'i-heroicons-face-smile-20-solid',
 
-    click:setComponent
-  },
   {
     label:'Gestions des services',
     icon:'i-heroicons-newspaper',
     click:setComponent
-  },{
-    label:'Gestions des utilisateurs',
-    icon:'i-heroicons-users',
-
-    click:setComponent
   },
 ]
+// add links for administrator profil
+if (userStore.role === "administrateur") {
+  links.push({label:"Gestions des utilisateurs",icon:'i-heroicons-users', click:setComponent})
+  links.push({label:"Gestions des horaires",icon:'i-heroicons-face-smile-20-solid',  click:setComponent})
+}
+
 const compoToSet = ref("Commentaires à valider")
  function setComponent(event){
 
@@ -118,7 +114,11 @@ const compoToSet = ref("Commentaires à valider")
     </div>
     <div class="col-span-3 row-span-5 col-start-3">
 {{compoToSet}}
-      <admin-pending-comments-component v-if="compoToSet==='Commentaires à valider'" :commentsList="commentStore.pendingCommentList" :token="xsrfToken" />
+
+        <admin-pending-comments-component v-if="compoToSet==='Commentaires à valider'" :commentsList="commentStore.pendingCommentList" :token="xsrfToken" />
+      <admin-equipements-component v-if="compoToSet==='Gestions des équipements'" :token="xsrfToken" :equipementsList="equipementStore.equipementsList"/>
+
+
     </div>
   </div>
 

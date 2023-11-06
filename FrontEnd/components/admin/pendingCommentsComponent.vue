@@ -9,10 +9,7 @@ const props =defineProps({
 })
 const commentStore = useCommentStore(pinia())
 
-const columns = [{
-  key: 'comment_id',
-  label: 'ID'
-}, {
+const columns = [ {
   key: 'sender_name',
   label: 'Nom'
 }, {
@@ -30,24 +27,24 @@ const columns = [{
 
 
 
-// cut data for pagination
+
 const rows = ref({
   row:[]
 })
-//for (const comment of Object.entries(props.commentsList)) {
+
 const page = ref(1)
 const pageCount = 10
 const total = ref()
 function refresh() {
   rows.value.row=[]
-  for (const comment of Object.entries(commentStore.pendingCommentList))  {
+  for (const comment of Object.entries(props.commentsList))  {
     rows.value.row.push(comment[1])
     total.value = rows.value.row.length
     page.value=1
   }
 
 }
-await refresh()
+ refresh()
 
 
 
@@ -75,24 +72,13 @@ async function rejectComment(id){
 }
 
 
-const items = (row) => [
-  [{
-    label: 'Valider',
-    icon: 'i-heroicons-document-check',
-    variant: "ghost",
-    color:'green',
-    click: () =>  validateComment(row.comment_id)
-  }, {
-    label: 'Refuser',
-    icon: 'i-heroicons-trash-20-solid'
-  }]
-]
+
 
 
 </script>
 
 <template>
-<h1>Pending comment</h1>
+
 
   <UTable :rows="rowsPaginated" :columns="columns">
 
