@@ -1,16 +1,17 @@
 <script setup lang="js">
 import {useequipementStore} from "~/stores/equipementStore";
+import {useFuelStore} from "~/stores/fuelStore.js";
 
 const props = defineProps({
   token: null,
-  equipementsList: {}
+  fuelList: {}
 })
 
-const equipementStore = useequipementStore()
+const fuelStore = useFuelStore()
 
 const columns = [{
-  key: 'equipement_name',
-  label: `Nom de l'équipement`
+  key: 'fuel_name',
+  label: `Nom du carburant`
 },
   {
     key: 'actions'
@@ -27,7 +28,7 @@ const total = ref()
 
 function refresh() {
   rows.value.row = []
-  for (const item of Object.entries(props.equipementsList)) {
+  for (const item of Object.entries(props.fuelList)) {
     rows.value.row.push(item[1])
     total.value = rows.value.row.length
     page.value = 1
@@ -43,36 +44,36 @@ const rowsPaginated = computed(() => {
 })
 const isOpen = ref(false)
 const newName = ref()
-const equipementName = ref()
+const fuelName = ref()
 const idToChange = ref()
 const sliderActionName = ref()
 const sliderInputName = ref()
 const actionToDo = ref()
 
-async function editEquipement(id, name) {
-
+async function edit(id, name) {
+  console.log('update')
   if (newName.value === undefined) {
     alert("Merci de saisir un nom")
     return
   }
-  await equipementStore.updateEquipements(id, name, props.token)
+  await fuelStore.updateFuel(id, name, props.token)
 
-  await equipementStore.getEquipements()
+  await fuelStore.getFuels()
   await refresh()
   isOpen.value = false
-alert('Modification réalisée')
+  alert('Modification réalisée')
 
 }
 
-async function addEquipement(name) {
-
+async function add(name) {
+  console.log('ajouter', name)
   if (newName.value === undefined) {
     alert("Merci de saisir un nom")
     return
   }
 
-  await equipementStore.addEquipement(name, props.token)
-  await equipementStore.getEquipements()
+  await fuelStore.addFuel(name, props.token)
+  await fuelStore.getFuels()
   await refresh()
   isOpen.value = false
   //alert("Ajout réalisé")
@@ -83,8 +84,8 @@ function setupSlider(id, name, action) {
   isOpen.value = true
 // retreive data
 
-  equipementName.value = name
-
+  fuelName.value = name
+  console.log(id)
   idToChange.value = id
 
   if (action === 'modify') {
@@ -96,14 +97,14 @@ function setupSlider(id, name, action) {
   if (action === 'add') {
     sliderActionName.value = `Ajout d'un nouvel équipement`
     sliderInputName.value = `Veuillez saisir le nom de l'équipement à ajouter`
-    newName.value = ""
+    newName.value=""
     actionToDo.value = 'Ajouter'
   }
 }
 
 function selectAction(action) {
-
-  action === 'Ajouter' ? addEquipement(newName.value) : editEquipement(idToChange.value, newName.value)
+  console.log(action)
+  action === 'Ajouter' ? add(newName.value) : edit(idToChange.value, newName.value)
 
 }
 
@@ -130,7 +131,7 @@ function selectAction(action) {
           color="orange"
           variant="ghost"
           icon="i-heroicons-pencil"
-          @click="setupSlider(row.equipement_id,row.equipement_name,'modify')"
+          @click="setupSlider(row.fuel_id,row.fuel_name,'modify')"
       />
     </template>
 
@@ -149,7 +150,7 @@ function selectAction(action) {
       <template #header>
         <div class="flex items-center justify-between">
           <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
-            {{ sliderActionName }} <br>{{ equipementName }}
+            {{ sliderActionName }} <br>{{ fuelName }}
           </h3>
           <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
                    @click="isOpen = false"/>

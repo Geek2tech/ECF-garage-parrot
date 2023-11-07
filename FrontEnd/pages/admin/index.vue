@@ -37,7 +37,7 @@ const xsrfToken = await sessionStorage.getItem("xsrf")
 
 
 // fetch data
-await  profilStore.getProfils(xsrfToken)
+await profilStore.getProfils(xsrfToken)
 await fuelStore.getFuels(xsrfToken)
 await openingStore.getOpeningHours()
 await carStore.getCars('noselect')
@@ -52,56 +52,57 @@ await userStore.getUser(xsrfToken)
 
 const links = [{
   label: 'Commentaires à valider',
-  icon:'i-heroicons-clipboard-document-check',
+  icon: 'i-heroicons-clipboard-document-check',
 
-  click:setComponent
+  click: setComponent
 
 }, {
   label: 'Gestions des équipements',
-  icon:'i-heroicons-cpu-chip-20-solid',
+  icon: 'i-heroicons-cpu-chip-20-solid',
 
-  click:setComponent
+  click: setComponent
 },
   {
-    label:'Gestion des carburants',
-    icon:'i-heroicons-beaker',
+    label: 'Gestion des carburants',
+    icon: 'i-heroicons-beaker',
 
-    click:setComponent
+    click: setComponent
   },
   {
-    label:'Gestion des annonces',
-    icon:'i-heroicons-document-text',
+    label: 'Gestion des annonces',
+    icon: 'i-heroicons-document-text',
 
-    click:setComponent
+    click: setComponent
 
   },
 
   {
-    label:'Gestions des services',
-    icon:'i-heroicons-newspaper',
-    click:setComponent
+    label: 'Gestions des services',
+    icon: 'i-heroicons-newspaper',
+    click: setComponent
   },
 ]
 // add links for administrator profil
 if (userStore.role === "administrateur") {
-  links.push({label:"Gestions des utilisateurs",icon:'i-heroicons-users', click:setComponent})
-  links.push({label:"Gestions des horaires",icon:'i-heroicons-face-smile-20-solid',  click:setComponent})
+  links.push({label: "Gestions des utilisateurs", icon: 'i-heroicons-users', click: setComponent})
+  links.push({label: "Gestions des horaires", icon: 'i-heroicons-face-smile-20-solid', click: setComponent})
 }
 
 const compoToSet = ref("Commentaires à valider")
- function setComponent(event){
 
-  compoToSet.value =  event.target.innerText
+function setComponent(event) {
 
-   // restart logout timer
-   userStore.startSessionTimer()
+  compoToSet.value = event.target.innerText
+
+  // restart logout timer
+  userStore.startSessionTimer()
 }
 
 </script>
 
 <template>
-<h1>Admin page</h1>
-  <p class="m-auto  text-2xl  mb-3">Bonjour - {{userStore.firstName}}   {{userStore.lastName}}</p>
+  <h1>Admin page</h1>
+  <p class="m-auto  text-2xl  mb-3">Bonjour - {{ userStore.firstName }} {{ userStore.lastName }}</p>
 
   <div class="grid grid-cols-5 grid-rows-5 gap-4 mb-4">
     <div class="col-span-2 row-span-5 border-2 ">
@@ -113,11 +114,23 @@ const compoToSet = ref("Commentaires à valider")
       </UVerticalNavigation>
     </div>
     <div class="col-span-3 row-span-5 col-start-3">
-{{compoToSet}}
+      {{ compoToSet }}
 
-        <admin-pending-comments-component v-if="compoToSet==='Commentaires à valider'" :commentsList="commentStore.pendingCommentList" :token="xsrfToken" />
-      <admin-equipements-component v-if="compoToSet==='Gestions des équipements'" :token="xsrfToken" :equipementsList="equipementStore.equipementsList"/>
-
+      <admin-pending-comments-component
+          v-if="compoToSet==='Commentaires à valider'"
+          :commentsList="commentStore.pendingCommentList"
+          :token="xsrfToken"
+      />
+      <admin-equipements-component
+          v-if="compoToSet==='Gestions des équipements'"
+          :token="xsrfToken"
+          :equipementsList="equipementStore.equipementsList"
+      />
+      <admin-fuel-component
+          v-if="compoToSet === 'Gestion des carburants'"
+          :token="xsrfToken"
+          :fuel-list="fuelStore.fuelList"
+      />
 
     </div>
   </div>

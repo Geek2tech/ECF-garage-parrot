@@ -15,7 +15,7 @@ function suppressSpecialChar (value) {
     })
 
     const valueToClean = value
-    console.log(typeof valueToClean)
+
     if (typeof valueToClean === 'number') {
         const valueClean = valueToClean
         return valueClean

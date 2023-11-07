@@ -58,7 +58,6 @@ return emailToReset
         startSessionTimer(){
             const router = useRouter()
             setTimeout(function() {
-                console.log('Session timeout')
                 this.isAuth = false
                 sessionStorage.clear()
                 router.push('/')

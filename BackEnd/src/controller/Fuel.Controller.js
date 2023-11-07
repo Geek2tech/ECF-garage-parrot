@@ -133,9 +133,9 @@ function updateFuel(req, res) {
     try {
 
 
-        const fuelName = suppressSpecialChar(req.body.fuelName)
+        const fuelId = suppressSpecialChar(req.body.fuelId)
         const newValue = suppressSpecialChar(req.body.newValue)
-        const query = "UPDATE ParrotDB.fuels SET fuel_name = ?  WHERE fuel_name = ? "
+        const query = "UPDATE ParrotDB.fuels SET fuel_name = ?  WHERE fuel_id = ? "
 
         logger.log({
             level:'info',
@@ -143,17 +143,21 @@ function updateFuel(req, res) {
             message:'BDD request'
         })
 
-        database.dbconnect.query(query, [newValue,fuelName], (err, result) => {
+        database.dbconnect.query(query, [newValue,fuelId], (err, result) => {
             if (err) {
 
-                logger.log({
-                    level: 'error',
-                    module: 'Fuel',
-                    message: `Update Error : ${err}`
-                })
+                if (err.code === 'ER_DUP_ENTRY') {
+                    logger.log({
+                        level: 'error',
+                        module: 'Constructor',
+                        message: `Duplicate Entry`
+                    })
+                    res.status(204)
+                    res.send('Entré déja existant')
+                    return
+                }
 
-                res.status(500)
-                res.send(`SQL error : ${err} `)
+
 
             } else {
 
