@@ -73,6 +73,16 @@ async function addEquipement(req, res) {
                     module:'Equipements',
                     message:`SQL Error : ${err}`
                 })
+                if (err.code === 'ER_DUP_ENTRY') {
+                    logger.log({
+                        level: 'error',
+                        module: 'Constructor',
+                        message: `Duplicate Entry`
+                    })
+                    res.status(204)
+                    res.send('Entré déja existant')
+                    return
+                }
                 res.status(500)
                 res.send(`SQL Error : ${err}`)
             }
@@ -112,16 +122,17 @@ async function addEquipement(req, res) {
 async function updateEquipement(req, res) {
 
     try {
-        const equipement_name = suppressSpecialChar(req.body.equipement_name)
+        console.log(req.body)
+        const equipement_id = suppressSpecialChar(req.body.equipement_id)
         const newValue = suppressSpecialChar(req.body.newValue)
 
         logger.log({
             level:'info',
             module:'Equipements',
-            message:`Call updateEquipement with params : ${equipement_name} , ${newValue}`
+            message:`Call updateEquipement with params : ${equipement_id} , ${newValue}`
         })
 
-        const query = "UPDATE equipements SET equipement_name = ? WHERE equipement_name = ?"
+        const query = "UPDATE equipements SET equipement_name = ? WHERE equipement_id = ?"
 
         logger.log({
             level:'info',
@@ -129,14 +140,15 @@ async function updateEquipement(req, res) {
             message:'BDD Request'
         })
 
-        await database.dbconnect.query(query,[newValue , equipement_name],(err,result)=>{
+        await database.dbconnect.query(query,[newValue , equipement_id],(err,result)=>{
             if(err) {
                 logger.log({
                     level:'error',
                     module:'Equipements',
                     message:`update error : ${err}`
                 })
-                res.status(500)
+
+                res.status(200)
                 res.send(`update error ${err}`)
             } else {
 
