@@ -1,12 +1,13 @@
 <script setup lang="js">
 import {useequipementStore} from "~/stores/equipementStore";
+import pinia from "~/stores/index.ts";
 
 const props = defineProps({
   token: null,
   equipementsList: {}
 })
 
-const equipementStore = useequipementStore()
+const equipementStore = useequipementStore(pinia())
 
 const columns = [{
   key: 'equipement_name',
@@ -29,7 +30,7 @@ function refresh() {
   rows.value.row = []
   for (const item of Object.entries(props.equipementsList)) {
     rows.value.row.push(item[1])
-    total.value = rows.value.row.length
+    total.value = rows.value.row.length || 0
     page.value = 1
   }
 
@@ -60,7 +61,7 @@ async function editEquipement(id, name) {
   await equipementStore.getEquipements()
   await refresh()
   isOpen.value = false
-alert('Modification réalisée')
+  alert('Modification réalisée')
 
 }
 
@@ -120,7 +121,15 @@ function selectAction(action) {
   </div>
 
 
-  <UTable :rows="rowsPaginated" :columns="columns">
+  <UTable
+      :rows="rowsPaginated"
+      :columns="columns"
+      :ui="
+      {
+        td: { base : 'whitespace-normal'}
+      }"
+
+  >
 
 
     <template #actions-data="{ row }">

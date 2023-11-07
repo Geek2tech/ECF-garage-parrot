@@ -1,18 +1,25 @@
 <script setup lang="js">
-import {useequipementStore} from "~/stores/equipementStore";
-import {useFuelStore} from "~/stores/fuelStore.js";
+
+
+import {useServicesStore} from "~/stores/servicesStore.js";
+import pinia from "~/stores/index.ts";
 
 const props = defineProps({
   token: null,
-  fuelList: {}
+  serviceList: {}
 })
 
-const fuelStore = useFuelStore()
+const serviceStore = useServicesStore(pinia())
 
 const columns = [{
-  key: 'fuel_name',
-  label: `Nom du carburant`
+  key: 'service_name',
+  label: `Nom du carburant`,
+
 },
+  {
+    key: 'service_description',
+    label: 'Description',
+  },
   {
     key: 'actions'
   }
@@ -28,7 +35,7 @@ const total = ref()
 
 function refresh() {
   rows.value.row = []
-  for (const item of Object.entries(props.fuelList)) {
+  for (const item of Object.entries(props.serviceList)) {
     rows.value.row.push(item[1])
     total.value = rows.value.row.length || 0
     page.value = 1
@@ -44,21 +51,22 @@ const rowsPaginated = computed(() => {
 })
 const isOpen = ref(false)
 const newName = ref()
-const fuelName = ref()
+const serviceName = ref()
+const serviceDescription = ref()
 const idToChange = ref()
 const sliderActionName = ref()
 const sliderInputName = ref()
 const actionToDo = ref()
 
-async function edit(id, name) {
+async function edit(id, name, description) {
   console.log('update')
   if (newName.value === undefined) {
     alert("Merci de saisir un nom")
     return
   }
-  await fuelStore.updateFuel(id, name, props.token)
+  await serviceStore.update(id, name, description, props.token)
 
-  await fuelStore.getFuels()
+  await serviceStore.loadServices()
   await refresh()
   isOpen.value = false
   alert('Modification réalisée')
@@ -72,39 +80,64 @@ async function add(name) {
     return
   }
 
-  await fuelStore.addFuel(name, props.token)
-  await fuelStore.getFuels()
+  await serviceStore.add(name, props.token)
+  await serviceStore.loadServices()
   await refresh()
   isOpen.value = false
   //alert("Ajout réalisé")
 
 }
 
-function setupSlider(id, name, action) {
+async function supp(id) {
+
+}
+
+function setupSlider(id, name, description, action) {
   isOpen.value = true
 // retreive data
+  console.log(action)
+  serviceName.value = name
 
-  fuelName.value = name
-  console.log(id)
   idToChange.value = id
 
-  if (action === 'modify') {
-    sliderActionName.value = `Changement du nom de l'équipement`
-    sliderInputName.value = `Veuillez saisir le nouveau nom de l'équipement`
-    newName.value = name
-    actionToDo.value = 'Modifier'
-  }
-  if (action === 'add') {
-    sliderActionName.value = `Ajout d'un nouvel équipement`
-    sliderInputName.value = `Veuillez saisir le nom de l'équipement à ajouter`
-    newName.value=""
-    actionToDo.value = 'Ajouter'
+  switch (action) {
+    case 'modify' :
+      sliderActionName.value = `Changement du nom du service`
+      sliderInputName.value = `Veuillez saisir le nouveau nom et la description du service`
+      newName.value = name
+      serviceDescription.value = description
+      actionToDo.value = 'Modifier'
+      break
+    case 'add' :
+      sliderActionName.value = `Ajout d'un nouveau service`
+      sliderInputName.value = `Veuillez saisir le nom et la description du service à ajouter`
+      newName.value = ""
+      serviceDescription.value = description
+      actionToDo.value = 'Ajouter'
+      break
+    case 'delete' :
+      sliderActionName.value = `Suppression d'un service`
+      sliderInputName.value = `Voulez vous supprimer le service suivant`
+      newName.value = ""
+      serviceDescription.value = description
+      actionToDo.value = 'supprimer'
+      break
   }
 }
 
 function selectAction(action) {
-  console.log(action)
-  action === 'Ajouter' ? add(newName.value) : edit(idToChange.value, newName.value)
+  switch (action) {
+    case 'Ajouter':
+      add(newName.value)
+      break
+    case 'Modifier':
+      edit(idToChange.value, newName.value)
+      break
+    case 'Supprimer':
+      supp(idToChange.value)
+
+  }
+
 
 }
 
@@ -116,7 +149,7 @@ function selectAction(action) {
     <UButton
         label="Ajouter"
         color="red"
-        @click="setupSlider(null,null,'add')"
+        @click="setupSlider(null,null,null,'add')"
     />
   </div>
 
@@ -139,7 +172,13 @@ function selectAction(action) {
           color="orange"
           variant="ghost"
           icon="i-heroicons-pencil"
-          @click="setupSlider(row.fuel_id,row.fuel_name,'modify')"
+          @click="setupSlider(row.service_id,row.service_name,row.service_description,'modify')"
+      />
+      <UButton
+          color="red"
+          variant="ghost"
+          icon="i-heroicons-archive-box-x-mark"
+          @click="setupSlider(row.service_id,row.service_name,row.service_description,'delete')"
       />
     </template>
 
@@ -158,7 +197,7 @@ function selectAction(action) {
       <template #header>
         <div class="flex items-center justify-between">
           <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
-            {{ sliderActionName }} <br>{{ fuelName }}
+            {{ sliderActionName }} <br>{{ serviceName }}
           </h3>
           <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
                    @click="isOpen = false"/>

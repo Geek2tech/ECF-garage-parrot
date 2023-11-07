@@ -57,7 +57,7 @@ const links = [{
   click: setComponent
 
 }, {
-  label: 'Gestions des équipements',
+  label: 'Gestion des équipements',
   icon: 'i-heroicons-cpu-chip-20-solid',
 
   click: setComponent
@@ -77,15 +77,15 @@ const links = [{
   },
 
   {
-    label: 'Gestions des services',
+    label: 'Gestion des services',
     icon: 'i-heroicons-newspaper',
     click: setComponent
   },
 ]
 // add links for administrator profil
 if (userStore.role === "administrateur") {
-  links.push({label: "Gestions des utilisateurs", icon: 'i-heroicons-users', click: setComponent})
-  links.push({label: "Gestions des horaires", icon: 'i-heroicons-face-smile-20-solid', click: setComponent})
+  links.push({label: "Gestion des utilisateurs", icon: 'i-heroicons-users', click: setComponent})
+  links.push({label: "Gestion des horaires", icon: 'i-heroicons-face-smile-20-solid', click: setComponent})
 }
 
 const compoToSet = ref("Commentaires à valider")
@@ -97,7 +97,7 @@ function setComponent(event) {
   // restart logout timer
   userStore.startSessionTimer()
 }
-
+console.log(serviceStore.services)
 </script>
 
 <template>
@@ -122,7 +122,7 @@ function setComponent(event) {
           :token="xsrfToken"
       />
       <admin-equipements-component
-          v-if="compoToSet==='Gestions des équipements'"
+          v-if="compoToSet==='Gestion des équipements'"
           :token="xsrfToken"
           :equipementsList="equipementStore.equipementsList"
       />
@@ -131,6 +131,11 @@ function setComponent(event) {
           :token="xsrfToken"
           :fuel-list="fuelStore.fuelList"
       />
+      <admin-service-component
+        v-if="compoToSet === 'Gestion des services'"
+        :token="xsrfToken"
+        :service-list="serviceStore.services"
+        />
 
     </div>
   </div>

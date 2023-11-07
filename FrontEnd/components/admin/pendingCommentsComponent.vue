@@ -39,7 +39,7 @@ function refresh() {
   rows.value.row=[]
   for (const comment of Object.entries(props.commentsList))  {
     rows.value.row.push(comment[1])
-    total.value = rows.value.row.length
+    total.value = rows.value.row.length || 0
     page.value=1
   }
 
@@ -80,7 +80,15 @@ async function rejectComment(id){
 <template>
 
 
-  <UTable :rows="rowsPaginated" :columns="columns">
+  <UTable
+      :rows="rowsPaginated"
+      :columns="columns"
+      :ui="
+      {
+        td: { base : 'whitespace-normal'}
+      }"
+
+  >
 
 
   <template #actions-data="{ row }">
