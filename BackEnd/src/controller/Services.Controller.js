@@ -52,15 +52,15 @@ async function updateServices(req, res) {
 
 
 
-        const serviceName = suppressSpecialChar(req.body.name)
+        const serviceId = suppressSpecialChar(req.body.serviceId)
         const newValue = suppressSpecialChar(req.body.newValue)
         const serviceDescription = suppressSpecialChar(req.body.description)
-        const query = "UPDATE services SET service_name = ? , service_description = ?  WHERE service_name = ? "
+        const query = "UPDATE services SET service_name = ? , service_description = ?  WHERE service_id = ? "
 
         logger.log({
             level: 'info',
             module: 'Services',
-            message: `Call updateServices with param ${serviceName} , ${newValue} , ${serviceDescription} `
+            message: `Call updateServices with param ${serviceId} , ${newValue} , ${serviceDescription} `
         })
 
         logger.log({
@@ -70,7 +70,7 @@ async function updateServices(req, res) {
         })
 
 
-        await database.dbconnect.query(query, [newValue, serviceDescription, serviceName], (err, result) => {
+        await database.dbconnect.query(query, [newValue, serviceDescription, serviceId], (err, result) => {
             if (err) {
 
                 logger.log({
@@ -206,8 +206,8 @@ async function deleteServices(req, res) {
 
     try {
         const table = "services"
-        const whereField = "service_name"
-        const whereValue = req.body.whereValue
+        const whereField = "service_id"
+        const whereValue = req.body.serviceId
 
         logger.log({
             level: 'info',

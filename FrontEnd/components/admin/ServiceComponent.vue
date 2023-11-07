@@ -73,29 +73,35 @@ async function edit(id, name, description) {
 
 }
 
-async function add(name) {
-  console.log('ajouter', name)
-  if (newName.value === undefined) {
-    alert("Merci de saisir un nom")
+async function add(name,description) {
+
+  if (newName.value === undefined || serviceDescription.value === undefined) {
+    alert("Merci de saisir un nom et une description")
     return
   }
 
-  await serviceStore.add(name, props.token)
+  await serviceStore.addService(name,description, props.token)
   await serviceStore.loadServices()
   await refresh()
   isOpen.value = false
-  //alert("Ajout réalisé")
+  alert("Ajout réalisé")
 
 }
 
 async function supp(id) {
+  console.log('supp',id)
+await serviceStore.deleteService(id,props.token)
+  await serviceStore.loadServices()
+  await refresh()
+  isOpen.value = false
+  alert("Suppression réalisée")
 
 }
 
 function setupSlider(id, name, description, action) {
   isOpen.value = true
 // retreive data
-  console.log(action)
+
   serviceName.value = name
 
   idToChange.value = id
@@ -118,9 +124,9 @@ function setupSlider(id, name, description, action) {
     case 'delete' :
       sliderActionName.value = `Suppression d'un service`
       sliderInputName.value = `Voulez vous supprimer le service suivant`
-      newName.value = ""
+      newName.value = name
       serviceDescription.value = description
-      actionToDo.value = 'supprimer'
+      actionToDo.value = 'Supprimer'
       break
   }
 }
@@ -128,10 +134,10 @@ function setupSlider(id, name, description, action) {
 function selectAction(action) {
   switch (action) {
     case 'Ajouter':
-      add(newName.value)
+      add(newName.value,serviceDescription.value)
       break
     case 'Modifier':
-      edit(idToChange.value, newName.value)
+      edit(idToChange.value, newName.value,serviceDescription.value)
       break
     case 'Supprimer':
       supp(idToChange.value)
@@ -210,8 +216,18 @@ function selectAction(action) {
           variant="outline"
           color="red"
           required
-          class="m-3"
+           class="m-3"
       />
+      <UTextarea
+        v-model="serviceDescription"
+        variant="outline"
+        color="red"
+        :ui="{
+            base: 'h-[150px]'
+          }"
+        required
+        class="m-3"
+        />
       <UButton
           :label="actionToDo"
           @click="selectAction(actionToDo)"

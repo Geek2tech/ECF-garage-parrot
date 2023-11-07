@@ -76,16 +76,13 @@ const links = [{
 
   },
 
-  {
-    label: 'Gestion des services',
-    icon: 'i-heroicons-newspaper',
-    click: setComponent
-  },
+
 ]
 // add links for administrator profil
 if (userStore.role === "administrateur") {
   links.push({label: "Gestion des utilisateurs", icon: 'i-heroicons-users', click: setComponent})
   links.push({label: "Gestion des horaires", icon: 'i-heroicons-face-smile-20-solid', click: setComponent})
+  links.push({label: "Gestion des services",icon:'i-heroicons-newspaper',click:setComponent})
 }
 
 const compoToSet = ref("Commentaires à valider")
