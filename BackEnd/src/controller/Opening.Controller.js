@@ -15,8 +15,20 @@ async function updateOpenningHours(req,res) {
     try {
 
         const request = req.body
-        const morningHours = suppressSpecialChar(request.morning_open) + " - " + suppressSpecialChar(request.morning_close)
-        const afternoonHours =  suppressSpecialChar(request.afternoon_open) + " - " + suppressSpecialChar(request.afternoon_close)
+        let morningHours = ""
+        let afternoonHours = ""
+        if (suppressSpecialChar(request.morning_open) === 'fermé') {
+            morningHours = 'fermé'
+        }else {
+           morningHours = suppressSpecialChar(request.morning_open) + "h - " + suppressSpecialChar(request.morning_close) + "h"
+
+        }
+        if (suppressSpecialChar(request.afternoon_open) === 'fermé') {
+             afternoonHours = 'fermé'
+        }else {
+             afternoonHours =  suppressSpecialChar(request.afternoon_open) + "h - " + suppressSpecialChar(request.afternoon_close) + "h"
+
+        }
 
         logger.log({
             level:'info',
@@ -98,7 +110,7 @@ async function updateOpenningHours(req,res) {
 async function getOpeningHours (req,res) {
 
     try {
-        const query = `SELECT * FROM opening_hours WHERE morning !="Fermé" or afternoon !='Fermé'`
+        const query = `SELECT * FROM opening_hours WHERE morning !="fermé" or afternoon !="fermé"`
 
         logger.log({
             level:'info',
@@ -119,10 +131,35 @@ async function getOpeningHours (req,res) {
     }
 
     }
+async function geAllOpeningHours (req,res) {
+
+    try {
+        const query = `SELECT * FROM opening_hours `
+
+        logger.log({
+            level:'info',
+            module:'Opening Hours',
+            message:'Call getOpeningHours'
+        })
+
+        paginatedResult(req, res,query)
+    }catch (err) {
+        logger.log({
+            level:'error',
+            module:'Opening',
+            message:`Internal error :  ${err}`
+        })
+
+        res.status(500)
+        res.send('Internal Error')
+    }
+
+}
 
 
 
 module.exports ={
     updateOpenningHours,
-    getOpeningHours
+    getOpeningHours,
+    geAllOpeningHours
 }

@@ -175,6 +175,7 @@ function selectAction(action) {
       />
       <UButton
           :label="actionToDo"
+          color="red"
           @click="selectAction(actionToDo)"
       />
 

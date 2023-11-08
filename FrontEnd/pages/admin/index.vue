@@ -39,7 +39,7 @@ const xsrfToken = await sessionStorage.getItem("xsrf")
 // fetch data
 await profilStore.getProfils(xsrfToken)
 await fuelStore.getFuels(xsrfToken)
-await openingStore.getOpeningHours()
+await openingStore.getAllOpeningHours()
 await carStore.getCars('noselect')
 await towingStore.getTowing()
 await serviceStore.loadServices()
@@ -94,7 +94,7 @@ function setComponent(event) {
   // restart logout timer
   userStore.startSessionTimer()
 }
-console.log(serviceStore.services)
+
 </script>
 
 <template>
@@ -115,7 +115,7 @@ console.log(serviceStore.services)
 
       <admin-pending-comments-component
           v-if="compoToSet==='Commentaires à valider'"
-          :commentsList="commentStore.pendingCommentList"
+          :commentsList="commentStore?.pendingCommentList"
           :token="xsrfToken"
       />
       <admin-equipements-component
@@ -132,6 +132,11 @@ console.log(serviceStore.services)
         v-if="compoToSet === 'Gestion des services'"
         :token="xsrfToken"
         :service-list="serviceStore.services"
+        />
+      <admin-opening-component
+        v-if="compoToSet === 'Gestion des horaires'"
+        :token="xsrfToken"
+        :opening-list="openingStore.openingHours"
         />
 
     </div>

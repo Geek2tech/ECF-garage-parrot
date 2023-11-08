@@ -59,7 +59,7 @@ const sliderInputName = ref()
 const actionToDo = ref()
 
 async function edit(id, name, description) {
-  console.log('update')
+
   if (newName.value === undefined) {
     alert("Merci de saisir un nom")
     return
@@ -89,7 +89,7 @@ async function add(name,description) {
 }
 
 async function supp(id) {
-  console.log('supp',id)
+
 await serviceStore.deleteService(id,props.token)
   await serviceStore.loadServices()
   await refresh()
@@ -230,6 +230,7 @@ function selectAction(action) {
         />
       <UButton
           :label="actionToDo"
+          color="red"
           @click="selectAction(actionToDo)"
       />
 

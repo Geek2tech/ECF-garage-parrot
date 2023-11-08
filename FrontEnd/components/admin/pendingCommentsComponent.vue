@@ -1,7 +1,7 @@
 <script setup lang="js">
 import {useCommentStore} from "~/stores/commentStore.js";
 import pinia from "~/stores/index.ts";
-import {suppressSpecialChar} from "~/helpers/fieldControl.js";
+
 
 const props =defineProps({
   commentsList : {},
@@ -116,6 +116,8 @@ async function rejectComment(id){
       :page-count="pageCount"
       :total="total"
   />
+
+
 
 </template>
 
