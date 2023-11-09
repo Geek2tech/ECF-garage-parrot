@@ -128,16 +128,16 @@ async function updateConstructor(req, res) {
     try {
 
 
-        const constructorName = suppressSpecialChar(req.body.constructorName)
+        const constructorId = suppressSpecialChar(req.body.constructorId)
         const newValue = suppressSpecialChar(req.body.newValue)
 
         logger.log({
             level: 'info',
             module: 'Constructor',
-            message: `Call updateContructor with param : ${constructorName} , ${newValue}`
+            message: `Call updateContructor with param : ${constructorId} , ${newValue}`
         })
 
-        const query = "UPDATE constructor SET constructor_name = ?  WHERE constructor_name = ? "
+        const query = "UPDATE constructor SET constructor_name = ?  WHERE constructor_id = ? "
 
         logger.log({
             level:'info',
@@ -145,7 +145,7 @@ async function updateConstructor(req, res) {
             message:'BDD request'
         })
 
-        await database.dbconnect.query(query, [newValue, constructorName], (err, result) => {
+        await database.dbconnect.query(query, [newValue, constructorId], (err, result) => {
             if (err) {
 
                 logger.log({

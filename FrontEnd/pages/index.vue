@@ -53,7 +53,11 @@ function toggleCommentModal() {
 
 
 <template>
-
+<div>
+  <Head>
+    <Title> Garage Vincent Parrot</Title>
+  </Head>
+</div>
 
   <section id="presentationSection">
 

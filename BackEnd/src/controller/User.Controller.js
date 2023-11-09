@@ -24,7 +24,7 @@ async function getUser(req, res) {
             module: 'USer',
             message: `Call getUser`
         })
-        const query = "SELECT u.first_name , u.last_name , u.email,p.profil_name FROM users as u JOIN profils as p on u.profil_id = p.profil_id "
+        const query = "SELECT u.user_uuid,u.first_name , u.last_name , u.email,p.profil_name FROM users as u JOIN profils as p on u.profil_id = p.profil_id "
 
 
         logger.log({

@@ -16,7 +16,8 @@ import {useequipementStore} from "~/stores/equipementStore.js";
 
 
 definePageMeta({
-  middleware: 'auth'
+  middleware: 'auth',
+
 })
 // store declaration
 
@@ -49,6 +50,7 @@ await commentStore.getPendingComment(xsrfToken)
 await equipementStore.getEquipements()
 await userStore.getUser(xsrfToken)
 
+const profils = profilStore.profilList.results
 
 const links = [{
   label: 'Commentaires à valider',
@@ -67,6 +69,13 @@ const links = [{
     icon: 'i-heroicons-beaker',
 
     click: setComponent
+  },
+  {
+    label: 'Gestion des constructeurs',
+    icon: 'i-heroicons-truck',
+
+    click: setComponent
+
   },
   {
     label: 'Gestion des annonces',
@@ -98,6 +107,11 @@ function setComponent(event) {
 </script>
 
 <template>
+  <div>
+    <Head>
+      <Title> Administration - V.parrot</Title>
+    </Head>
+  </div>
   <h1>Admin page</h1>
   <p class="m-auto  text-2xl  mb-3">Bonjour - {{ userStore.firstName }} {{ userStore.lastName }}</p>
 
@@ -137,6 +151,17 @@ function setComponent(event) {
         v-if="compoToSet === 'Gestion des horaires'"
         :token="xsrfToken"
         :opening-list="openingStore.openingHours"
+        />
+      <admin-constructor-component
+        v-if="compoToSet === 'Gestion des constructeurs'"
+        :token="xsrfToken"
+        :constructor-list="constructorStore.constructorsList"
+        />
+      <admin-user-component
+        v-if="compoToSet === 'Gestion des utilisateurs'"
+        :token="xsrfToken"
+        :users-list="userStore.userList"
+        :profil-list="profilStore.profilList"
         />
 
     </div>

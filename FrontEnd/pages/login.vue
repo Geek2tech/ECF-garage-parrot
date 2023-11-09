@@ -58,7 +58,11 @@ email: undefined
 
 <template>
 
-
+  <div>
+    <Head>
+      <Title> V.parrot - Login</Title>
+    </Head>
+  </div>
   <section id="login"
       class="mx-auto flex min-h-screen w-full items-center justify-center bg-[url('/images/car-3504910_1920.jpg')] bg-cover text-white"
   >

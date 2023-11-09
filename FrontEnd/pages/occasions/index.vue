@@ -37,6 +37,11 @@ await carStore.getMinMax()
 </script>
 
 <template>
+  <div>
+    <Head>
+      <Title> V.parrot - occasions</Title>
+    </Head>
+  </div>
   <section id="filters" >
 <h1 class="text-6xl text-center m-3">Nos véhicules d'occasions</h1>
 
