@@ -8,7 +8,7 @@ const props = defineProps({
   usersList: {},
   profilList:{}
 })
-console.log(props.profilList)
+
 const userStore = useUserStore(pinia())
 const profils = []
 
@@ -65,12 +65,10 @@ const rowsPaginated = computed(() => {
   return rows.value.row.slice((page.value - 1) * pageCount, (page.value) * pageCount)
 })
 const isOpen = ref(false)
-const newName = ref()
 const firstName = ref()
 const lastName=ref()
 const profilName =ref()
 const email = ref()
-const serviceDescription = ref()
 const idToChange = ref()
 const sliderActionName = ref()
 const sliderInputName = ref()
@@ -78,43 +76,72 @@ const actionToDo = ref()
 
 
 
-async function edit(id, name, description) {
+async function edit(id, fName,lName,uEmail,uProfil) {
 
-  if (newName.value === undefined) {
-    alert("Merci de saisir un nom")
+  if (fName === undefined || lName === undefined || uEmail === undefined || uProfil === undefined) {
+    alert("Merci de saisir tout les champs")
     return
   }
-  await serviceStore.update(id, name, description, props.token)
+  // retreive profil id
+  props.profilList.results.forEach((item) => {
 
-  await serviceStore.loadServices()
+        if (Object.values(item)[1] === uProfil) {
+          uProfil = Object.values(item)[0]
+
+        }
+
+  })
+
+  await userStore.update(id,fName,lName,uEmail,uProfil,props.token)
+  await userStore.getUser(props.token)
   await refresh()
   isOpen.value = false
   alert('Modification réalisée')
 
 }
 
-async function add(name,description) {
+async function add(fName,lName,uEmail,uProfil) {
 
-  if (newName.value === undefined || serviceDescription.value === undefined) {
-    alert("Merci de saisir un nom et une description")
+  if (fName === undefined || lName === undefined || uEmail === undefined || uProfil === undefined) {
+    alert("Merci de saisir tout les champs")
     return
   }
+  // retreive profil id
+  props.profilList.results.forEach((item) => {
 
-  await serviceStore.addService(name,description, props.token)
-  await serviceStore.loadServices()
+    if (Object.values(item)[1] === uProfil) {
+      uProfil = Object.values(item)[0]
+
+    }
+
+  })
+
+  const result = await userStore.add(fName,lName,uEmail,uProfil,props.token)
+
+  await userStore.getUser(props.token)
   await refresh()
   isOpen.value = false
-  alert("Ajout réalisé")
+  if (result._rawValue === "Utilisateur déja existant") {
+    alert('Email déja utilisé')
+  } else {
+    alert("Ajout réalisé")
+  }
+
 
 }
 
-async function supp(id) {
+async function supp(email) {
 
-  await serviceStore.deleteService(id,props.token)
-  await serviceStore.loadServices()
+  const result = await userStore.delete(email,props.token)
+  await userStore.getUser(props.token)
   await refresh()
   isOpen.value = false
-  alert("Suppression réalisée")
+  if (result._rawValue === "Impossible de supprimer le dernier admin") {
+    alert('Impossible de supprimer seul administrateur')
+  } else {
+   alert("Suppression réalisée")
+  }
+
 
 }
 
@@ -144,13 +171,11 @@ function setupSlider(id, fName,lName,uEmail,pName, action) {
       lastName.value=""
       email.value=""
       profilName.value=""
-
       actionToDo.value = 'Ajouter'
       break
     case 'delete' :
       sliderActionName.value = `Suppression d'un utilisateur`
       sliderInputName.value = `Voulez vous supprimer l'utilisateur suivant`
-
       actionToDo.value = 'Supprimer'
       break
   }
@@ -159,19 +184,18 @@ function setupSlider(id, fName,lName,uEmail,pName, action) {
 function selectAction(action) {
   switch (action) {
     case 'Ajouter':
-      add(newName.value,serviceDescription.value)
+      add(firstName.value,lastName.value,email.value,profilName.value)
       break
     case 'Modifier':
-      edit(idToChange.value, newName.value,serviceDescription.value)
+      edit(idToChange.value, firstName.value,lastName.value,email.value,profilName.value)
       break
     case 'Supprimer':
-      supp(idToChange.value)
+      supp(email.value)
 
   }
 
 
 }
-
 
 </script>
 

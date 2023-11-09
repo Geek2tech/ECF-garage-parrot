@@ -111,7 +111,7 @@ async function addUser(req, res) {
                                 module: 'User',
                                 message: `Email ${newUser.email} déja utilisé`
                             })
-                            res.status(204)
+                            res.status(200)
                             res.send('Utilisateur déja existant')
                         } else {
 
@@ -138,7 +138,7 @@ async function addUser(req, res) {
                             to: newUser.email,
                             subject: 'Votre nouveau mot de passe',
                             text: ` Votre compte vient d'être créé , voici votre password : ${password}`,
-                            html: `<h1> Garage Parrot </h1><br><strong>Bonjour ${newUser.first_name} ${newUser.last_name}</strong><br><br><strong>Votre commpte pour l'accès au site</strong>
+                            html: `<h1> Garage Parrot </h1><br><strong>Bonjour ${newUser.first_name} ${newUser.last_name}</strong><br><br><strong>Votre compte pour l'accès au site</strong>
 <br><strong>vient d'être créé . Voici le mot de passe</strong>
 <br>
 <br>
@@ -275,7 +275,7 @@ async function deleteUser(req, res) {
                                     message: `It's the last admin you can't delete him`
                                 })
 
-                                res.status(304)
+                                res.status(200)
                                 res.send(`Impossible de supprimer le dernier admin`)
 
                             } else {
