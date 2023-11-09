@@ -315,128 +315,71 @@ async function deleteUser(req, res) {
  */
 async function updateUser(req, res) {
     try {
-
+        const uuid = suppressSpecialChar(req.body.user_uuid)
         const first_name = suppressSpecialChar(req.body.first_name)
         const last_name = suppressSpecialChar(req.body.last_name)
         const profil = suppressSpecialChar(req.body.profil)
         const email = suppressSpecialChar(req.body.email)
-        const newEmail = suppressSpecialChar(req.body.new_email)
+
+
+        const user = {
+            uuid: uuid,
+            first_name: first_name,
+            last_name: last_name,
+            email: email,
+            profil: profil
+        }
+        query = `UPDATE users
+                 SET first_name = ?,
+                     last_name  = ?,
+                     email      = ?,
+                     profil_id  = ?
+                 WHERE user_uuid = ?`
 
         logger.log({
             level: 'info',
             module: 'User',
-            message: `Call updateUser with params  ${first_name} , ${last_name} , ${email} , ${newEmail}, ${profil}`
+            message: 'Update User'
         })
 
-
-        let query = `SELECT user_uuid
-                     FROM users
-                     where email = ?`
-
-        logger.log({
-            level: 'info',
-            module: 'User',
-            message: 'Bdd request'
-        })
-
-        logger.log({
-            level: 'info',
-            module: 'User',
-            message: `Request uuid user for ${email}`
-        })
-
-        await database.dbconnect.query(query, [email], (err, result) => {
+        database.dbconnect.query(query, [user.first_name, user.last_name, user.email, user.profil, user.uuid], (err, result) => {
             if (err) {
+                if (err.code === 'ER_DUP_ENTRY') {
+                    logger.log({
+                        level: 'error',
+                        module: 'User',
+                        message: 'Duplicated email'
+                    })
 
-                logger.log({
-                    level: 'info',
-                    module: 'User',
-                    message: `Sql error during search user : ${err.message}`
-                })
+                    res.status(304)
+                    res.send('Erreur email déja existant')
+                } else {
+                    logger.log({
+                        level: 'error',
+                        module: 'User',
+                        message: `SQL error : ${err.message}`
+                    })
+                    res.status(500)
+                    res.send(`SQL error ${err.message}`)
+                }
 
-                res.status(500)
-                res.send(`Internal error ${err.message}`)
-
-            } else if (result.length === 0) {
-                logger.log({
-                    level: 'error',
-                    module: 'User',
-                    message: 'User not Found'
-                })
-                res.status(204)
-                res.send('User not found')
 
             } else {
 
                 logger.log({
                     level: 'info',
                     module: 'User',
-                    message: `User found`
+                    message: `Update user successfully ${result.message}`
                 })
 
-
-                const uuid = result[0]['user_uuid']
-                const user = {
-                    uuid: uuid,
-                    first_name: first_name,
-                    last_name: last_name,
-                    email: newEmail,
-                    profil: profil
-                }
-                query = `UPDATE users
-                         SET first_name = ?,
-                             last_name  = ?,
-                             email      = ?,
-                             profil_id  = ?
-                         WHERE user_uuid = ?`
-
-                logger.log({
-                    level: 'info',
-                    module: 'User',
-                    message: 'Update User'
-                })
-
-                database.dbconnect.query(query, [user.first_name, user.last_name, user.email, user.profil, user.uuid], (err, result) => {
-                    if (err) {
-                        if (err.code === 'ER_DUP_ENTRY') {
-                            logger.log({
-                                level: 'error',
-                                module: 'User',
-                                message: 'Duplicated email'
-                            })
-
-                            res.status(304)
-                            res.send('Erreur email déja existant')
-                        } else {
-                            logger.log({
-                                level: 'error',
-                                module: 'User',
-                                message: `SQL error : ${err.message}`
-                            })
-                            res.status(500)
-                            res.send(`SQL error ${err.message}`)
-                        }
-
-
-                    } else {
-
-                        logger.log({
-                            level: 'info',
-                            module: 'User',
-                            message: `Update user successfully ${result.message}`
-                        })
-
-                        res.status(200)
-                        res.send('Update ok')
-                    }
-                })
-
+                res.status(200)
+                res.send('Update ok')
             }
-
         })
 
-
-    } catch (err) {
+    }catch
+        (err)
+    {
         logger.log({
             level: 'error',
             module: 'User',
@@ -446,6 +389,8 @@ async function updateUser(req, res) {
         res.status(500)
         res.send('Internal Error')
     }
+
+
 
 
 }

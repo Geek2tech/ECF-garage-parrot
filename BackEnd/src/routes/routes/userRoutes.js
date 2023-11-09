@@ -9,7 +9,7 @@ router.get('/api/protected/users',userController.getUser)
 router.post('/api/protected/user',userController.addUser)
 
 // update user information
-router.put('/api/protected/user',userController.updateUser)
+router.put('/api/user',userController.updateUser)
 
 // request an update user password
 router.post('/api/password',userController.updateUserPassword)

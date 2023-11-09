@@ -16,7 +16,7 @@ for (const item of Object.entries(props.profilList?.results)) {
 profils.push(item[1].profil_name)
 
 }
-console.log(profils)
+
 
 const columns = [{
   key: 'first_name',
