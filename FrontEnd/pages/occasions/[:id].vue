@@ -57,8 +57,12 @@ function submitMail(mail,message){
 
   toggleModal()
 }
-
-
+const focusedPhoto = ref(
+    urlPhotos + carStore.carList.results[0]?.photo_name
+)
+function changePhoto(name) {
+    focusedPhoto.value=urlPhotos + name
+}
 
 
 
@@ -80,11 +84,11 @@ function submitMail(mail,message){
 
 
 
-  <img crossorigin="anonymous" :src="urlPhotos + carStore.carList.results[0]?.photo_name" alt="photo" class="object-cover mb-3">
+  <img crossorigin="anonymous" :src="focusedPhoto" alt="photo" class="object-cover mb-3 m-auto">
   <div v-if="carStore.photoList.rows !== 0" class=" flex flex-wrap  align-middle justify-center   ">
 
-    <div v-for="photo in carStore.photoList.results" class= "  w-1/2 md:w-1/3 p-3  ">
-      <img crossorigin="anonymous" :src="urlPhotos + photo.photo_name" alt="">
+    <div v-for="photo in carStore.photoList.results" class= "  w-1/2 md:w-1/3  p-3 m-auto  ">
+      <img crossorigin="anonymous" :src="urlPhotos + photo.photo_name" alt="" @click="changePhoto(photo.photo_name)" class="object-cover">
 
     </div>
   </div>

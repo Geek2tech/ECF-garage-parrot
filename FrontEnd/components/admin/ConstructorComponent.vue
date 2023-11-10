@@ -12,7 +12,7 @@ const props = defineProps({
 const constructorStore = useConstructorStore(pinia())
 const columns = [{
   key: 'constructor_name',
-  label: `Nom de l'équipement`
+  label: `Nom du constructeur`
 },
   {
     key: 'actions'

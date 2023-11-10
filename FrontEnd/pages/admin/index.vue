@@ -163,6 +163,11 @@ function setComponent(event) {
         :users-list="userStore.userList"
         :profil-list="profilStore.profilList"
         />
+      <admin-cars-component
+        v-if="compoToSet === 'Gestion des annonces'"
+        :token="xsrfToken"
+        :car-list="carStore.carList"
+        />
 
     </div>
   </div>
