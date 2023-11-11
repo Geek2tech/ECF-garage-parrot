@@ -60,6 +60,37 @@ export const useCarStore = defineStore('car', {
             this.activePage++
 
         },
+        delete(id,token){
+
+            const runTimeConfigs = useRuntimeConfig()
+
+
+            const {data: carRemoved} = useAsyncData(`CarRemoved`, () => {
+                    return $fetch(`${runTimeConfigs.public.API_URL}/api/protected/car/${id}`, {
+                            method: `DELETE`,
+                            mode: "cors",
+                            credentials: 'include',
+                            headers: {
+                                "content-Type": "application/json",
+                                "x-api-key": `${runTimeConfigs.public.API_KEY}`,
+                                "x-xsrf-token":token
+                            },
+                            key: `CarDeleted`,
+
+
+
+
+                        },
+                    )
+
+
+                },
+            )
+
+
+
+
+        },
 
          async getMinMax() {
             const runTimeConfigs = useRuntimeConfig()
@@ -85,7 +116,7 @@ export const useCarStore = defineStore('car', {
 
 
         },
-       async getCars(carId,price,year,mileage) {
+       async getCars(carId,price,year,mileage,limit) {
 
             const  body = {
 
@@ -113,7 +144,7 @@ export const useCarStore = defineStore('car', {
                     body: JSON.stringify(body),
                     params: {
                         page: this.activePage,
-                        limit: 10
+                        limit: limit
                     },
 
 

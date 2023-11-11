@@ -84,11 +84,11 @@ function changePhoto(name) {
 
 
 
-  <img crossorigin="anonymous" :src="focusedPhoto" alt="photo" class="object-cover mb-3 m-auto">
+  <img crossorigin="anonymous" :src="focusedPhoto" alt="photo" class="object-cover mb-3 m-auto lg:w-[1000px] rounded-xl " >
   <div v-if="carStore.photoList.rows !== 0" class=" flex flex-wrap  align-middle justify-center   ">
 
     <div v-for="photo in carStore.photoList.results" class= "  w-1/2 md:w-1/3  p-3 m-auto  ">
-      <img crossorigin="anonymous" :src="urlPhotos + photo.photo_name" alt="" @click="changePhoto(photo.photo_name)" class="object-cover">
+      <img crossorigin="anonymous" :src="urlPhotos + photo.photo_name" alt="" @click="changePhoto(photo.photo_name)" class="rounded-xl">
 
     </div>
   </div>

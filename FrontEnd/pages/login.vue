@@ -71,7 +71,7 @@ email: undefined
       <div class="text-center text-4xl font-medium">Log In</div>
 
       <div
-          class="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500"
+          class="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-[#D92332]"
       >
         <input
             type="email"
@@ -84,7 +84,7 @@ email: undefined
       </div>
 
       <div
-          class="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500"
+          class="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-[#D92332]"
       >
         <input
             type="password"

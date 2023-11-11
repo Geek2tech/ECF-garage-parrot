@@ -9,7 +9,7 @@ router.post('/api/cars',carController.getCars)
 router.post('/api/protected/car',carController.addCar)
 
 // delete car
-router.delete('/api/car/:car_id',carController.deleteCar)
+router.delete('/api/protected/car/:car_id',carController.deleteCar)
 
 // get mmin max for filtering
 
