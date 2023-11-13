@@ -73,7 +73,7 @@ const idToChange = ref()
 const sliderActionName = ref()
 const sliderInputName = ref()
 const actionToDo = ref()
-
+const disabledField = ref(false)
 
 
 async function edit(id, fName,lName,uEmail,uProfil) {
@@ -160,13 +160,14 @@ function setupSlider(id, fName,lName,uEmail,pName, action) {
     case 'modify' :
       sliderActionName.value = `Modification de l'utilisateur`
       sliderInputName.value = `Veuillez renseigner les champs suivants`
-
+disabledField.value = false
 
       actionToDo.value = 'Modifier'
       break
     case 'add' :
       sliderActionName.value = `Ajout d'un nouvel utilisateur`
       sliderInputName.value = `Veuillez renseigner les champs suivants`
+        disabledField.value = false
       firstName.value=""
       lastName.value=""
       email.value=""
@@ -174,6 +175,7 @@ function setupSlider(id, fName,lName,uEmail,pName, action) {
       actionToDo.value = 'Ajouter'
       break
     case 'delete' :
+      disabledField.value = true
       sliderActionName.value = `Suppression d'un utilisateur`
       sliderInputName.value = `Voulez vous supprimer l'utilisateur suivant`
       actionToDo.value = 'Supprimer'
@@ -268,6 +270,7 @@ function selectAction(action) {
               variant="outline"
               color="red"
               required
+              :disabled="disabledField"
               class="m-3"
           />
         </div>
@@ -279,6 +282,7 @@ function selectAction(action) {
               variant="outline"
               color="red"
               required
+              :disabled="disabledField"
               class="m-3"
           />
         </div>
@@ -295,6 +299,7 @@ function selectAction(action) {
             variant="outline"
             color="red"
             required
+            :disabled="disabledField"
             class="m-3"
         />
       </div>
@@ -305,6 +310,7 @@ function selectAction(action) {
             variant="outline"
             color="red"
             :options="profils"
+            :disabled="disabledField"
             required
             class="m-3"
         />

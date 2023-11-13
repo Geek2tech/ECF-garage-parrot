@@ -56,6 +56,7 @@ const serviceDescription = ref()
 const idToChange = ref()
 const sliderActionName = ref()
 const sliderInputName = ref()
+const disabledField = ref(false)
 const actionToDo = ref()
 
 async function edit(id, name, description) {
@@ -73,14 +74,14 @@ async function edit(id, name, description) {
 
 }
 
-async function add(name,description) {
+async function add(name, description) {
 
   if (newName.value === undefined || serviceDescription.value === undefined) {
     alert("Merci de saisir un nom et une description")
     return
   }
 
-  await serviceStore.addService(name,description, props.token)
+  await serviceStore.addService(name, description, props.token)
   await serviceStore.loadServices()
   await refresh()
   isOpen.value = false
@@ -90,7 +91,7 @@ async function add(name,description) {
 
 async function supp(id) {
 
-await serviceStore.deleteService(id,props.token)
+  await serviceStore.deleteService(id, props.token)
   await serviceStore.loadServices()
   await refresh()
   isOpen.value = false
@@ -110,6 +111,7 @@ function setupSlider(id, name, description, action) {
     case 'modify' :
       sliderActionName.value = `Changement du nom du service`
       sliderInputName.value = `Veuillez saisir le nouveau nom et la description du service`
+      disabledField.value = false
       newName.value = name
       serviceDescription.value = description
       actionToDo.value = 'Modifier'
@@ -117,6 +119,7 @@ function setupSlider(id, name, description, action) {
     case 'add' :
       sliderActionName.value = `Ajout d'un nouveau service`
       sliderInputName.value = `Veuillez saisir le nom et la description du service à ajouter`
+      disabledField.value = false
       newName.value = ""
       serviceDescription.value = description
       actionToDo.value = 'Ajouter'
@@ -124,6 +127,7 @@ function setupSlider(id, name, description, action) {
     case 'delete' :
       sliderActionName.value = `Suppression d'un service`
       sliderInputName.value = `Voulez vous supprimer le service suivant`
+        disabledField.value = true
       newName.value = name
       serviceDescription.value = description
       actionToDo.value = 'Supprimer'
@@ -134,10 +138,10 @@ function setupSlider(id, name, description, action) {
 function selectAction(action) {
   switch (action) {
     case 'Ajouter':
-      add(newName.value,serviceDescription.value)
+      add(newName.value, serviceDescription.value)
       break
     case 'Modifier':
-      edit(idToChange.value, newName.value,serviceDescription.value)
+      edit(idToChange.value, newName.value, serviceDescription.value)
       break
     case 'Supprimer':
       supp(idToChange.value)
@@ -216,18 +220,20 @@ function selectAction(action) {
           variant="outline"
           color="red"
           required
-           class="m-3"
+          :disabled="disabledField"
+          class="m-3"
       />
       <UTextarea
-        v-model="serviceDescription"
-        variant="outline"
-        color="red"
-        :ui="{
+          v-model="serviceDescription"
+          variant="outline"
+          color="red"
+          :ui="{
             base: 'h-[150px]'
           }"
-        required
-        class="m-3"
-        />
+          required
+          :disabled="disabledField"
+          class="m-3"
+      />
       <UButton
           :label="actionToDo"
           color="red"

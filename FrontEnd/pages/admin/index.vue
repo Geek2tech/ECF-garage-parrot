@@ -112,8 +112,14 @@ function setComponent(event) {
       <Title> Administration - V.parrot</Title>
     </Head>
   </div>
-  <h1>Admin page</h1>
-  <p class="m-auto  text-2xl  mb-3">Bonjour - {{ userStore.firstName }} {{ userStore.lastName }}</p>
+  <h1 class="text-center text-4xl font-light  ">Administration du site</h1>
+  <div class="p-2 text-2xl ">Bonjour - {{ userStore.firstName }} {{ userStore.lastName }}</div>
+  <UButton
+    label="Déconnexion"
+    color="red"
+    class="m-3"
+    @click="userStore.logout()"
+    />
 
   <div class="grid grid-cols-5 grid-rows-5 gap-4 mb-4">
     <div class="col-span-2 row-span-5 border-2 ">
