@@ -7,6 +7,7 @@ import {useFuelStore} from "~/stores/fuelStore.js";
 import {useTransmissionStore} from "~/stores/transmissionStore.js";
 import {useTowingStore} from "~/stores/towingStore.js";
 import {useequipementStore} from "~/stores/equipementStore.js";
+import * as events from "events";
 
 const props = defineProps({
   token: null,
@@ -59,7 +60,7 @@ const carsRows = ref({
   row: []
 })
 const equipementRows = ref({
-  row:[]
+  row: []
 })
 
 
@@ -76,15 +77,12 @@ function refresh() {
   }
 
 }
+
 // Setup carTable
 const carRowsPaginated = computed(() => {
   return carsRows.value.row.slice((page.value - 1) * pageCount, (page.value) * pageCount)
 })
 refresh()
-
-
-
-
 
 
 const SliderIsOpen = ref(false)
@@ -108,6 +106,7 @@ const car = {
   transmission: '',
   photo: '',
 
+
 }
 // slider conf
 const inputDisabled = ref(false)
@@ -117,13 +116,16 @@ const actionToDo = ref()
 //modal conf
 const modalTitle = ref()
 const selectedEquipements = ref([])
+const primaryPhotoUrl = ref('')
+const secondaryPhotos = ref([])
+const secondaryPhotosUrls = ref([])
 // setup equipement table in modal
 for (const item of Object.entries(equipementStore.equipementsList)) {
   equipementRows.value.row.push(item[1])
 }
 
 const equipementRowsPaginated = computed(() => {
-  return equipementRows.value.row.slice((page.value - 1) * pageCount,(page.value) *pageCount)
+  return equipementRows.value.row.slice((page.value - 1) * pageCount, (page.value) * pageCount)
 })
 
 async function edit(id, name, description) {
@@ -238,6 +240,19 @@ function selectAction(action) {
 
 const runTimeConfigs = useRuntimeConfig()
 const url = `${runTimeConfigs.public.API_URL}/photo/`
+
+
+function primaryPhotoPreview(event) {
+  primaryPhotoUrl.value = URL.createObjectURL(event.target.files[0])
+
+}
+
+function addSecondaryPhoto(event) {
+
+  secondaryPhotos.value[event.target.name] = event.target.files[0]
+  secondaryPhotosUrls.value[event.target.name] = URL.createObjectURL(event.target.files[0])
+
+}
 
 </script>
 
@@ -605,12 +620,85 @@ const url = `${runTimeConfigs.public.API_URL}/photo/`
           />
 
         </div>
+        <h1 class="text-center border-b-2 border-red-500 text-2xl m-5 "> Photo principale</h1>
+        <img :src="primaryPhotoUrl" alt="" class="m-auto md:max-w-[800px]">
+
+        <UInput
+            v-model="car.photo"
+            type="file"
+            color="red"
+            accept="image/*"
+            class="m-3"
+            @change="primaryPhotoPreview"
 
 
+        />
+        <h1 class="text-center border-b-2 border-red-500 text-2xl m-5 "> Photos secondaires</h1>
+
+
+        <UInput
+            name="0"
+            type="file"
+            color="red"
+            accept="image/*"
+            class="m-3"
+            @change="addSecondaryPhoto"
+        />
+        <img :src="secondaryPhotosUrls[0]" alt="" class="max-w-[800px] m-auto">
+        <UInput
+            name="1"
+            v-if="secondaryPhotos.length > 0"
+            type="file"
+            color="red"
+            accept="image/*"
+            class="m-3"
+            @change="addSecondaryPhoto"
+        />
+        <img :src="secondaryPhotosUrls[1]" alt="" class="max-w-[800px] m-auto ">
+
+        <UInput
+            name="2"
+            v-if="secondaryPhotos.length > 1"
+            type="file"
+            color="red"
+            accept="image/*"
+            class="m-3"
+            @change="addSecondaryPhoto"
+        />
+        <img :src="secondaryPhotosUrls[2]" alt="" class="max-w-[800px] m-auto ">
+        <UInput
+            name="3"
+            v-if="secondaryPhotos.length > 2"
+            type="file"
+            color="red"
+            accept="image/*"
+            class="m-3"
+            @change="addSecondaryPhoto"
+        />
+        <img :src="secondaryPhotosUrls[3]" alt="" class="max-w-[800px] m-auto ">
+        <UInput
+            name="4"
+            v-if="secondaryPhotos.length > 3"
+            type="file"
+            color="red"
+            accept="image/*"
+            class="m-3"
+            @change="addSecondaryPhoto"
+        />
+        <img :src="secondaryPhotosUrls[4]" alt="" class="max-w-[800px] m-auto ">
+        <UInput
+            name="5"
+            v-if="secondaryPhotos.length > 4"
+            type="file"
+            color="red"
+            accept="image/*"
+            class="m-3"
+            @change="addSecondaryPhoto"
+        />
+        <img :src="secondaryPhotosUrls[5]" alt="" class="max-w-[800px] m-auto ">
       </UCard>
     </UModal>
   </div>
-
 
 
 </template>

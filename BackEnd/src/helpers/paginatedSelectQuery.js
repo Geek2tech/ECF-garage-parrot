@@ -34,7 +34,6 @@ try {
         message: 'BDD request'
     })
 
-
     database.dbconnect.query(query, (err, rows) => {
 
         if (err) {
