@@ -69,8 +69,9 @@ const page = ref(1)
 const pageCount = 5
 const total = ref()
 
-function refresh() {
+async function refresh() {
   carsRows.value.row = []
+  await carStore.getCars('noselect','','','','')
   for (const item of Object.entries(carStore.carList.results)) {
     carsRows.value.row.push(item[1])
     total.value = carsRows.value.row.length || 0
@@ -147,8 +148,6 @@ async function edit(id, name, description) {
 
 async function add(car, equipement, primaryPhoto, secondaryPhotos) {
 
-  console.log('equipement', equipement)
-  console.log('photo Primaire', primaryPhoto)
   console.log('photos', secondaryPhotos)
 
   //check car values and push in database
@@ -204,9 +203,13 @@ async function add(car, equipement, primaryPhoto, secondaryPhotos) {
 
     })
     selectedEquipements.value = []
-    alert("Ajout réalisé")
+
+    carStore.addCarPhoto(carId,'Y',primaryPhoto?._value,props.token)
+    await refresh()
     modalIsOpen.value = false
-    refresh()
+    alert("Ajout réalisé")
+
+
 
   }
 

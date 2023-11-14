@@ -252,6 +252,7 @@ export const useCarStore = defineStore('car', {
 
 
         },
+
         async getCarPhotos(id) {
             const runTimeConfigs = useRuntimeConfig()
 
@@ -275,8 +276,34 @@ export const useCarStore = defineStore('car', {
                 })
             })
             this.photoList = carPhotos
-        }
+        },
+        async addCarPhoto(carId, primary,photo, token) {
+            const runTimeConfigs = useRuntimeConfig()
+            const body = new FormData()
+            body.append("file",photo)
+
+            const {data: addCarPhoto} = await useAsyncData('AddCarPhoto', () => {
+                return $fetch(`${runTimeConfigs.public.API_URL}/api/protected/photo/${carId}/${primary}`, {
+                    method: 'POST',
+                    mode: 'cors',
+                    credentials: 'include',
+                    headers: {
+
+                        "x-api-key": `${runTimeConfigs.public.API_KEY}`,
+                        "x-xsrf-token": token
+                    },
+                    key: 'AddCarPhoto',
+                    lazy: true,
+                    body: body,
+
+
+                })
+            })
+
+
+        },
     },
+
 
 
 })
