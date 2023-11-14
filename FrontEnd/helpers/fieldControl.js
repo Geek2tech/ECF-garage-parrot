@@ -6,9 +6,12 @@ export function suppressSpecialChar (value) {
      * @param {string} string to clean
      * @return {string} string cleaned
      */
-
-
     const valueToClean = value
+
+    if (typeof valueToClean === 'number') {
+        const valueClean = valueToClean
+        return valueClean
+    }
     const valueClean = valueToClean.replace(/\<|\>|\?|\$|\&|\"|\!|\|\=/g, "").trim()
 
     return valueClean

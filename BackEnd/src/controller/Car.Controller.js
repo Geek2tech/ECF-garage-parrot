@@ -125,7 +125,7 @@ async function addCar(req, res) {
             message: `Insert successfully with id : ${result.insertId}`
         })
 
-        return res.status(200).send(`Ajout ok id : ${result.insertId}`)
+        return res.status(200).send(` ${result.insertId}`)
 
 
     })

@@ -21,6 +21,7 @@ const transmissionStore = useTransmissionStore(pinia())
 const towingStore = useTowingStore(pinia())
 const equipementStore = useequipementStore(pinia())
 
+
 const carColumns = [{
   key: 'car_id',
   label: `Numéro annonce`,
@@ -116,6 +117,7 @@ const actionToDo = ref()
 //modal conf
 const modalTitle = ref()
 const selectedEquipements = ref([])
+const primaryPHoto = ref()
 const primaryPhotoUrl = ref('')
 const secondaryPhotos = ref([])
 const secondaryPhotosUrls = ref([])
@@ -143,12 +145,71 @@ async function edit(id, name, description) {
 
 }
 
-async function add(name, description) {
+async function add(car, equipement, primaryPhoto, secondaryPhotos) {
+
+  console.log('equipement', equipement)
+  console.log('photo Primaire', primaryPhoto)
+  console.log('photos', secondaryPhotos)
+
+  //check car values and push in database
+  const fieldNeeded = ref([])
+  for (const key in car) {
+
+    if (key !== 'carNumber' && key !== 'photo') {
+      if (car[key] === '') {
+        fieldNeeded.value.push(key)
+
+      }
+    }
+  }
+  if (fieldNeeded.value.length > 0) {
+    alert('merci de remplir tout les champs')
+
+  } else {
 
 
-  total.value = carsRows.value.row.length || 0
-  page.value = 1
-  alert("Ajout réalisé")
+    // retrieve fuel id
+    fuelStore.fuelList.forEach((item) => {
+      if (item.fuel_name === car.fuel) {
+        car.fuel = item.fuel_id
+      }
+    })
+    // retrieve constructor
+    constructorStore.constructorsList.forEach((item) => {
+
+      if (item.constructor_name === car.constructor) {
+        car.constructor = item.constructor_id
+      }
+    })
+    // retrieve towing mode id
+    towingStore.towingList.forEach((item) => {
+      if (item.mode_name === car.mode) {
+        car.mode = item.towing_id
+      }
+    })
+    // retrieve transmission id
+    transmissionStore.transmissionsList.forEach((item) => {
+      if (item.transmission_type_name === car.transmission) {
+        car.transmission = item.transmission_type_id
+      }
+    })
+
+    const carAddedResponse = await carStore.add(car, props.token)
+    const carId = carAddedResponse?._value
+
+    // store car equipement
+    selectedEquipements.value.forEach((item)=> {
+
+      carStore.addCarEquipement(carId,item.equipement_id,props.token)
+
+    })
+    selectedEquipements.value = []
+    alert("Ajout réalisé")
+    modalIsOpen.value = false
+    refresh()
+
+  }
+
 
 }
 
@@ -185,21 +246,14 @@ function setupSlider(row, action) {
   car.transmission = row.transmission_type_name
   car.photo = url + row.photo_name
 
-  console.log(car)
+
   switch (action) {
     case 'modify' :
-      sliderActionName.value = `Changement du nom du service`
-      sliderInputName.value = `Veuillez saisir le nouveau nom et la description du service`
+
 
       actionToDo.value = 'Modifier'
       break
-    case 'add' :
-      sliderActionName.value = `Ajout d'un nouveau service`
-      sliderInputName.value = `Veuillez saisir le nom et la description du service à ajouter`
 
-      console.log(car)
-      actionToDo.value = 'Ajouter'
-      break
     case 'delete' :
       sliderActionName.value = `Suppression d'une annonce`
       sliderInputName.value = `Voulez vous supprimer l'annonce :`
@@ -213,11 +267,15 @@ function setupSlider(row, action) {
 
 function setupModal(row, action) {
   modalIsOpen.value = true
-  console.log(row)
+
   switch (action) {
     case 'add' :
       modalTitle.value = `Ajout d'une nouvelle annonce`
+      for (const key in car) {
+        car[key] = ''
+      }
       total.value = equipementRows.value.row.length || 0
+      actionToDo.value = 'Ajouter'
       page.value = 1
       break
   }
@@ -227,7 +285,8 @@ function setupModal(row, action) {
 function selectAction(action) {
   switch (action) {
     case 'Ajouter':
-      add(carNumber.value, serviceDescription.value)
+
+      add(car, selectedEquipements, primaryPHoto, secondaryPhotos)
       break
     case 'Modifier':
       edit(idToChange.value, carNumber.value, serviceDescription.value)
@@ -242,7 +301,8 @@ const runTimeConfigs = useRuntimeConfig()
 const url = `${runTimeConfigs.public.API_URL}/photo/`
 
 
-function primaryPhotoPreview(event) {
+function addPrimaryPhoto(event) {
+  primaryPHoto.value = event.target.files[0]
   primaryPhotoUrl.value = URL.createObjectURL(event.target.files[0])
 
 }
@@ -381,14 +441,14 @@ function addSecondaryPhoto(event) {
       >
         <template #header>
           <div class="flex items-center justify-between">
-            <h3 class=" font-semibold leading-6 text-gray-900 ">
+            <h3 class=" font-semibold leading-6 text-gray-900 m-auto">
               {{ modalTitle }}
             </h3>
             <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
                      @click="modalIsOpen = false"/>
           </div>
         </template>
-        <div id="annonces" class="container ">
+        <div id="annonces" class="container m-auto">
           <h1 class="text-center border-b-2 border-red-500 text-2xl m-5 "> Modèle</h1>
           <div class="flex flex-wrap justify-center">
             <div class="flex-col m-3">
@@ -440,7 +500,7 @@ function addSecondaryPhoto(event) {
 
             <div class="flex-col m-3">
               <div>
-                Prix
+                Prix en € (nombre seulement)
               </div>
               <div>
                 <UInput
@@ -470,7 +530,7 @@ function addSecondaryPhoto(event) {
 
             <div class="flex-col m-3">
               <div>
-                Kilométrage
+                Kilométrage en km
               </div>
               <div>
                 <UInput
@@ -498,10 +558,9 @@ function addSecondaryPhoto(event) {
 
             </div>
 
-
             <div class="flex-col m-3">
               <div>
-                Nombre de porte
+                Nombre de portes
               </div>
               <div>
                 <USelect
@@ -538,11 +597,25 @@ function addSecondaryPhoto(event) {
 
             <div class="flex-col m-3">
               <div>
-                Cylindrée
+                Cylindrée ex : 2000
               </div>
               <div>
                 <UInput
                     v-model="car.cylinderCapacity"
+                    color="red"
+
+                />
+
+              </div>
+
+            </div>
+            <div class="flex-col m-3">
+              <div>
+                Puissance en cv
+              </div>
+              <div>
+                <UInput
+                    v-model="car.horsePower"
                     color="red"
 
                 />
@@ -608,7 +681,7 @@ function addSecondaryPhoto(event) {
               :ui="{
         base : 'overflow-y'
       }"
-              @change="console.log(selectedEquipements)"
+
 
           />
           <UPagination
@@ -620,83 +693,94 @@ function addSecondaryPhoto(event) {
           />
 
         </div>
-        <h1 class="text-center border-b-2 border-red-500 text-2xl m-5 "> Photo principale</h1>
-        <img :src="primaryPhotoUrl" alt="" class="m-auto md:max-w-[800px]">
+        <div class="container m-auto">
+          <h1 class="text-center border-b-2 border-red-500 text-2xl m-5 "> Photo principale</h1>
+          <img :src="primaryPhotoUrl" alt="" class="m-auto md:max-w-[800px]">
 
-        <UInput
-            v-model="car.photo"
-            type="file"
-            color="red"
-            accept="image/*"
-            class="m-3"
-            @change="primaryPhotoPreview"
+          <UInput
 
-
-        />
-        <h1 class="text-center border-b-2 border-red-500 text-2xl m-5 "> Photos secondaires</h1>
+              type="file"
+              color="red"
+              accept="image/*"
+              class="m-3"
+              @change="addPrimaryPhoto"
 
 
-        <UInput
-            name="0"
-            type="file"
-            color="red"
-            accept="image/*"
-            class="m-3"
-            @change="addSecondaryPhoto"
-        />
-        <img :src="secondaryPhotosUrls[0]" alt="" class="max-w-[800px] m-auto">
-        <UInput
-            name="1"
-            v-if="secondaryPhotos.length > 0"
-            type="file"
-            color="red"
-            accept="image/*"
-            class="m-3"
-            @change="addSecondaryPhoto"
-        />
-        <img :src="secondaryPhotosUrls[1]" alt="" class="max-w-[800px] m-auto ">
+          />
+          <h1 class="text-center border-b-2 border-red-500 text-2xl m-5 "> Photos secondaires</h1>
 
-        <UInput
-            name="2"
-            v-if="secondaryPhotos.length > 1"
-            type="file"
-            color="red"
-            accept="image/*"
-            class="m-3"
-            @change="addSecondaryPhoto"
-        />
-        <img :src="secondaryPhotosUrls[2]" alt="" class="max-w-[800px] m-auto ">
-        <UInput
-            name="3"
-            v-if="secondaryPhotos.length > 2"
-            type="file"
-            color="red"
-            accept="image/*"
-            class="m-3"
-            @change="addSecondaryPhoto"
-        />
-        <img :src="secondaryPhotosUrls[3]" alt="" class="max-w-[800px] m-auto ">
-        <UInput
-            name="4"
-            v-if="secondaryPhotos.length > 3"
-            type="file"
-            color="red"
-            accept="image/*"
-            class="m-3"
-            @change="addSecondaryPhoto"
-        />
-        <img :src="secondaryPhotosUrls[4]" alt="" class="max-w-[800px] m-auto ">
-        <UInput
-            name="5"
-            v-if="secondaryPhotos.length > 4"
-            type="file"
-            color="red"
-            accept="image/*"
-            class="m-3"
-            @change="addSecondaryPhoto"
-        />
-        <img :src="secondaryPhotosUrls[5]" alt="" class="max-w-[800px] m-auto ">
+
+          <UInput
+              name="0"
+              type="file"
+              color="red"
+              accept="image/*"
+              class="m-3"
+              @change="addSecondaryPhoto"
+          />
+          <img :src="secondaryPhotosUrls[0]" alt="" class="max-w-[800px] m-auto">
+          <UInput
+              name="1"
+              v-if="secondaryPhotos.length > 0"
+              type="file"
+              color="red"
+              accept="image/*"
+              class="m-3"
+              @change="addSecondaryPhoto"
+          />
+          <img :src="secondaryPhotosUrls[1]" alt="" class="max-w-[800px] m-auto ">
+
+          <UInput
+              name="2"
+              v-if="secondaryPhotos.length > 1"
+              type="file"
+              color="red"
+              accept="image/*"
+              class="m-3"
+              @change="addSecondaryPhoto"
+          />
+          <img :src="secondaryPhotosUrls[2]" alt="" class="max-w-[800px] m-auto ">
+          <UInput
+              name="3"
+              v-if="secondaryPhotos.length > 2"
+              type="file"
+              color="red"
+              accept="image/*"
+              class="m-3"
+              @change="addSecondaryPhoto"
+          />
+          <img :src="secondaryPhotosUrls[3]" alt="" class="max-w-[800px] m-auto ">
+          <UInput
+              name="4"
+              v-if="secondaryPhotos.length > 3"
+              type="file"
+              color="red"
+              accept="image/*"
+              class="m-3"
+              @change="addSecondaryPhoto"
+          />
+          <img :src="secondaryPhotosUrls[4]" alt="" class="max-w-[800px] m-auto ">
+          <UInput
+              name="5"
+              v-if="secondaryPhotos.length > 4"
+              type="file"
+              color="red"
+              accept="image/*"
+              class="m-3"
+              @change="addSecondaryPhoto"
+          />
+          <img :src="secondaryPhotosUrls[5]" alt="" class="max-w-[800px] m-auto ">
+          <UButton
+              color="red"
+              :label="actionToDo"
+              size="lg"
+              class="w-1/5 m-auto justify-center flex"
+              @click="selectAction(actionToDo)"
+          />
+        </div>
+
       </UCard>
+
     </UModal>
   </div>
 

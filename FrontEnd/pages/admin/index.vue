@@ -131,7 +131,7 @@ function setComponent(event) {
       </UVerticalNavigation>
     </div>
     <div class="col-span-3 row-span-5 col-start-3">
-      {{ compoToSet }}
+      <div class="mb-3 text-lg font-semibold"> {{ compoToSet }}</div>
 
       <admin-pending-comments-component
           v-if="compoToSet==='Commentaires à valider'"
