@@ -72,7 +72,7 @@ const addPhoto = async (req, res) => {
 
 const downloadPhoto = (req, res) => {
     const fileName = req.params.name
-    const directoryPath = __basedir + "/resources/Photos/"
+    const directoryPath = __basedir + "/Resources/Photos/"
 
     logger.log({
         level: 'info',

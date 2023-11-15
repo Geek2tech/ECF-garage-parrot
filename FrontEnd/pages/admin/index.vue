@@ -123,7 +123,7 @@ function setComponent(event) {
 
   <div class="grid grid-cols-5 grid-rows-5 gap-4 mb-4">
     <div class="col-span-2 row-span-5 border-2 ">
-      <UVerticalNavigation :links="links">
+      <UVerticalNavigation :links="links" >
 
         <template #default="{ link }">
           <span class="group-hover:text-[#D92332] text-xl relative">{{ link.label }}</span>

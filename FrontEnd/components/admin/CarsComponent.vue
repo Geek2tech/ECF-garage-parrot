@@ -214,7 +214,7 @@ async function add(car, equipement, primaryPhoto, secondaryPhotos) {
     carStore.addCarPhoto(carId, 'Y', primaryPhoto?._value, props.token)
     primaryPhoto.value = ''
 // add secondaries photos
-    secondaryPhotos.value.forEach((item) => {
+      secondaryPhotos.value.forEach((item) => {
       carStore.addCarPhoto(carId, 'N', item, props.token)
       secondaryPhotos.value = []
       modalIsOpen.value = false
@@ -260,13 +260,7 @@ function setupSlider(row, action) {
   car.transmission = row.transmission_type_name
   car.photo = url + row.photo_name
 
-
   switch (action) {
-    case 'modify' :
-
-
-      actionToDo.value = 'Modifier'
-      break
 
     case 'delete' :
       sliderActionName.value = `Suppression d'une annonce`
@@ -299,11 +293,7 @@ function setupModal(row, action) {
 function selectAction(action) {
   switch (action) {
     case 'Ajouter':
-
       add(car, selectedEquipements, primaryPHoto, secondaryPhotos)
-      break
-    case 'Modifier':
-      edit(idToChange.value, carNumber.value, serviceDescription.value)
       break
     case 'Supprimer':
       supp(car.carNumber)
@@ -365,12 +355,6 @@ function checkValue(event) {
     <template #actions-data="{ row }">
 
 
-      <UButton
-          color="orange"
-          variant="ghost"
-          icon="i-heroicons-pencil"
-          @click="setupSlider(row.car_id,row,'modify')"
-      />
       <UButton
           color="red"
           variant="ghost"
@@ -447,11 +431,11 @@ function checkValue(event) {
 
     </UCard>
   </USlideover>
-  <!-- Modal -->
+
 
   <div>
 
-
+    <!-- modal for add car -->
     <UModal v-model="modalIsOpen" fullscreen>
       <UCard
           :ui="{
@@ -525,7 +509,7 @@ function checkValue(event) {
 
             <div class="flex-col m-3">
               <div>
-                Prix en € (nombre seulement)
+                Prix en €
               </div>
               <div>
                 <UInput

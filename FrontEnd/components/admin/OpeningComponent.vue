@@ -20,8 +20,8 @@ const columns = [{
     label: 'Matin',
   },
   {
-    key:'afternoon',
-    label:'Après midi'
+    key: 'afternoon',
+    label: 'Après midi'
   },
   {
     key: 'actions'
@@ -56,7 +56,7 @@ const isOpen = ref(false)
 const newName = ref()
 const day = ref()
 const morningStart = ref()
-const morningEnd =ref()
+const morningEnd = ref()
 const afternoonStart = ref()
 const afternoonEnd = ref()
 const serviceDescription = ref()
@@ -64,14 +64,14 @@ const idToChange = ref()
 const sliderActionName = ref()
 const sliderInputName = ref()
 const actionToDo = ref()
-const hours = [6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+const hours = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
 const afternoonFields = ref(false)
 const morningFields = ref(false)
 
 async function edit(id, name, description) {
 
 
-  await openingStore.update(day.value,morningStart.value,morningEnd.value,afternoonStart.value,afternoonEnd.value, props.token)
+  await openingStore.update(day.value, morningStart.value, morningEnd.value, afternoonStart.value, afternoonEnd.value, props.token)
 
   await openingStore.getAllOpeningHours()
   await refresh()
@@ -80,8 +80,7 @@ async function edit(id, name, description) {
 
 }
 
-async function add(name,description) {
-
+async function add(name, description) {
 
 
 }
@@ -91,7 +90,7 @@ async function supp(id) {
 
 }
 
-function setupSlider(id, dayTochange,morning,afternoon, action) {
+function setupSlider(id, dayTochange, morning, afternoon, action) {
   isOpen.value = true
 // retreive data
 
@@ -99,20 +98,17 @@ function setupSlider(id, dayTochange,morning,afternoon, action) {
   if (morning === 'fermé') {
     morningStart.value = 'fermé'
     morningEnd.value = 'fermé'
-  }else {
+  } else {
     morningStart.value = morning.split('-')[0].split('h')[0]
     morningEnd.value = morning.split('-')[1].split('h')[0]
   }
-  if (afternoon === 'fermé'){
+  if (afternoon === 'fermé') {
     afternoonStart.value = 'fermé'
     afternoonEnd.value = 'fermé'
-  }else {
+  } else {
     afternoonStart.value = afternoon.split('-')[0].split('h')[0]
     afternoonEnd.value = afternoon.split('-')[1].split('h')[0]
   }
-
-
-
 
 
   idToChange.value = id
@@ -125,7 +121,7 @@ function setupSlider(id, dayTochange,morning,afternoon, action) {
       actionToDo.value = 'Modifier'
       break
     case 'add' :
-     break
+      break
     case 'delete' :
       break
   }
@@ -137,7 +133,7 @@ function selectAction(action) {
 
       break
     case 'Modifier':
-      edit(idToChange.value, newName.value,serviceDescription.value)
+      edit(idToChange.value, newName.value, serviceDescription.value)
       break
     case 'Supprimer':
       break
@@ -153,7 +149,7 @@ function toggleMorningField() {
 
   if (morningFields.value === true) {
     morningStart.value = 'fermé'
-    morningEnd.value ='fermé'
+    morningEnd.value = 'fermé'
 
   }
 
@@ -166,7 +162,7 @@ function toggleAfternoonField() {
 
   if (afternoonFields.value === true) {
     afternoonStart.value = 'fermé'
-    afternoonEnd.value ='fermé'
+    afternoonEnd.value = 'fermé'
 
   }
 
@@ -175,7 +171,6 @@ function toggleAfternoonField() {
 </script>
 
 <template>
-
 
 
   <UTable
@@ -222,19 +217,19 @@ function toggleAfternoonField() {
         </div>
       </template>
 
-      <div  class="m-5 text-2xl text-center">{{ day }}</div>
+      <div class="m-5 text-2xl text-center">{{ day }}</div>
       <h2 class="text-2xl text-center mt-3 mb-3">Matin</h2>
       <div>Ouverture</div>
       <USelectMenu v-model="morningStart" :options="hours" :disabled="morningFields"/>
       <div>Fermeture</div>
       <USelectMenu v-model="morningEnd" :options="hours" :disabled="morningFields"/>
-      <UCheckbox label="Fermé" @change="toggleMorningField" />
+      <UCheckbox label="Fermé" @change="toggleMorningField"/>
       <h2 class="text-2xl text-center mt-3 mb-3">Après midi</h2>
       <div>Ouverture</div>
       <USelectMenu v-model="afternoonStart" :options="hours" :disabled="afternoonFields"/>
       <div>Fermeture</div>
-      <USelectMenu  v-model="afternoonEnd" :options="hours" :disabled="afternoonFields" />
-      <UCheckbox label="Fermé" @change="toggleAfternoonField"  />
+      <USelectMenu v-model="afternoonEnd" :options="hours" :disabled="afternoonFields"/>
+      <UCheckbox label="Fermé" @change="toggleAfternoonField"/>
       <UButton
           :label="actionToDo"
           color="red"

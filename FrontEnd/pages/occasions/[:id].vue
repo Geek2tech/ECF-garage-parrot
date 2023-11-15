@@ -97,10 +97,10 @@ function changePhoto(name) {
     <h2 class=" text-center font-bold text-[#D92332] text-4xl mb-3 lg:text-5xl">Motorisation</h2>
     <ul class="list-disc list-inside text-xl lg:text-2xl">
       <li>
-        Puissance : {{carStore.carList.results[0]?.horse_power}}
+        Puissance : {{carStore.carList.results[0]?.horse_power}} cv
       </li>
       <li>
-        Puissance Fiscal : {{carStore.carList.results[0]?.fiscal_power}} cv
+        Puissance Fiscal : {{carStore.carList.results[0]?.fiscal_power}}
       </li>
       <li>
         cylindrée : {{carStore.carList.results[0]?.cylinder_capacity}} cm3
