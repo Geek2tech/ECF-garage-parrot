@@ -203,17 +203,21 @@ async function add(car, equipement, primaryPhoto, secondaryPhotos) {
 
     })
     selectedEquipements.value = []
-
-    carStore.addCarPhoto(carId,'Y',primaryPhoto?._value,props.token)
-    await refresh()
-    modalIsOpen.value = false
-    alert("Ajout réalisé")
-
-
-
+// add primary photo
+    if (!primaryPhoto.value) {
+      alert (`Merci d'ajouter une photo principal`)
+    }else {
+      carStore.addCarPhoto(carId,'Y',primaryPhoto?._value,props.token)
+      primaryPhoto.value=''
+      await refresh()
+      modalIsOpen.value = false
+      alert("Ajout réalisé")
+    }
+    secondaryPhotos.value.forEach((item) => {
+      console.log(item)
+      carStore.addCarPhoto(carId,'N',item,props.token)
+    })
   }
-
-
 }
 
 async function supp(id) {
