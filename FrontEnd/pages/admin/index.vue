@@ -34,7 +34,7 @@ const commentStore = await useCommentStore(pinia())
 const equipementStore = await useequipementStore(pinia())
 // init const for fetch
 
-const xsrfToken = await sessionStorage.getItem("xsrf")
+const xsrfToken =  sessionStorage.getItem("xsrf")
 
 
 // fetch data

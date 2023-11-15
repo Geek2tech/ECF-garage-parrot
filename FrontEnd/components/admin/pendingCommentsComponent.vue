@@ -71,8 +71,9 @@ async function rejectComment(id){
 
 }
  function toggleCommentModal() {
-
+commentStore.autoValidate = true
   commentStore.toggleModal()
+
 
 }
 

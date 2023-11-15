@@ -10,7 +10,8 @@ export const useCommentStore = defineStore('comments', {
             nbPage: "",
             activePage: 1,
             addModalActive: ref(false),
-            lastInsertId:""
+            lastInsertId:"",
+            autoValidate : false
 
 
         }
@@ -125,6 +126,11 @@ export const useCommentStore = defineStore('comments', {
 
             )
             this.lastInsertId =  commentAdded
+            if (this.autoValidate === true) {
+                this.validePendingComment(this.lastInsertId,sessionStorage.getItem("xsrf"))
+                this.autoValidate = false
+
+            }
 
 
         },
