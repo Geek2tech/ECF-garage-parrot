@@ -21,7 +21,7 @@ const transmissionStore = useTransmissionStore(pinia())
 const towingStore = useTowingStore(pinia())
 const equipementStore = useequipementStore(pinia())
 
-
+const toast = useToast()
 const carColumns = [{
   key: 'car_id',
   label: `Numéro annonce`,
@@ -71,7 +71,7 @@ const total = ref()
 
 async function refresh() {
   carsRows.value.row = []
-  await carStore.getCars('noselect','','','','')
+  await carStore.getCars('noselect', '', '', '', '')
   for (const item of Object.entries(carStore.carList.results)) {
     carsRows.value.row.push(item[1])
     total.value = carsRows.value.row.length || 0
@@ -133,14 +133,6 @@ const equipementRowsPaginated = computed(() => {
 
 async function edit(id, name, description) {
 
-  if (carNumber.value === undefined) {
-    alert("Merci de saisir un nom")
-    return
-  }
-  await serviceStore.update(id, name, description, props.token)
-
-  await serviceStore.loadServices()
-  await refresh()
   SliderIsOpen.value = false
   alert('Modification réalisée')
 
@@ -148,21 +140,34 @@ async function edit(id, name, description) {
 
 async function add(car, equipement, primaryPhoto, secondaryPhotos) {
 
-  console.log('photos', secondaryPhotos)
-
-  //check car values and push in database
-  const fieldNeeded = ref([])
+  //check  values
+  const fieldNeededOrWrong = ref([])
   for (const key in car) {
 
     if (key !== 'carNumber' && key !== 'photo') {
       if (car[key] === '') {
-        fieldNeeded.value.push(key)
-
+        fieldNeededOrWrong.value.push(key)
       }
+
     }
   }
-  if (fieldNeeded.value.length > 0) {
-    alert('merci de remplir tout les champs')
+  if (!primaryPhoto.value) {
+    fieldNeededOrWrong.value.push('PrimaryPhoto')
+  }
+  if (
+      isNaN(car.year) === true ||
+      isNaN(car.cylinderCapacity) === true ||
+      isNaN(car.fiscalPower) === true ||
+      isNaN(car.horsePower) === true ||
+      isNaN(car.mileage) === true ||
+      isNaN(car.price) === true
+
+  ) {
+    fieldNeededOrWrong.value.push("incorrect Value")
+  }
+  if (fieldNeededOrWrong.value.length > 0) {
+    alert('merci de remplir tout les champs ou de vérifier leur contenus ( Champs en rouge )')
+
 
   } else {
 
@@ -194,29 +199,31 @@ async function add(car, equipement, primaryPhoto, secondaryPhotos) {
     })
 
     const carAddedResponse = await carStore.add(car, props.token)
+
     const carId = carAddedResponse?._value
 
     // store car equipement
-    selectedEquipements.value.forEach((item)=> {
+    selectedEquipements.value.forEach((item) => {
 
-      carStore.addCarEquipement(carId,item.equipement_id,props.token)
+      carStore.addCarEquipement(carId, item.equipement_id, props.token)
 
     })
     selectedEquipements.value = []
 // add primary photo
-    if (!primaryPhoto.value) {
-      alert (`Merci d'ajouter une photo principal`)
-    }else {
-      carStore.addCarPhoto(carId,'Y',primaryPhoto?._value,props.token)
-      primaryPhoto.value=''
-      await refresh()
-      modalIsOpen.value = false
-      alert("Ajout réalisé")
-    }
+
+    carStore.addCarPhoto(carId, 'Y', primaryPhoto?._value, props.token)
+    primaryPhoto.value = ''
+// add secondaries photos
     secondaryPhotos.value.forEach((item) => {
-      console.log(item)
-      carStore.addCarPhoto(carId,'N',item,props.token)
+      carStore.addCarPhoto(carId, 'N', item, props.token)
+      secondaryPhotos.value = []
+      modalIsOpen.value = false
+
+
     })
+    alert("Ajout réalisé")
+
+    await refresh()
   }
 }
 
@@ -319,6 +326,16 @@ function addSecondaryPhoto(event) {
   secondaryPhotos.value[event.target.name] = event.target.files[0]
   secondaryPhotosUrls.value[event.target.name] = URL.createObjectURL(event.target.files[0])
 
+}
+
+function checkValue(event) {
+  if (isNaN(event.target.value)) {
+    event.target.style.color = 'white'
+    event.target.style.background = "red"
+  } else {
+    event.target.style.color = 'black'
+    event.target.style.background = "white"
+  }
 }
 
 </script>
@@ -498,6 +515,7 @@ function addSecondaryPhoto(event) {
                 <UInput
                     v-model="car.year"
                     color="red"
+                    @change="checkValue"
 
                 />
 
@@ -513,6 +531,7 @@ function addSecondaryPhoto(event) {
                 <UInput
                     v-model="car.price"
                     color="red"
+                    @change="checkValue"
 
                 />
 
@@ -528,6 +547,7 @@ function addSecondaryPhoto(event) {
                 <UInput
                     v-model="car.fiscalPower"
                     color="red"
+                    @change="checkValue"
 
                 />
 
@@ -543,6 +563,7 @@ function addSecondaryPhoto(event) {
                 <UInput
                     v-model="car.mileage"
                     color="red"
+                    @change="checkValue"
 
                 />
 
@@ -610,6 +631,7 @@ function addSecondaryPhoto(event) {
                 <UInput
                     v-model="car.cylinderCapacity"
                     color="red"
+                    @change="checkValue"
 
                 />
 
@@ -624,6 +646,7 @@ function addSecondaryPhoto(event) {
                 <UInput
                     v-model="car.horsePower"
                     color="red"
+                    @change="checkValue"
 
                 />
 

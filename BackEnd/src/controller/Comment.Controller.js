@@ -119,7 +119,7 @@ async function addComment(req, res) {
                 message: `Insert successfully with id : ${result.insertId}`
             })
             res.status(201)
-            res.send("ok : " + result.insertId)
+            res.send(`${result.insertId}`)
 
         })
 

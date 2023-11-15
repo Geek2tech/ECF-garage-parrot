@@ -35,9 +35,9 @@ const rows = ref({
 const page = ref(1)
 const pageCount = 10
 const total = ref()
-function refresh() {
+ function refresh() {
   rows.value.row=[]
-  for (const comment of Object.entries(props.commentsList))  {
+   for (const comment of Object.entries(props.commentsList))  {
     rows.value.row.push(comment[1])
     total.value = rows.value.row.length || 0
     page.value=1
@@ -70,6 +70,11 @@ async function rejectComment(id){
 
 
 }
+ function toggleCommentModal() {
+
+  commentStore.toggleModal()
+
+}
 
 
 
@@ -78,7 +83,13 @@ async function rejectComment(id){
 </script>
 
 <template>
-
+  <div>
+    <UButton
+        label="Ajouter"
+        color="red"
+        @click="toggleCommentModal"
+    />
+  </div>
 
   <UTable
       :rows="rowsPaginated"
@@ -117,7 +128,7 @@ async function rejectComment(id){
       :total="total"
   />
 
-
+  <AddCommentComponent v-model="commentStore.addModalActive"/>
 
 </template>
 

@@ -25,10 +25,11 @@ async function submitComment(nom, comment, note) {
     alert('Malheureusement le commentaire ne doit pas dépasser 80 caractères merci de le raccourcir')
     return
   }
-  commentStore.addComment(suppressSpecialChar(nom), suppressSpecialChar(comment), suppressSpecialChar(note))
+  await commentStore.addComment(suppressSpecialChar(nom), suppressSpecialChar(comment), suppressSpecialChar(note))
 
 
-  commentStore.loadComment()
+ await  commentStore.loadComment()
+
   commentStore.toggleModal()
 
 

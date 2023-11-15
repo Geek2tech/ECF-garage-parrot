@@ -29,7 +29,7 @@ const stateForm = ref({
 })
 function toggleModal (){
   modalActive.value === true ? modalActive.value =false : modalActive.value  = true
-console.log(modalActive)
+
 }
 function submitMail(mail,message){
   const validateEmail = (mail) => {
@@ -86,9 +86,9 @@ function changePhoto(name) {
 
   <img crossorigin="anonymous" :src="focusedPhoto" alt="photo" class="object-cover mb-3 m-auto lg:max-w-[1000px] rounded-xl " >
   <div v-if="carStore.photoList.rows !== 0" class=" flex flex-wrap  align-middle justify-center   ">
-
+    <img crossorigin="anonymous" :src="urlPhotos + carStore.carList.results[0]?.photo_name" alt="primaryPhoto" @click="changePhoto(carStore.carList.results[0]?.photo_name)" class= "  w-1/2 md:w-1/3  p-3 m-auto  ">
     <div v-for="photo in carStore.photoList.results" class= "  w-1/2 md:w-1/3  p-3 m-auto  ">
-      <img crossorigin="anonymous" :src="urlPhotos + photo.photo_name" alt="" @click="changePhoto(photo.photo_name)" class="rounded-xl">
+      <img crossorigin="anonymous" :src="urlPhotos + photo.photo_name" alt="carPhoto" @click="changePhoto(photo.photo_name)" class="rounded-xl">
 
     </div>
   </div>

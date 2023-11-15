@@ -9,7 +9,9 @@ export const useCommentStore = defineStore('comments', {
             pendingCommentList:{},
             nbPage: "",
             activePage: 1,
-            addModalActive: ref(false)
+            addModalActive: ref(false),
+            lastInsertId:""
+
 
         }
     },
@@ -92,7 +94,7 @@ export const useCommentStore = defineStore('comments', {
 
 
         },
-        addComment(nom, comment, note) {
+        async addComment(nom, comment, note) {
 
             const body = {
                 sender_name: nom,
@@ -102,7 +104,7 @@ export const useCommentStore = defineStore('comments', {
 
             const runTimeConfigs = useRuntimeConfig()
 
-            const {data: commentAdded} = useAsyncData(`Comments`, () => {
+            const {data: commentAdded} =  await useAsyncData(`Comments`, () => {
                     return $fetch(`${runTimeConfigs.public.API_URL}/api/comment`, {
                             method: `POST`,
                             mode: "cors",
@@ -110,7 +112,7 @@ export const useCommentStore = defineStore('comments', {
                                 "content-Type": "application/json",
                                 "x-api-key": `${runTimeConfigs.public.API_KEY}`
                             },
-                            key: `commentList-${this.activePage}`,
+                            key: `commentAdded`,
 
                             body: JSON.stringify(body)
 
@@ -120,7 +122,9 @@ export const useCommentStore = defineStore('comments', {
 
 
                 },
+
             )
+            this.lastInsertId =  commentAdded
 
 
         },

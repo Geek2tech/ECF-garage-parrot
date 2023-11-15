@@ -1,14 +1,11 @@
 <template>
-<Header/>
+  <Header/>
 
-    <NuxtPage />
+  <NuxtPage/>
+
 
 
   <Footer/>
-
-
-
-
 
 </template>
 
@@ -24,19 +21,23 @@ import Footer from "~/components/FooterComponent.vue";
   font-family: "Barlow-regular";
   src: url('./fonts/Barlow/Barlow-Regular.ttf');
 }
+
 @font-face {
-  font-family:"Rajdhani";
+  font-family: "Rajdhani";
   src: url("./fonts/Rajdhani/Rajdhani-Regular.ttf");
 }
+
 h1 {
-  font-family: Rajdhani,sans-serif ;
+  font-family: Rajdhani, sans-serif;
 
 }
+
 h2 {
-  font-family: Rajdhani,sans-serif;
+  font-family: Rajdhani, sans-serif;
 }
+
 p {
-  font-family: Barlow-regular,sans-serif;
+  font-family: Barlow-regular, sans-serif;
 
 }
 

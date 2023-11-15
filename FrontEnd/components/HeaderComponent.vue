@@ -44,7 +44,7 @@ items-center md:static md:z-50 md:transform-none md:border-none md:flex-row md:w
           </li>
           <li class="py-4 md:py-0 md:mr-6">
             <a href="/login" class="text-sm uppercase  w-full text-[#262526] hover:text-[#F2F2F2]
-          md:text-[#F2F2F2] md:hover:text-[#262526] ">Espace pro
+          md:text-[#F2F2F2] md:hover:text-[#262526] ">Espace privé
             </a>
           </li>
         </ul>
