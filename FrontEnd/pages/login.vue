@@ -8,7 +8,6 @@ import {useUserStore} from "~/stores/userStore.js";
 <script lang="js">
 import {useUserStore} from "~/stores/userStore.js";
 import pinia from "~/stores/index.ts";
-import * as path from "path";
 import {suppressSpecialChar} from "~/helpers/fieldControl.js";
 
 const userStore = useUserStore(pinia())

@@ -217,12 +217,12 @@ async function add(car, equipement, primaryPhoto, secondaryPhotos) {
       secondaryPhotos.value.forEach((item) => {
       carStore.addCarPhoto(carId, 'N', item, props.token)
       secondaryPhotos.value = []
-      modalIsOpen.value = false
+
 
 
     })
     alert("Ajout réalisé")
-
+    modalIsOpen.value = false
     await refresh()
   }
 }
