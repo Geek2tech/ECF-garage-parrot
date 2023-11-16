@@ -24,14 +24,15 @@ export const useConstactStore = defineStore('contact', {
 
         },
         sendMail(subject,message){
+            const runTimeConfigs = useRuntimeConfig()
 
             const body = {
-                to: 'geek2tech@geek2tech.fr',
+                to: `${runTimeConfigs.public.APP_MAIL}`,
                 subject:`${subject} `,
                 message: message
             }
 
-            const runTimeConfigs = useRuntimeConfig()
+
 
             const {data: MailSend} = useAsyncData(`SendMail`, () => {
                     return $fetch(`${runTimeConfigs.public.API_URL}/api/mail`, {
