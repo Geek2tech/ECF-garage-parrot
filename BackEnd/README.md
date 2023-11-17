@@ -2,7 +2,7 @@
 
 Used tech:
 
-Node.Js and Express
+NodeJs 18.16 and Express
 
 Used packages and dependencies :
 ```bash
