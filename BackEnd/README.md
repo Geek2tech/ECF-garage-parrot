@@ -1,6 +1,8 @@
 # Garage Vincent Parrot BackEnd
 
-Used Node.Js and Express
+Used tech:
+
+Node.Js and Express
 
 Used packages and dependencies :
 ```bash
