@@ -95,7 +95,7 @@ async function authentification(req, res) {
                         res.cookie('token', token, {
                             httpOnly: true,
                             SameSite:"None",
-                            secure:false,
+                            secure:true,
                             maxAge: expireIn
                         })
                         logger.log({
