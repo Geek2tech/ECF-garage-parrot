@@ -1,5 +1,7 @@
 {
-  "name": "nuxt-app",
+  "name": "FrontVparrot",
+  "version": "1.0.0",
+  "description": "Front End garage vincent parrot",
   "private": true,
   "type": "module",
   "scripts": {
