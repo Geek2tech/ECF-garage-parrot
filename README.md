@@ -39,9 +39,9 @@ En plus des features pour les employés
 
 ## Technologies utilisées
 
-FrontEnd : Le FrontEnd est basé sur Nuxt 3
+FrontEnd : Le FrontEnd est basé sur Nuxt 3 ( voir le Readme dans le dossier FrontEnd pour plus de détail et la procédure de déploiement local)
 
-BackEnd : le BackEnd est basé sur NodeJS 18.16 et Express
+BackEnd : le BackEnd est basé sur NodeJS 18.16 et Express ( voir le Readme dans le dossier BackEnd pour plus de détail et la procédure de déploiement local)
 
 Base de donnée : pour le développement et la mise en production la base de donnée est hébergée sur un serveur MariaDB
 
