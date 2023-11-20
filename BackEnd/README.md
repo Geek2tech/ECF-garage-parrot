@@ -86,9 +86,16 @@ see Mysql or MariaDB documentation for more information.
 
 At this point you have an empty database , so if you want to have some test data you can run fixture.sql script ,it  add some stuff like constructor , towing mode etc
 
+## Add Administrator
+
+To add an administrator account you have to push it into the Database with this request :
+```bash
+INSERT INTO ParrotDB.users (user_uuid, first_name, last_name, email, password, profil_id) VALUES ('b23ecd86-9493-4178-88ab-af0bb92c36ef', 'firstName', 'lastName', 'valid email', 'password', 1);
+```
+The password has to be encrypted to be functional so you have to use lost password feature ( /login page )  from the Front End . It generates a new password and sends it by mail to your mail address 
 ## Development Server
 
-I recommend to install nodemon ( npm install nodemon) to have automatique restart when you modify anything ( except .env ) in the BackEnd file
+I recommend to install nodemon ( npm install nodemon) to have automatic restart when you modify anything ( except .env ) in the BackEnd file
 
 Start the development server :
 
