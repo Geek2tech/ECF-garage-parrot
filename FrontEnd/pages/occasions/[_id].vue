@@ -23,7 +23,7 @@ const runTimeConfigs = useRuntimeConfig()
 await carStore.getCarEquipement(route.params._id)
 await carStore.getCarPhotos(route.params._id)
 carStore.activePage=1
-await carStore.getCars(route.params.id)
+await carStore.getCars(route.params._id)
 if (carStore.carList.rows === 0) navigateTo({path:"/"})
 // Set url to get photos
 const urlPhotos=`${runTimeConfigs.public.API_URL}/photo/`
