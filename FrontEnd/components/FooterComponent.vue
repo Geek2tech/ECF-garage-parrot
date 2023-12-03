@@ -6,7 +6,7 @@
 
         <div class="flex justify-center " >
           <PhoneCall/>
-          <span class="px-3 text-lg"> 06.66.66.66.66</span>
+           <a href="tel:+0666666666" class="px-3 text-lg"> 06.66.66.66.66</a>
           <ClipboardType/>
           <button  type=button :onClick="toggleModal" class=" hover:text-[#D9777F]  px-3 text-lg"> Remplir le formulaire de contact</button>
       </div>
