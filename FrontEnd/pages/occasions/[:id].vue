@@ -4,6 +4,15 @@ import {useConstactStore} from "~/stores/contactFormsStore.js";
 import pinia from "~/stores/index.ts";
 
 const contactStore = useConstactStore()
+  definePageMeta({
+  title: 'Garage Vincent Parrot',
+  description: 'Garage Vincent Parrot',
+  validate: async(route) => {
+   return !(isNaN(route.params._id))
+
+ }
+
+})
 
 const route = useRoute()
 
@@ -11,10 +20,10 @@ const route = useRoute()
 const carStore = useCarStore(pinia())
 const runTimeConfigs = useRuntimeConfig()
 
-await carStore.getCarEquipement(route.params.id)
-await carStore.getCarPhotos(route.params.id)
+await carStore.getCarEquipement(route.params._id)
+await carStore.getCarPhotos(route.params._id)
 carStore.activePage=1
-await carStore.getCars(route.params.id)
+await carStore.getCars(route.params._id)
 if (carStore.carList.rows === 0) navigateTo({path:"/"})
 // Set url to get photos
 const urlPhotos=`${runTimeConfigs.public.API_URL}/photo/`
