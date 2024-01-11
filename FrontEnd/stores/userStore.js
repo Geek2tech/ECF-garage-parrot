@@ -162,6 +162,15 @@ return emailToReset
 
                 }, (15 * 60 * 1000))
         },
+        valideEmail(email) {
+            const valideEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+            if (email.match(valideEmail) === null) {
+                return false
+
+            }else {
+                return true
+            }
+        },
         async getUser (token) {
 
 

@@ -82,6 +82,12 @@ async function edit(id, fName,lName,uEmail,uProfil) {
     alert("Merci de saisir tout les champs")
     return
   }
+  const emailValide = userStore.valideEmail(uEmail)
+
+  if (emailValide === false ){
+    alert("Merci de saisir une adresse email valide")
+    return
+  }
   // retreive profil id
   props.profilList.results.forEach((item) => {
 
@@ -104,6 +110,11 @@ async function add(fName,lName,uEmail,uProfil) {
 
   if (fName === undefined || lName === undefined || uEmail === undefined || uProfil === undefined) {
     alert("Merci de saisir tout les champs")
+    return
+  }
+  const emailValide = userStore.valideEmail(uEmail)
+  if (emailValide === false ){
+    alert("Merci de saisir une adresse email valide")
     return
   }
   // retreive profil id
@@ -299,6 +310,7 @@ function selectAction(action) {
             variant="outline"
             color="red"
             required
+            type="email"
             :disabled="disabledField"
             class="m-3"
         />
