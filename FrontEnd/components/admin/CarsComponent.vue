@@ -231,10 +231,10 @@ async function supp(id) {
 
   await carStore.delete(id, props.token)
   await carStore.getCars('noselect', '', '', '', '')
-  await refresh()
+
   SliderIsOpen.value = false
   alert("Suppression réalisée")
-
+  await refresh()
 }
 
 function setupSlider(row, action) {
