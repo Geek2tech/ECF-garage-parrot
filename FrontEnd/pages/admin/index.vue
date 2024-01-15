@@ -44,7 +44,7 @@ await openingStore.getAllOpeningHours()
 await carStore.getCars('noselect','','','','')
 await towingStore.getTowing()
 await serviceStore.loadServices()
-await constructorStore.getConstructors()
+
 await transmissionStore.getTransmissions()
 await commentStore.getPendingComment(xsrfToken)
 await equipementStore.getEquipements()

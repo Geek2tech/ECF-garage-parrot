@@ -12,7 +12,7 @@ const props = defineProps({
 
 const constructorStore = useConstructorStore(pinia())
 
-const test = await constructorStore.getConstructors()
+ await constructorStore.getConstructors()
 const columns = [{
   key: 'constructor_name',
   label: `Nom du constructeur`
@@ -44,7 +44,7 @@ function refresh() {
 
 }
 
-refresh()
+await refresh()
 
 
 const rowsPaginated = computed(() => {
@@ -57,6 +57,24 @@ const idToChange = ref()
 const sliderActionName = ref()
 const sliderInputName = ref()
 const actionToDo = ref()
+const isdisabled = ref(false)
+const numberOfCars = ref(0)
+
+
+async function supress(id) {
+
+  if (numberOfCars.value > 0) {
+    alert("Impossible de supprimer un constructeur qui possède des véhicules")
+    isOpen.value = false
+    return
+  }
+  await constructorStore.deleteConstructor(id, props.token)
+  await constructorStore.getConstructors()
+  await refresh()
+  isOpen.value = false
+  alert('Suppression réalisée')
+
+}
 
 async function edit(id, name) {
 
@@ -73,6 +91,8 @@ async function edit(id, name) {
 
 }
 
+
+
 async function add(name) {
 
   if (newName.value === undefined) {
@@ -88,7 +108,7 @@ async function add(name) {
 
 }
 
-function setupSlider(id, name, action) {
+function setupSlider(id, name, nombre, action) {
   isOpen.value = true
 // retreive data
 
@@ -100,6 +120,7 @@ function setupSlider(id, name, action) {
     sliderActionName.value = `Changement du nom du constructeur`
     sliderInputName.value = `Veuillez saisir le nouveau nom du construtor`
     newName.value = name
+    isdisabled.value = false
     actionToDo.value = 'Modifier'
   }
   if (action === 'add') {
@@ -108,11 +129,31 @@ function setupSlider(id, name, action) {
     newName.value = ""
     actionToDo.value = 'Ajouter'
   }
+  if (action === 'delete') {
+    sliderActionName.value = `Suppression du constructeur`
+    sliderInputName.value = `Construteur à supprimer`
+    newName.value = name
+    isdisabled.value = true
+numberOfCars.value = nombre
+    actionToDo.value = 'Supprimer'
+  }
 }
 
 function selectAction(action) {
 
-  action === 'Ajouter' ? add(newName.value) : edit(idToChange.value, newName.value)
+
+
+  switch (action) {
+    case 'Ajouter':
+      add(newName.value)
+      break
+    case 'Modifier':
+      edit(idToChange.value, newName.value)
+      break
+    case 'Supprimer':
+      supress(idToChange.value )
+      break
+  }
 
 }
 
@@ -124,7 +165,7 @@ function selectAction(action) {
     <UButton
         label="Ajouter"
         color="red"
-        @click="setupSlider(null,null,'add')"
+        @click="setupSlider(null,null,null,'add')"
     />
   </div>
 
@@ -147,7 +188,13 @@ function selectAction(action) {
           color="orange"
           variant="ghost"
           icon="i-heroicons-pencil"
-          @click="setupSlider(row.constructor_id,row.constructor_name,'modify')"
+          @click="setupSlider(row.constructor_id,row.constructor_name,null,'modify')"
+      />
+      <UButton
+          color="red"
+          variant="ghost"
+          icon="i-heroicons-archive-box-x-mark"
+          @click="setupSlider(row.constructor_id,row.constructor_name, row.nombre,'delete')"
       />
     </template>
 
@@ -179,6 +226,7 @@ function selectAction(action) {
           variant="outline"
           color="red"
           required
+          :disabled="isdisabled"
           class="m-3"
       />
       <UButton

@@ -104,6 +104,37 @@ export const useConstructorStore = defineStore('constructor', {
 
 
         },
+        async deleteConstructor(id,token){
+            const body = {
+                "constructorId":id,
+            }
+            const runTimeConfigs = useRuntimeConfig()
+
+            const {error, data: constructorDelete} = await useAsyncData('ConstructorDelete', () => {
+                return $fetch(`${runTimeConfigs.public.API_URL}/api/protected/constructor`, {
+                        method: 'DELETE',
+                        mode: 'cors',
+                        credentials: 'include',
+                        headers: {
+                            "content-Type": "application/json",
+                            "x-api-key": `${runTimeConfigs.public.API_KEY}`,
+                            "x-xsrf-token":token
+
+                        },
+                        key: 'constructorDelete',
+                        body:JSON.stringify(body)
+
+
+
+
+                    }
+                )
+
+            })
+
+
+
+        }
     }
 
 })

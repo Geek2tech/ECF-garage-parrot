@@ -8,6 +8,8 @@ router.get("/api/constructors", constructorController.getContructor)
 router.post('/api/protected/constructor', constructorController.addConstructor)
 // update a constructor
 router.put("/api/protected/constructor", constructorController.updateConstructor)
+// delete a constructor
+router.delete("/api/protected/constructor", constructorController.deleteConstructor)
 
 
 
