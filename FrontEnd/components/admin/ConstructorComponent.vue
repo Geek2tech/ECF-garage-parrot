@@ -15,11 +15,13 @@ const constructorStore = useConstructorStore(pinia())
  await constructorStore.getConstructors()
 const columns = [{
   key: 'constructor_name',
-  label: `Nom du constructeur`
+  label: `Nom du constructeur`,
+  sortable: true
 },
   {
     key: 'nombre',
-    label: `Nombre de véhicules`
+    label: `Nombre de véhicules`,
+    sortable: true
   },
   {
     key: 'actions'
@@ -126,6 +128,7 @@ function setupSlider(id, name, nombre, action) {
   if (action === 'add') {
     sliderActionName.value = `Ajout d'un nouveau constructeur`
     sliderInputName.value = `Veuillez saisir le nom du constructeur à ajouter`
+    isdisabled.value = false
     newName.value = ""
     actionToDo.value = 'Ajouter'
   }

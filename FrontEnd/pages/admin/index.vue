@@ -3,16 +3,7 @@
 
 import {useUserStore} from "~/stores/userStore.js";
 import pinia from "~/stores/index.ts";
-import {useProfilStore} from "~/stores/profilStore.js";
-import {useFuelStore} from "~/stores/fuelStore.js";
-import {useOpeningStore} from "~/stores/OpeningStore.js";
-import {useCarStore} from "~/stores/carsStore.js";
-import {useTowingStore} from "~/stores/towingStore.js";
-import {useServicesStore} from "~/stores/servicesStore.js";
-import {useConstructorStore} from "~/stores/constructorStore.js";
-import {useTransmissionStore} from "~/stores/transmissionStore.js";
-import {useCommentStore} from "~/stores/commentStore.js";
-import {useequipementStore} from "~/stores/equipementStore.js";
+
 
 
 definePageMeta({
@@ -22,35 +13,14 @@ definePageMeta({
 // store declaration
 
 const userStore = await useUserStore(pinia())
-const profilStore = await useProfilStore(pinia())
-const fuelStore = await useFuelStore(pinia())
-const openingStore = await useOpeningStore(pinia())
-const carStore = await useCarStore(pinia())
-const towingStore = await useTowingStore(pinia())
-const serviceStore = await useServicesStore(pinia())
-const constructorStore = await useConstructorStore(pinia())
-const transmissionStore = await useTransmissionStore(pinia())
-const commentStore = await useCommentStore(pinia())
-const equipementStore = await useequipementStore(pinia())
+
+
+
 // init const for fetch
 
 const xsrfToken =  sessionStorage.getItem("xsrf")
 
 
-// fetch data
-await profilStore.getProfils(xsrfToken)
-
-
-await carStore.getCars('noselect','','','','')
-await towingStore.getTowing()
-await serviceStore.loadServices()
-
-await transmissionStore.getTransmissions()
-
-await equipementStore.getEquipements()
-await userStore.getUser(xsrfToken)
-
-const profils = profilStore.profilList.results
 
 const links = [{
   label: 'Commentaires à valider',
@@ -141,17 +111,17 @@ function setComponent(event) {
       <admin-equipements-component
           v-if="compoToSet==='Gestion des équipements'"
           :token="xsrfToken"
-          :equipementsList="equipementStore.equipementsList"
+
       />
       <admin-fuel-component
           v-if="compoToSet === 'Gestion des carburants'"
           :token="xsrfToken"
-          :fuel-list="fuelStore.fuelList"
+
       />
       <admin-service-component
         v-if="compoToSet === 'Gestion des services'"
         :token="xsrfToken"
-        :service-list="serviceStore.services"
+
         />
       <admin-opening-component
         v-if="compoToSet === 'Gestion des horaires'"
@@ -166,13 +136,12 @@ function setComponent(event) {
       <admin-user-component
         v-if="compoToSet === 'Gestion des utilisateurs'"
         :token="xsrfToken"
-        :users-list="userStore.userList"
-        :profil-list="profilStore.profilList"
+
         />
       <admin-cars-component
         v-if="compoToSet === 'Gestion des annonces'"
         :token="xsrfToken"
-        :car-list="carStore.carList"
+
         />
 
     </div>

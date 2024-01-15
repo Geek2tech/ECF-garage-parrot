@@ -2,17 +2,20 @@
 
 import pinia from "~/stores/index.ts";
 import {useUserStore} from "~/stores/userStore.js";
+import {useProfilStore} from "~/stores/profilStore.js";
 
 const props = defineProps({
   token: null,
   usersList: {},
-  profilList:{}
 })
 
 const userStore = useUserStore(pinia())
+const profilStore = useProfilStore(pinia())
+await profilStore.getProfils(props.token)
+await userStore.getUser(props.token)
 const profils = []
 
-for (const item of Object.entries(props.profilList?.results)) {
+for (const item of Object.entries(profilStore.profilList?.results)) {
 profils.push(item[1].profil_name)
 
 }
@@ -50,7 +53,7 @@ const total = ref()
 
 function refresh() {
   rows.value.row = []
-  for (const item of Object.entries(props.usersList)) {
+  for (const item of Object.entries(userStore.userList)) {
     rows.value.row.push(item[1])
     total.value = rows.value.row.length || 0
     page.value = 1

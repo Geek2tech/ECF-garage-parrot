@@ -4,11 +4,11 @@ import pinia from "~/stores/index.ts";
 
 const props = defineProps({
   token: null,
-  equipementsList: {}
+
 })
 
 const equipementStore = useequipementStore(pinia())
-
+await equipementStore.getEquipements()
 const columns = [{
   key: 'equipement_name',
   label: `Nom de l'équipement`
@@ -28,7 +28,7 @@ const total = ref()
 
 function refresh() {
   rows.value.row = []
-  for (const item of Object.entries(props.equipementsList)) {
+  for (const item of Object.entries(equipementStore.equipementsList)) {
     rows.value.row.push(item[1])
     total.value = rows.value.row.length || 0
     page.value = 1
