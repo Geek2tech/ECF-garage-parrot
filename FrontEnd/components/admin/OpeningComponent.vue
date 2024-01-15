@@ -9,7 +9,7 @@ const props = defineProps({
 })
 
 const openingStore = useOpeningStore(pinia())
-
+await openingStore.getAllOpeningHours()
 const columns = [{
   key: 'day',
   label: `Jour`,
@@ -38,7 +38,7 @@ const total = ref()
 
 function refresh() {
   rows.value.row = []
-  for (const item of Object.entries(props.openingList)) {
+  for (const item of Object.entries(openingStore.openingHours)) {
     rows.value.row.push(item[1])
     total.value = rows.value.row.length || 0
     page.value = 1

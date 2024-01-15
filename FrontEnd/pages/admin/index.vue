@@ -40,7 +40,7 @@ const xsrfToken =  sessionStorage.getItem("xsrf")
 // fetch data
 await profilStore.getProfils(xsrfToken)
 
-await openingStore.getAllOpeningHours()
+
 await carStore.getCars('noselect','','','','')
 await towingStore.getTowing()
 await serviceStore.loadServices()
@@ -156,7 +156,7 @@ function setComponent(event) {
       <admin-opening-component
         v-if="compoToSet === 'Gestion des horaires'"
         :token="xsrfToken"
-        :opening-list="openingStore.openingHours"
+
         />
       <admin-constructor-component
         v-if="compoToSet === 'Gestion des constructeurs'"
