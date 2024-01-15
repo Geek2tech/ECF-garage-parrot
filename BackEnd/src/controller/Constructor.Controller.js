@@ -92,8 +92,10 @@ async function getContructor(req, res) {
 
     try {
 
-        const query = `SELECT *
-                   FROM constructor`
+        //const query = `SELECT *
+          //         FROM constructor`
+
+        const query = 'SELECT co.constructor_id ,co.constructor_name,count(c.car_id) as nombre from constructor as co left join cars c on co.constructor_id = c.constructor_id group by co.constructor_name'
 
         logger.log({
             level: 'info',

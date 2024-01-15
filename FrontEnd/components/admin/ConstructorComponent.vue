@@ -15,6 +15,10 @@ const columns = [{
   label: `Nom du constructeur`
 },
   {
+    key: 'nombre',
+    label: `Nombre de véhicules`
+  },
+  {
     key: 'actions'
   }
 ]
