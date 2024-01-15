@@ -5,11 +5,14 @@ import {useConstructorStore} from "~/stores/constructorStore.js";
 
 const props = defineProps({
   token: null,
-  constructorList: {}
+
 })
 
 
+
 const constructorStore = useConstructorStore(pinia())
+
+const test = await constructorStore.getConstructors()
 const columns = [{
   key: 'constructor_name',
   label: `Nom du constructeur`
@@ -29,11 +32,11 @@ const rows = ref({
 
 const page = ref(1)
 const pageCount = 10
-const total = ref()
+const total = ref(0)
 
 function refresh() {
   rows.value.row = []
-  for (const item of Object.entries(props.constructorList)) {
+  for (const item of Object.entries(constructorStore.constructorsList)) {
     rows.value.row.push(item[1])
     total.value = rows.value.row.length || 0
     page.value = 1

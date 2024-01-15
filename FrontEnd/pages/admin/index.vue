@@ -161,7 +161,7 @@ function setComponent(event) {
       <admin-constructor-component
         v-if="compoToSet === 'Gestion des constructeurs'"
         :token="xsrfToken"
-        :constructor-list="constructorStore.constructorsList"
+
         />
       <admin-user-component
         v-if="compoToSet === 'Gestion des utilisateurs'"
