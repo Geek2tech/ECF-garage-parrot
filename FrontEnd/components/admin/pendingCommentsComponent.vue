@@ -4,10 +4,11 @@ import pinia from "~/stores/index.ts";
 
 
 const props =defineProps({
-  commentsList : {},
+
   token : null
 })
 const commentStore = useCommentStore(pinia())
+await commentStore.getPendingComment(props.token)
 
 const columns = [ {
   key: 'sender_name',
@@ -37,7 +38,7 @@ const pageCount = 10
 const total = ref()
  function refresh() {
   rows.value.row=[]
-   for (const comment of Object.entries(props.commentsList))  {
+   for (const comment of Object.entries(commentStore.pendingCommentList))  {
     rows.value.row.push(comment[1])
     total.value = rows.value.row.length || 0
     page.value=1

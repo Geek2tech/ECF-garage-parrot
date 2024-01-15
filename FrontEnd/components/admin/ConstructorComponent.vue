@@ -61,7 +61,7 @@ const isdisabled = ref(false)
 const numberOfCars = ref(0)
 
 
-async function supress(id) {
+async function suppress(id) {
 
   if (numberOfCars.value > 0) {
     alert("Impossible de supprimer un constructeur qui possède des véhicules")
@@ -151,7 +151,7 @@ function selectAction(action) {
       edit(idToChange.value, newName.value)
       break
     case 'Supprimer':
-      supress(idToChange.value )
+      suppress(idToChange.value )
       break
   }
 

@@ -46,7 +46,7 @@ await towingStore.getTowing()
 await serviceStore.loadServices()
 
 await transmissionStore.getTransmissions()
-await commentStore.getPendingComment(xsrfToken)
+
 await equipementStore.getEquipements()
 await userStore.getUser(xsrfToken)
 
@@ -135,7 +135,7 @@ function setComponent(event) {
 
       <admin-pending-comments-component
           v-if="compoToSet==='Commentaires à valider'"
-          :commentsList="commentStore?.pendingCommentList"
+
           :token="xsrfToken"
       />
       <admin-equipements-component
