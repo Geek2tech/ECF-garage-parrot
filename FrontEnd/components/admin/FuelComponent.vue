@@ -8,7 +8,7 @@ const props = defineProps({
 })
 
 const fuelStore = useFuelStore()
-
+await fuelStore.getFuels(props.token)
 const columns = [{
   key: 'fuel_name',
   label: `Nom du carburant`
@@ -28,7 +28,7 @@ const total = ref()
 
 function refresh() {
   rows.value.row = []
-  for (const item of Object.entries(props.fuelList)) {
+  for (const item of Object.entries(fuelStore.fuelList)) {
     rows.value.row.push(item[1])
     total.value = rows.value.row.length || 0
     page.value = 1

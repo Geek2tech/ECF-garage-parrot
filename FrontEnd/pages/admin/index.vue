@@ -39,7 +39,7 @@ const xsrfToken =  sessionStorage.getItem("xsrf")
 
 // fetch data
 await profilStore.getProfils(xsrfToken)
-await fuelStore.getFuels(xsrfToken)
+
 await openingStore.getAllOpeningHours()
 await carStore.getCars('noselect','','','','')
 await towingStore.getTowing()
