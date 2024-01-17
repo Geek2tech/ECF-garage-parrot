@@ -9,6 +9,42 @@ export const useFuelStore = defineStore('fuel', {
     },
 
     actions : {
+        async deleteFuel(id,token) {
+
+            const body = {
+                "fuel_id":id
+            }
+
+
+            const runTimeConfigs = useRuntimeConfig()
+
+            const {error, data: deletedFuel} = await useAsyncData('deletedFuel', () => {
+                    return $fetch(`${runTimeConfigs.public.API_URL}/api/protected/fuel`, {
+                            method: 'DELETE',
+                            mode: 'cors',
+                            credentials: 'include',
+                            headers: {
+                                "content-Type": "application/json",
+                                "x-api-key": `${runTimeConfigs.public.API_KEY}`,
+                                "x-xsrf-token":token
+
+                            },
+                            key: 'deletedFuel',
+                            body:JSON.stringify(body)
+
+
+
+
+                        }
+                    )
+
+                }
+            )
+
+
+        },
+
+
         async addFuel(name,token) {
 
             const body = {

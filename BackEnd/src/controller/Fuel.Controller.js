@@ -5,11 +5,66 @@ const database = require("../services/db");
 
 /**
  * @function
- * @description get the fuel list from database
+ * @description delete the fuel list from database
  * @param req request with optional ?page=X&limit=X
  * @param res response
  * @return paginated list of constructor
  */
+function deleteFuel(req, res) {
+    const fuel_id = req.body.fuel_id
+        try {
+            const query = `DELETE FROM fuels WHERE fuel_id = ?`
+
+            logger.log({
+                level: 'info',
+                module: 'Fuel',
+                message: `Call deleteFuel with params : ${fuel_id}`
+            })
+
+            database.dbconnect.query(query, [fuel_id], (err, result) => {
+                if (err) {
+                    logger.log({
+                        level: 'error',
+                        module: 'Fuel',
+                        message: `SQL error : ${err.sqlMessage}`
+                    })
+                    res.status(500)
+                    res.send(err.sqlMessage)
+                } else {
+                    if (result.affectedRows === 0) {
+                        logger.log({
+                            level: 'info',
+                            module: 'Fuel',
+                            message: `Nothing to delete : ${result.message}`
+                        })
+                        res.status(204)
+                        res.send("aucun élément à supprimer")
+                    } else {
+                        logger.log({
+                            level: 'info',
+                            module: 'Fuel',
+                            message: `Delete successfully : ${result.message}`
+                        })
+                        res.status(200)
+                        res.send(result.message)
+                    }
+
+                }
+            })
+
+        }catch (err) {
+            logger.log({
+                level:'error',
+                module:'Fuel',
+                message:`Internal error :  ${err}`
+            })
+
+            res.status(500)
+            res.send('Internal Error')
+        }
+}
+
+
 function getFuel(req, res) {
 
     try {
@@ -204,5 +259,6 @@ function updateFuel(req, res) {
 module.exports = {
     getFuel,
     addFuel,
-    updateFuel
+    updateFuel,
+    deleteFuel
 }

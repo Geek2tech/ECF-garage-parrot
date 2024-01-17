@@ -119,7 +119,7 @@ commentStore.autoValidate = true
     <UButton
         color="red"
         variant="ghost"
-        icon="i-heroicons-archive-box-x-mark"
+        icon="i-heroicons-trash"
         @click="rejectComment(row.comment_id)"
     />
   </template>

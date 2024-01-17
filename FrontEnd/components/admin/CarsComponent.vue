@@ -363,7 +363,7 @@ function checkValue(event) {
       <UButton
           color="red"
           variant="ghost"
-          icon="i-heroicons-archive-box-x-mark"
+          icon="i-heroicons-trash"
           @click="setupSlider(row,'delete')"
       />
     </template>

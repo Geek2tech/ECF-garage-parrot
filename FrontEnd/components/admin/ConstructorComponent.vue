@@ -196,7 +196,7 @@ function selectAction(action) {
       <UButton
           color="red"
           variant="ghost"
-          icon="i-heroicons-archive-box-x-mark"
+          icon="i-heroicons-trash"
           @click="setupSlider(row.constructor_id,row.constructor_name, row.nombre,'delete')"
       />
     </template>

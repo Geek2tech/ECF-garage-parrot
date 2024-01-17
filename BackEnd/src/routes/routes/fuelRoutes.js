@@ -8,6 +8,8 @@ router.get('/api/fuels', fuelController.getFuel)
 router.post('/api/protected/fuel', fuelController.addFuel)
 // update fuel
 router.put('/api/protected/fuel', fuelController.updateFuel)
+//delete fuel
+router.delete('/api/protected/fuel', fuelController.deleteFuel)
 
 
 module.exports = router

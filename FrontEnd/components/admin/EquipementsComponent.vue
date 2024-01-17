@@ -84,7 +84,21 @@ async function addEquipement(name) {
   await equipementStore.getEquipements()
   await refresh()
   isOpen.value = false
-  //alert("Ajout réalisé")
+  alert("Ajout réalisé")
+
+}
+async function deleteEquipement(id) {
+
+  if (numberOfCars.value > 0) {
+    alert("Impossible de supprimer cet équipement, il est utilisé par au moins un véhicule")
+    isOpen.value = false
+    return
+  }
+  await equipementStore.deleteEquipement(id, props.token)
+  await equipementStore.getEquipements()
+  await refresh()
+  isOpen.value = false
+  alert('Suppression réalisée')
 
 }
 
@@ -125,29 +139,16 @@ function setupSlider(id, name, nombre, action) {
 
   switch (action) {
     case 'Supprimer':
-      if (numberOfCars.value > 0) {
-
-        alert("Impossible de supprimer cet équipement, il est utilisé par au moins un véhicule")
-        isOpen.value = false
-        return
-      }
-       equipementStore.deleteEquipement(idToChange.value, props.token)
-      isOpen.value = false
-       refresh()
-      alert('Suppression réalisée')
+     deleteEquipement(idToChange.value,props.token)
 
       break
     case 'Modifier':
       editEquipement(idToChange.value, newName.value)
-      isOpen.value = false
-        refresh()
-      alert('Modification réalisée')
+
       break
     case 'Ajouter':
       addEquipement(newName.value)
-      isOpen.value = false
-        refresh()
-      alert('Ajout réalisé')
+
       break
   }
 
@@ -189,7 +190,7 @@ function setupSlider(id, name, nombre, action) {
       <UButton
           color="red"
           variant="ghost"
-          icon="i-heroicons-archive-box-x-mark"
+          icon="i-heroicons-trash"
           @click="setupSlider(row.equipement_id,row.equipement_name, row.nombre,'delete')"
       />
     </template>
