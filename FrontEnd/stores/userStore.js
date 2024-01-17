@@ -151,7 +151,7 @@ return emailToReset
             const router = useRouter()
             this.isAuth=false
             sessionStorage.clear()
-            router.push('/')
+            navigateTo('/')
         },
         startSessionTimer(){
             const router = useRouter()

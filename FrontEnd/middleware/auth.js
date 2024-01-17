@@ -11,8 +11,7 @@ const userStore = useUserStore(pinia())
 
 
     } else {
-
-        router.push('/login')
+navigateTo('/login')
 
     }
 

@@ -13,8 +13,7 @@ const database = require("../services/db");
 function getFuel(req, res) {
 
     try {
-        const query = `SELECT *
-                   FROM fuels`
+        const query = `SELECT f.fuel_id , f.fuel_name , count(c.car_id) as nombre from fuels as f left join cars c on f.fuel_id = c.fuel_id group by f.fuel_name`
 
         logger.log({
             level: 'info',
