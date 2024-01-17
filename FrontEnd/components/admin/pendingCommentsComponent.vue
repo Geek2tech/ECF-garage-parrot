@@ -1,14 +1,17 @@
 <script setup lang="js">
 import {useCommentStore} from "~/stores/commentStore.js";
 import pinia from "~/stores/index.ts";
+import {useUserStore} from "~/stores/userStore.js";
 
 
 const props =defineProps({
 
   token : null
 })
+const userStore = useUserStore(pinia())
 const commentStore = useCommentStore(pinia())
-await commentStore.getPendingComment(props.token)
+userStore.isAuth === true ? await commentStore.getPendingComment(props.token) : null
+//await commentStore.getPendingComment(props.token)
 
 const columns = [ {
   key: 'sender_name',
@@ -35,7 +38,7 @@ const rows = ref({
 
 const page = ref(1)
 const pageCount = 10
-const total = ref()
+const total = ref(0)
  function refresh() {
   rows.value.row=[]
    for (const comment of Object.entries(commentStore.pendingCommentList))  {
