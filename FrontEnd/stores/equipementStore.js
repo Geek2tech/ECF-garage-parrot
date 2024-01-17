@@ -41,6 +41,40 @@ export const useequipementStore = defineStore('equipements', {
             )
 
         },
+
+async deleteEquipement(id,token){
+            const body = {
+                "equipement_id":id
+
+
+                        }
+    const runTimeConfigs = useRuntimeConfig()
+
+    const {error, data: DeletedEquipement} = await useAsyncData('deletedEquipement', () => {
+            return $fetch(`${runTimeConfigs.public.API_URL}/api/protected/equipement`, {
+                    method: 'DELETE',
+                    mode: 'cors',
+                    credentials: 'include',
+                    headers: {
+                        "content-Type": "application/json",
+                        "x-api-key": `${runTimeConfigs.public.API_KEY}`,
+                        "x-xsrf-token":token
+
+                    },
+                    key: 'deletedEquipement',
+                    body:JSON.stringify(body)
+
+
+                }
+            )
+
+        }
+    )
+
+
+
+},
+
         async updateEquipements(id,name,token){
             const body = {
                 "equipement_id":id,

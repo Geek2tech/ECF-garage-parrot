@@ -14,4 +14,8 @@ router.post('/api/protected/equipement',equipementController.addEquipement)
 
 router.put('/api/protected/equipement',equipementController.updateEquipement)
 
+// Delete Equipement
+
+router.delete('/api/protected/equipement',equipementController.deleteEquipement)
+
 module.exports = router
