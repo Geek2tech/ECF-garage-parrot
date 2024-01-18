@@ -10,7 +10,8 @@ import {useServicesStore} from "~/stores/servicesStore.js";
 
 
 const route = useRoute()
-
+const nextIsDisabled = ref(false)
+const previousIsDisabled = ref(false)
 // service part management
 
 const serviceStore =  useServicesStore(pinia())
@@ -30,6 +31,10 @@ function refresh(event) {
     if (commentStore.activePage < commentStore.nbPage) {
       commentStore.activePageIncrement()
       commentStore.loadComment(parseInt(commentStore.activePage))
+      nextIsDisabled.value = false
+      previousIsDisabled.value = false
+    }else {
+      nextIsDisabled.value = true
     }
 
   } else {
@@ -37,6 +42,10 @@ function refresh(event) {
     if (commentStore.activePage > 1) {
       commentStore.activePageDecrement()
       commentStore.loadComment()
+      nextIsDisabled.value = false
+      previousIsDisabled.value = false
+    }else {
+      previousIsDisabled.value = true
     }
   }
 }
@@ -109,6 +118,7 @@ function toggleCommentModal() {
           color="red"
           variant="outline"
           size="xl"
+          :disabled="previousIsDisabled"
           :onClick="refresh"
           class="m-1 "
 
@@ -118,6 +128,7 @@ function toggleCommentModal() {
           color="red"
           variant="outline"
           size="xl"
+          :disabled="nextIsDisabled"
           :onClick="refresh"
           class="m-1"
       />
