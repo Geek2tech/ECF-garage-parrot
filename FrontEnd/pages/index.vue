@@ -10,8 +10,7 @@ import {useServicesStore} from "~/stores/servicesStore.js";
 
 
 const route = useRoute()
-const nextIsDisabled = ref(false)
-const previousIsDisabled = ref(false)
+
 // service part management
 
 const serviceStore =  useServicesStore(pinia())
@@ -31,10 +30,7 @@ function refresh(event) {
     if (commentStore.activePage < commentStore.nbPage) {
       commentStore.activePageIncrement()
       commentStore.loadComment(parseInt(commentStore.activePage))
-      nextIsDisabled.value = false
-      previousIsDisabled.value = false
-    }else {
-      nextIsDisabled.value = true
+      e
     }
 
   } else {
@@ -42,11 +38,9 @@ function refresh(event) {
     if (commentStore.activePage > 1) {
       commentStore.activePageDecrement()
       commentStore.loadComment()
-      nextIsDisabled.value = false
-      previousIsDisabled.value = false
-    }else {
-      previousIsDisabled.value = true
+
     }
+
   }
 }
 // add comment modal management
@@ -113,22 +107,21 @@ function toggleCommentModal() {
       </div>
     </div>
     <div class="flex justify-center mb-6">
-      <UButton
+      <UButton v-if="commentStore.activePage > 1"
           label='<'
           color="red"
           variant="outline"
           size="xl"
-          :disabled="previousIsDisabled"
           :onClick="refresh"
           class="m-1 "
 
       />
-      <UButton
+
+      <UButton v-if="commentStore.activePage < commentStore.nbPage"
           label='>'
           color="red"
           variant="outline"
           size="xl"
-          :disabled="nextIsDisabled"
           :onClick="refresh"
           class="m-1"
       />
