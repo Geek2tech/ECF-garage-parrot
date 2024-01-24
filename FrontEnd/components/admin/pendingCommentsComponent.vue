@@ -1,13 +1,17 @@
 <script setup lang="js">
 import {useCommentStore} from "~/stores/commentStore.js";
 import pinia from "~/stores/index.ts";
+import {useUserStore} from "~/stores/userStore.js";
 
 
 const props =defineProps({
-  commentsList : {},
+
   token : null
 })
+const userStore = useUserStore(pinia())
 const commentStore = useCommentStore(pinia())
+userStore.isAuth === true ? await commentStore.getPendingComment(props.token) : null
+//await commentStore.getPendingComment(props.token)
 
 const columns = [ {
   key: 'sender_name',
@@ -34,10 +38,10 @@ const rows = ref({
 
 const page = ref(1)
 const pageCount = 10
-const total = ref()
+const total = ref(0)
  function refresh() {
   rows.value.row=[]
-   for (const comment of Object.entries(props.commentsList))  {
+   for (const comment of Object.entries(commentStore.pendingCommentList))  {
     rows.value.row.push(comment[1])
     total.value = rows.value.row.length || 0
     page.value=1
@@ -115,7 +119,7 @@ commentStore.autoValidate = true
     <UButton
         color="red"
         variant="ghost"
-        icon="i-heroicons-archive-box-x-mark"
+        icon="i-heroicons-trash"
         @click="rejectComment(row.comment_id)"
     />
   </template>

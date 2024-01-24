@@ -6,11 +6,11 @@ import pinia from "~/stores/index.ts";
 
 const props = defineProps({
   token: null,
-  serviceList: {}
+
 })
 
 const serviceStore = useServicesStore(pinia())
-
+await serviceStore.loadServices()
 const columns = [{
   key: 'service_name',
   label: `Nom du carburant`,
@@ -35,7 +35,7 @@ const total = ref()
 
 function refresh() {
   rows.value.row = []
-  for (const item of Object.entries(props.serviceList)) {
+  for (const item of Object.entries(serviceStore.services)) {
     rows.value.row.push(item[1])
     total.value = rows.value.row.length || 0
     page.value = 1
@@ -187,7 +187,7 @@ function selectAction(action) {
       <UButton
           color="red"
           variant="ghost"
-          icon="i-heroicons-archive-box-x-mark"
+          icon="i-heroicons-trash"
           @click="setupSlider(row.service_id,row.service_name,row.service_description,'delete')"
       />
     </template>

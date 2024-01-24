@@ -5,15 +5,24 @@ import {useConstructorStore} from "~/stores/constructorStore.js";
 
 const props = defineProps({
   token: null,
-  constructorList: {}
+
 })
 
 
+
 const constructorStore = useConstructorStore(pinia())
+
+ await constructorStore.getConstructors()
 const columns = [{
   key: 'constructor_name',
-  label: `Nom du constructeur`
+  label: `Nom du constructeur`,
+  sortable: true
 },
+  {
+    key: 'nombre',
+    label: `Nombre de véhicules`,
+    sortable: true
+  },
   {
     key: 'actions'
   }
@@ -25,11 +34,11 @@ const rows = ref({
 
 const page = ref(1)
 const pageCount = 10
-const total = ref()
+const total = ref(0)
 
 function refresh() {
   rows.value.row = []
-  for (const item of Object.entries(props.constructorList)) {
+  for (const item of Object.entries(constructorStore.constructorsList)) {
     rows.value.row.push(item[1])
     total.value = rows.value.row.length || 0
     page.value = 1
@@ -37,19 +46,37 @@ function refresh() {
 
 }
 
-refresh()
+await refresh()
 
 
 const rowsPaginated = computed(() => {
   return rows.value.row.slice((page.value - 1) * pageCount, (page.value) * pageCount)
 })
 const isOpen = ref(false)
-const newName = ref()
-const ConstructorName = ref()
-const idToChange = ref()
-const sliderActionName = ref()
-const sliderInputName = ref()
-const actionToDo = ref()
+const newName = ref("")
+const ConstructorName = ref("")
+const idToChange = ref("")
+const sliderActionName = ref("")
+const sliderInputName = ref("")
+const actionToDo = ref("")
+const isdisabled = ref(false)
+const numberOfCars = ref(0)
+
+
+async function suppress(id) {
+
+  if (numberOfCars.value > 0) {
+    alert("Impossible de supprimer un constructeur qui possède des véhicules")
+    isOpen.value = false
+    return
+  }
+  await constructorStore.deleteConstructor(id, props.token)
+  await constructorStore.getConstructors()
+  await refresh()
+  isOpen.value = false
+  alert('Suppression réalisée')
+
+}
 
 async function edit(id, name) {
 
@@ -66,6 +93,8 @@ async function edit(id, name) {
 
 }
 
+
+
 async function add(name) {
 
   if (newName.value === undefined) {
@@ -81,7 +110,7 @@ async function add(name) {
 
 }
 
-function setupSlider(id, name, action) {
+function setupSlider(id, name, nombre, action) {
   isOpen.value = true
 // retreive data
 
@@ -93,19 +122,41 @@ function setupSlider(id, name, action) {
     sliderActionName.value = `Changement du nom du constructeur`
     sliderInputName.value = `Veuillez saisir le nouveau nom du construtor`
     newName.value = name
+    isdisabled.value = false
     actionToDo.value = 'Modifier'
   }
   if (action === 'add') {
     sliderActionName.value = `Ajout d'un nouveau constructeur`
     sliderInputName.value = `Veuillez saisir le nom du constructeur à ajouter`
+    isdisabled.value = false
     newName.value = ""
     actionToDo.value = 'Ajouter'
+  }
+  if (action === 'delete') {
+    sliderActionName.value = `Suppression du constructeur`
+    sliderInputName.value = `Construteur à supprimer`
+    newName.value = name
+    isdisabled.value = true
+numberOfCars.value = nombre
+    actionToDo.value = 'Supprimer'
   }
 }
 
 function selectAction(action) {
 
-  action === 'Ajouter' ? add(newName.value) : edit(idToChange.value, newName.value)
+
+
+  switch (action) {
+    case 'Ajouter':
+      add(newName.value)
+      break
+    case 'Modifier':
+      edit(idToChange.value, newName.value)
+      break
+    case 'Supprimer':
+      suppress(idToChange.value )
+      break
+  }
 
 }
 
@@ -117,7 +168,7 @@ function selectAction(action) {
     <UButton
         label="Ajouter"
         color="red"
-        @click="setupSlider(null,null,'add')"
+        @click="setupSlider(null,null,null,'add')"
     />
   </div>
 
@@ -140,7 +191,13 @@ function selectAction(action) {
           color="orange"
           variant="ghost"
           icon="i-heroicons-pencil"
-          @click="setupSlider(row.constructor_id,row.constructor_name,'modify')"
+          @click="setupSlider(row.constructor_id,row.constructor_name,null,'modify')"
+      />
+      <UButton
+          color="red"
+          variant="ghost"
+          icon="i-heroicons-trash"
+          @click="setupSlider(row.constructor_id,row.constructor_name, row.nombre,'delete')"
       />
     </template>
 
@@ -172,6 +229,7 @@ function selectAction(action) {
           variant="outline"
           color="red"
           required
+          :disabled="isdisabled"
           class="m-3"
       />
       <UButton

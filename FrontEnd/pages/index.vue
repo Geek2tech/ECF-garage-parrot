@@ -30,6 +30,7 @@ function refresh(event) {
     if (commentStore.activePage < commentStore.nbPage) {
       commentStore.activePageIncrement()
       commentStore.loadComment(parseInt(commentStore.activePage))
+      e
     }
 
   } else {
@@ -37,7 +38,9 @@ function refresh(event) {
     if (commentStore.activePage > 1) {
       commentStore.activePageDecrement()
       commentStore.loadComment()
+
     }
+
   }
 }
 // add comment modal management
@@ -104,7 +107,7 @@ function toggleCommentModal() {
       </div>
     </div>
     <div class="flex justify-center mb-6">
-      <UButton
+      <UButton v-if="commentStore.activePage > 1"
           label='<'
           color="red"
           variant="outline"
@@ -113,7 +116,8 @@ function toggleCommentModal() {
           class="m-1 "
 
       />
-      <UButton
+
+      <UButton v-if="commentStore.activePage < commentStore.nbPage"
           label='>'
           color="red"
           variant="outline"

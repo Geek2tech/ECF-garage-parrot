@@ -151,7 +151,7 @@ return emailToReset
             const router = useRouter()
             this.isAuth=false
             sessionStorage.clear()
-            router.push('/')
+            navigateTo('/')
         },
         startSessionTimer(){
             const router = useRouter()
@@ -161,6 +161,15 @@ return emailToReset
                 router.push('/')
 
                 }, (15 * 60 * 1000))
+        },
+        valideEmail(email) {
+            const valideEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+            if (email.match(valideEmail) === null) {
+                return false
+
+            }else {
+                return true
+            }
         },
         async getUser (token) {
 

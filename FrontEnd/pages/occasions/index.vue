@@ -7,7 +7,7 @@ import CommentComponent from "~/components/CommentComponent.vue";
 const carStore = useCarStore(pinia())
 await carStore.getMinMax()
 // management of carList
-await carStore.getCars("noselect", '', '', '', '10')
+await carStore.getCars("noselect", '', '', '', '5')
 
 
 function refresh(event) {
@@ -19,7 +19,7 @@ function refresh(event) {
       carStore.activePageIncrement()
 
 
-      carStore.getCars("all", carStore.priceFilter, carStore.yearFilter, carStore.mileageFilter, 10)
+      carStore.getCars("all", carStore.priceFilter, carStore.yearFilter, carStore.mileageFilter, 5)
     }
 
   } else {
@@ -27,7 +27,7 @@ function refresh(event) {
     if (carStore.activePage > 1) {
       carStore.activePageDecrement()
 
-      carStore.getCars("all", carStore.priceFilter, carStore.yearFilter, carStore.mileageFilter, 10)
+      carStore.getCars("all", carStore.priceFilter, carStore.yearFilter, carStore.mileageFilter, 5)
     }
   }
 }
@@ -66,7 +66,7 @@ function refresh(event) {
 
     </section>
     <div class="flex justify-center mb-6">
-      <UButton
+      <UButton v-if="carStore.activePage > 1"
           label='<'
           color="red"
           variant="outline"
@@ -75,7 +75,7 @@ function refresh(event) {
           class="m-1 "
 
       />
-      <UButton
+      <UButton v-if="carStore.activePage < carStore.nbPage"
           label='>'
           color="red"
           variant="outline"

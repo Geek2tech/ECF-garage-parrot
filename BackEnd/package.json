@@ -1,6 +1,6 @@
 {
   "name": "Parrot garage backend",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Api pour le site du garage Parrot",
   "main": "server.js",
   "dependencies": {
@@ -16,6 +16,7 @@
     "mysql": "^2.18.1",
     "nanoid": "^3.3.6",
     "nodemailer": "^6.9.5",
+    "userland": "^0.4.1",
     "uuid": "^9.0.1",
     "winston": "^3.11.0",
     "winston-daily-rotate-file": "^4.7.1"

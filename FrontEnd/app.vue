@@ -13,6 +13,30 @@
 
 import Header from "~/components/HeaderComponent.vue";
 import Footer from "~/components/FooterComponent.vue";
+useSeoMeta({
+  description: 'Garage Vincent Parrot',
+  ogTitle: 'Garage Vincent Parrot',
+  ogDescription: 'réparation et vente de véhicules toutes marques',
+  ogImage: '/logo_og.png',
+  ogUrl: 'https://www.vparrot.fr',
+  twitterTitle: 'Garage Vincent Parrot',
+  twitterDescription: 'réparation et entretien de véhicules toutes marques',
+  twitterImage: '/logo_twitter.png',
+  twitterCard: 'summary'
+})
+
+useHead({
+  htmlAttrs: {
+    lang: 'fr'
+  },
+  link: [
+    {
+      rel: 'icon',
+      type: 'image/png',
+      href: '/logo.png'
+    }
+  ]
+})
 </script>
 
 <style>

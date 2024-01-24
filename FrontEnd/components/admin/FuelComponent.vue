@@ -8,11 +8,17 @@ const props = defineProps({
 })
 
 const fuelStore = useFuelStore()
-
+await fuelStore.getFuels(props.token)
 const columns = [{
   key: 'fuel_name',
-  label: `Nom du carburant`
+  label: `Nom du carburant`,
+  sortable: true
 },
+  {
+    key: 'nombre',
+    label: `Nombre de véhicules`,
+    sortable: true
+  },
   {
     key: 'actions'
   }
@@ -26,9 +32,9 @@ const page = ref(1)
 const pageCount = 10
 const total = ref()
 
-function refresh() {
+async function refresh() {
   rows.value.row = []
-  for (const item of Object.entries(props.fuelList)) {
+  for (const item of Object.entries(fuelStore.fuelList)) {
     rows.value.row.push(item[1])
     total.value = rows.value.row.length || 0
     page.value = 1
@@ -49,9 +55,27 @@ const idToChange = ref()
 const sliderActionName = ref()
 const sliderInputName = ref()
 const actionToDo = ref()
+const isdisabled = ref(false)
+const numberOfCars = ref(0)
+
+async function deleteFuel(id) {
+
+  if (numberOfCars.value > 0) {
+    alert("Impossible de supprimer ce carburant, il est utilisé par au moins un véhicule")
+    isOpen.value = false
+    return
+  }
+  await fuelStore.deleteFuel(id, props.token)
+ await fuelStore.getFuels()
+  await refresh()
+
+
+  isOpen.value = false
+  alert('Suppression réalisée')
+}
 
 async function edit(id, name) {
-  console.log('update')
+
   if (newName.value === undefined) {
     alert("Merci de saisir un nom")
     return
@@ -66,7 +90,7 @@ async function edit(id, name) {
 }
 
 async function add(name) {
-  console.log('ajouter', name)
+
   if (newName.value === undefined) {
     alert("Merci de saisir un nom")
     return
@@ -76,36 +100,56 @@ async function add(name) {
   await fuelStore.getFuels()
   await refresh()
   isOpen.value = false
-  //alert("Ajout réalisé")
+  alert("Ajout réalisé")
 
 }
 
-function setupSlider(id, name, action) {
+function setupSlider(id, name, nombre, action) {
   isOpen.value = true
+  numberOfCars.value = nombre
 // retreive data
 
   fuelName.value = name
-  console.log(id)
+
   idToChange.value = id
 
   if (action === 'modify') {
-    sliderActionName.value = `Changement du nom de l'équipement`
-    sliderInputName.value = `Veuillez saisir le nouveau nom de l'équipement`
+    sliderActionName.value = `Changement du nom `
+    sliderInputName.value = `Veuillez saisir le nouveau nom du carburant`
+    isdisabled.value = false
     newName.value = name
     actionToDo.value = 'Modifier'
   }
   if (action === 'add') {
-    sliderActionName.value = `Ajout d'un nouvel équipement`
-    sliderInputName.value = `Veuillez saisir le nom de l'équipement à ajouter`
-    newName.value=""
+    sliderActionName.value = `Ajout d'un nouveau `
+    sliderInputName.value = `Veuillez saisir le nom du carburant à ajouter`
+    isdisabled.value = false
+    newName.value = ""
     actionToDo.value = 'Ajouter'
+  }
+  if (action === 'delete') {
+    sliderActionName.value = `Suppression`
+    sliderInputName.value = `Suppression du carburant :`
+    isdisabled.value = true
+    newName.value = name
+    actionToDo.value = 'Supprimer'
   }
 }
 
 function selectAction(action) {
-  console.log(action)
-  action === 'Ajouter' ? add(newName.value) : edit(idToChange.value, newName.value)
 
+  switch (action) {
+    case 'Supprimer':
+      deleteFuel(idToChange.value)
+      break
+    case 'Modifier':
+      edit(idToChange.value, newName.value)
+      break
+    case 'Ajouter':
+      add(newName.value)
+      break
+
+  }
 }
 
 
@@ -116,7 +160,7 @@ function selectAction(action) {
     <UButton
         label="Ajouter"
         color="red"
-        @click="setupSlider(null,null,'add')"
+        @click="setupSlider(null,null,null,'add')"
     />
   </div>
 
@@ -139,7 +183,13 @@ function selectAction(action) {
           color="orange"
           variant="ghost"
           icon="i-heroicons-pencil"
-          @click="setupSlider(row.fuel_id,row.fuel_name,'modify')"
+          @click="setupSlider(row.fuel_id,row.fuel_name,null,'modify')"
+      />
+      <UButton
+          color="red"
+          variant="ghost"
+          icon="i-heroicons-trash"
+          @click="setupSlider(row.fuel_id,row.fuel_name,row.nombre,'delete')"
       />
     </template>
 
@@ -158,7 +208,7 @@ function selectAction(action) {
       <template #header>
         <div class="flex items-center justify-between">
           <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
-            {{ sliderActionName }} <br>{{ fuelName }}
+            {{ sliderActionName }}
           </h3>
           <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
                    @click="isOpen = false"/>
@@ -171,6 +221,7 @@ function selectAction(action) {
           variant="outline"
           color="red"
           required
+          :disabled="isdisabled"
           class="m-3"
       />
       <UButton

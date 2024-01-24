@@ -2,17 +2,20 @@
 
 import pinia from "~/stores/index.ts";
 import {useUserStore} from "~/stores/userStore.js";
+import {useProfilStore} from "~/stores/profilStore.js";
 
 const props = defineProps({
   token: null,
   usersList: {},
-  profilList:{}
 })
 
 const userStore = useUserStore(pinia())
+const profilStore = useProfilStore(pinia())
+await profilStore.getProfils(props.token)
+await userStore.getUser(props.token)
 const profils = []
 
-for (const item of Object.entries(props.profilList?.results)) {
+for (const item of Object.entries(profilStore.profilList?.results)) {
 profils.push(item[1].profil_name)
 
 }
@@ -50,7 +53,7 @@ const total = ref()
 
 function refresh() {
   rows.value.row = []
-  for (const item of Object.entries(props.usersList)) {
+  for (const item of Object.entries(userStore.userList)) {
     rows.value.row.push(item[1])
     total.value = rows.value.row.length || 0
     page.value = 1
@@ -82,6 +85,12 @@ async function edit(id, fName,lName,uEmail,uProfil) {
     alert("Merci de saisir tout les champs")
     return
   }
+  const emailValide = userStore.valideEmail(uEmail)
+
+  if (emailValide === false ){
+    alert("Merci de saisir une adresse email valide")
+    return
+  }
   // retreive profil id
   props.profilList.results.forEach((item) => {
 
@@ -104,6 +113,11 @@ async function add(fName,lName,uEmail,uProfil) {
 
   if (fName === undefined || lName === undefined || uEmail === undefined || uProfil === undefined) {
     alert("Merci de saisir tout les champs")
+    return
+  }
+  const emailValide = userStore.valideEmail(uEmail)
+  if (emailValide === false ){
+    alert("Merci de saisir une adresse email valide")
     return
   }
   // retreive profil id
@@ -234,7 +248,7 @@ function selectAction(action) {
       <UButton
           color="red"
           variant="ghost"
-          icon="i-heroicons-archive-box-x-mark"
+          icon="i-heroicons-trash"
           @click="setupSlider(row.user_uuid,row.first_name,row.last_name,row.email, row.profil_name,'delete')"
       />
     </template>
@@ -299,6 +313,7 @@ function selectAction(action) {
             variant="outline"
             color="red"
             required
+            type="email"
             :disabled="disabledField"
             class="m-3"
         />

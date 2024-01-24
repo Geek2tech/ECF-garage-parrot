@@ -4,15 +4,21 @@ import pinia from "~/stores/index.ts";
 
 const props = defineProps({
   token: null,
-  equipementsList: {}
+
 })
 
 const equipementStore = useequipementStore(pinia())
-
+await equipementStore.getEquipements()
 const columns = [{
   key: 'equipement_name',
-  label: `Nom de l'équipement`
+  label: `Nom de l'équipement`,
+  sortable: true
 },
+  {
+    key: 'nombre',
+    label: `Nombre de véhicules`,
+    sortable: true
+  },
   {
     key: 'actions'
   }
@@ -24,11 +30,12 @@ const rows = ref({
 
 const page = ref(1)
 const pageCount = 10
-const total = ref()
+const total = ref(0)
+const isdisabled = ref(false)
 
 function refresh() {
   rows.value.row = []
-  for (const item of Object.entries(props.equipementsList)) {
+  for (const item of Object.entries(equipementStore.equipementsList)) {
     rows.value.row.push(item[1])
     total.value = rows.value.row.length || 0
     page.value = 1
@@ -49,6 +56,7 @@ const idToChange = ref()
 const sliderActionName = ref()
 const sliderInputName = ref()
 const actionToDo = ref()
+const numberOfCars = ref()
 
 async function editEquipement(id, name) {
 
@@ -76,11 +84,25 @@ async function addEquipement(name) {
   await equipementStore.getEquipements()
   await refresh()
   isOpen.value = false
-  //alert("Ajout réalisé")
+  alert("Ajout réalisé")
+
+}
+async function deleteEquipement(id) {
+
+  if (numberOfCars.value > 0) {
+    alert("Impossible de supprimer cet équipement, il est utilisé par au moins un véhicule")
+    isOpen.value = false
+    return
+  }
+  await equipementStore.deleteEquipement(id, props.token)
+  await equipementStore.getEquipements()
+  await refresh()
+  isOpen.value = false
+  alert('Suppression réalisée')
 
 }
 
-function setupSlider(id, name, action) {
+function setupSlider(id, name, nombre, action) {
   isOpen.value = true
 // retreive data
 
@@ -91,20 +113,44 @@ function setupSlider(id, name, action) {
   if (action === 'modify') {
     sliderActionName.value = `Changement du nom de l'équipement`
     sliderInputName.value = `Veuillez saisir le nouveau nom de l'équipement`
+    isdisabled.value = false
     newName.value = name
     actionToDo.value = 'Modifier'
   }
   if (action === 'add') {
     sliderActionName.value = `Ajout d'un nouvel équipement`
     sliderInputName.value = `Veuillez saisir le nom de l'équipement à ajouter`
+    isdisabled.value = false
     newName.value = ""
     actionToDo.value = 'Ajouter'
   }
+  if (action === 'delete') {
+    sliderActionName.value = `Suppression d'un équipement`
+    sliderInputName.value = " "
+    newName.value = name
+    isdisabled.value = true
+    numberOfCars.value = nombre
+    actionToDo.value = 'Supprimer'
+  }
 }
 
-function selectAction(action) {
+  function selectAction(action) {
 
-  action === 'Ajouter' ? addEquipement(newName.value) : editEquipement(idToChange.value, newName.value)
+
+  switch (action) {
+    case 'Supprimer':
+     deleteEquipement(idToChange.value,props.token)
+
+      break
+    case 'Modifier':
+      editEquipement(idToChange.value, newName.value)
+
+      break
+    case 'Ajouter':
+      addEquipement(newName.value)
+
+      break
+  }
 
 }
 
@@ -116,7 +162,7 @@ function selectAction(action) {
     <UButton
         label="Ajouter"
         color="red"
-        @click="setupSlider(null,null,'add')"
+        @click="setupSlider(null,null,null,'add')"
     />
   </div>
 
@@ -139,7 +185,13 @@ function selectAction(action) {
           color="orange"
           variant="ghost"
           icon="i-heroicons-pencil"
-          @click="setupSlider(row.equipement_id,row.equipement_name,'modify')"
+          @click="setupSlider(row.equipement_id,row.equipement_name,null,'modify')"
+      />
+      <UButton
+          color="red"
+          variant="ghost"
+          icon="i-heroicons-trash"
+          @click="setupSlider(row.equipement_id,row.equipement_name, row.nombre,'delete')"
       />
     </template>
 
@@ -171,6 +223,7 @@ function selectAction(action) {
           variant="outline"
           color="red"
           required
+          :disabled="isdisabled"
           class="m-3"
       />
       <UButton

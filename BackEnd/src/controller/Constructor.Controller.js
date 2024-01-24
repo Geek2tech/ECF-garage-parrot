@@ -92,8 +92,10 @@ async function getContructor(req, res) {
 
     try {
 
-        const query = `SELECT *
-                   FROM constructor`
+        //const query = `SELECT *
+          //         FROM constructor`
+
+        const query = 'SELECT co.constructor_id ,co.constructor_name,count(c.car_id) as nombre from constructor as co left join cars c on co.constructor_id = c.constructor_id group by co.constructor_name'
 
         logger.log({
             level: 'info',
@@ -116,6 +118,88 @@ async function getContructor(req, res) {
 
 }
 
+/**
+ * @function
+ * @description Delete a constructor in the database
+ * @param req
+ * @param res
+ * @return {Promise<void>}
+ */
+async function deleteConstructor(req, res) {
+
+        try {
+            const constructorId = suppressSpecialChar(req.body.constructorId)
+
+            logger.log({
+                level: 'info',
+                module: 'Constructor',
+                message: `Call deleteConstructor with param : ${constructorId} `
+            })
+
+            const query = "DELETE FROM constructor WHERE constructor_id = ?"
+
+            logger.log({
+                level:'info',
+                module:'Constructor',
+                message:'BDD request'
+            })
+
+            await database.dbconnect.query(query, [constructorId], (err, result) => {
+
+                if (err) {
+
+                    logger.log({
+                        level: 'error',
+                        module: 'Constructor',
+                        message: `delete Error : ${err}`
+                    })
+
+                    res.status(500)
+                    res.send('Erreur lors de la suppression ' + err)
+
+                } else {
+
+
+                    if (result.affectedRows === 0) {
+
+                        logger.log({
+                            level:'info',
+                            module:'Constructor',
+                            message:`Nothing to suppress : ${result.message}`
+                        })
+
+                        res.status(204)
+                        res.send("aucun élément à supprimer")
+                    } else {
+
+                        logger.log({
+                            level:'info',
+                            module:'Constructor',
+                            message:`deleted successfully : ${result.message}`
+                        })
+
+                        res.status(200)
+                        res.send(result.message)
+                    }
+
+
+                }
+            })
+
+
+
+
+        }catch (err) {
+            logger.log({
+                level:'error',
+                module:'Constructor',
+                message:`Internal error :  ${err}`
+            })
+
+            res.status(500)
+            res.send('Internal Error')
+        }
+}
 /**
  * @function
  * @description Update a constructor in the database
@@ -205,4 +289,5 @@ module.exports = {
     addConstructor,
     getContructor,
     updateConstructor,
+    deleteConstructor
 }

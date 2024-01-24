@@ -7,7 +7,7 @@ import {useFuelStore} from "~/stores/fuelStore.js";
 import {useTransmissionStore} from "~/stores/transmissionStore.js";
 import {useTowingStore} from "~/stores/towingStore.js";
 import {useequipementStore} from "~/stores/equipementStore.js";
-import * as events from "events";
+
 
 const props = defineProps({
   token: null,
@@ -15,13 +15,18 @@ const props = defineProps({
 })
 
 const carStore = useCarStore(pinia())
+await carStore.getCars('noselect','','','','')
 const constructorStore = useConstructorStore(pinia())
+await constructorStore.getConstructors()
 const fuelStore = useFuelStore(pinia())
+await fuelStore.getFuels()
 const transmissionStore = useTransmissionStore(pinia())
+await transmissionStore.getTransmissions()
 const towingStore = useTowingStore(pinia())
+await towingStore.getTowing()
 const equipementStore = useequipementStore(pinia())
+await equipementStore.getEquipements()
 
-const toast = useToast()
 const carColumns = [{
   key: 'car_id',
   label: `Numéro annonce`,
@@ -67,7 +72,7 @@ const equipementRows = ref({
 
 const page = ref(1)
 const pageCount = 5
-const total = ref()
+const total = ref(0)
 
 async function refresh() {
   carsRows.value.row = []
@@ -231,10 +236,10 @@ async function supp(id) {
 
   await carStore.delete(id, props.token)
   await carStore.getCars('noselect', '', '', '', '')
-  await refresh()
+
   SliderIsOpen.value = false
   alert("Suppression réalisée")
-
+  await refresh()
 }
 
 function setupSlider(row, action) {
@@ -358,7 +363,7 @@ function checkValue(event) {
       <UButton
           color="red"
           variant="ghost"
-          icon="i-heroicons-archive-box-x-mark"
+          icon="i-heroicons-trash"
           @click="setupSlider(row,'delete')"
       />
     </template>
