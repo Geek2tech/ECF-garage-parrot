@@ -12,7 +12,7 @@ export default defineNuxtConfig({
 
     }
   },
- // ssr:false,
+  //ssr:false,
 
 routeRules:{
   '/login': {ssr:false},

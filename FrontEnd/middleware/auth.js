@@ -11,7 +11,8 @@ const userStore = useUserStore(pinia())
 
 
     } else {
-navigateTo('/login')
+
+        navigateTo('/login')
 
     }
 
