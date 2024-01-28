@@ -228,6 +228,10 @@ async function add(car, equipement, primaryPhoto, secondaryPhotos) {
     })
     alert("Ajout réalisé")
     modalIsOpen.value = false
+    primaryPHoto.value=""
+    primaryPhotoUrl.value = ''
+    secondaryPhotos.value = []
+    secondaryPhotosUrls.value = []
     await refresh()
   }
 }
