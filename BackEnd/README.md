@@ -72,6 +72,12 @@ APP_SMTPPORT="Insert smtp server port"
 APP_SMTPUSER="Insert Smtp User"
 APP_SMTPPASSWORD="Insert smtp user password"
 APP_SMTPSECURE="Insert true of false depending of your smtp server ( true is better ) "
+
+# Serveur Redis
+
+APP_REDISHOST="Insert DNS name or IP of Redis server"
+APP_REDISPORT="Insert Redis server port"
+APP_REDISPASSWORD="Insert Redis server password"
 ```
 
 ## Create database
