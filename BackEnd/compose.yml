@@ -1,0 +1,25 @@
+version: '3'
+volumes:
+  data:
+services:
+  db:
+    image: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: vparrot
+      MYSQL_DATABASE: vparrot
+      MYSQL_USER: vparrot
+      MYSQL_PASSWORD: vparrot
+    volumes:
+      - data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  cache:
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+     - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning --requirepass secret
+    volumes:
+     - data:/data
+
