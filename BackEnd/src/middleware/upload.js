@@ -17,11 +17,11 @@ let storage = multer.diskStorage({
         const fileName = file.originalname.split(".")
         const nanoid = customAlphabet('1234567890abcdefghijklmnopqrst', 20)
         file.originalname = nanoid(20) + "_" + car_id + "." + fileName[1]
-        const query = `INSERT INTO photos (photo_name,primary_photo)
-                       VALUES (? , ?)`
+        const query = `INSERT INTO photos (photo_name,primary_photo,car_id)
+                       VALUES (? , ?, ?)`
         try {
 
-            database.dbconnect.query(query, [file.originalname,primary], (err, result) => {
+            database.dbconnect.query(query, [file.originalname,primary,car_id], (err, result) => {
                 if (err) {
                     logger.log({
                         level: 'error',
