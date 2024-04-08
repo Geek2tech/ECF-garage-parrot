@@ -1,5 +1,14 @@
-async function  sendMsmNotification(validity, password, message, to, from, maxOpen, frontUrl) {
+const logger = require("../services/Logger");
 
+
+async function  sendMsmNotification(validity, password, message, to, from, maxOpen) {
+
+    logger.log({
+        level: 'info',
+        module: 'msm',
+        message: ` start msm api call  `
+    })
+const frontUrl = process.env.APP_FRONT_URL
     const body = {
         validity,
         password,
@@ -10,11 +19,9 @@ async function  sendMsmNotification(validity, password, message, to, from, maxOp
         frontUrl
     }
     const msmUrl = process.env.APP_MSM_URL
-    const msmKey = process.env.APP_MSM_APIKEY
+  const msmKey = process.env.APP_MSM_APIKEY
+ //const msmKey = ""
 
-    console.log('msmUrl', msmUrl)
-    console.log('msmKey', msmKey)
-    console.log('body', body)
 
     const msmRequest = await fetch(msmUrl + '/generate', {
         method: 'POST',
@@ -23,8 +30,15 @@ async function  sendMsmNotification(validity, password, message, to, from, maxOp
             'Authorization': 'bearer '+ msmKey
         },
         body: JSON.stringify(body)
-    })
-    console.log('msmRequest', msmRequest)
+    }).then(
+
+        response => response.json()
+
+    ).catch(
+        error =>error.message
+    )
+
+    return msmRequest
 
 }
 

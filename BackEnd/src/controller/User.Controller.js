@@ -4,10 +4,10 @@ const {suppressSpecialChar} = require("../helpers/fieldControl");
 const database = require('../services/db')
 const bcrypt = require('bcrypt')
 const {v4: uuidV4} = require('uuid')
-const transporter = require('../services/mailTransporter')
 const generatePassword = require('../helpers/passwordGenerator')
 const deleteItems = require('../helpers/deleteItem')
 const sendMsmNotification = require('../helpers/msm')
+
 /**
  * @function
  * @description Get list of user
@@ -102,7 +102,7 @@ async function addUser(req, res) {
                     message: `Bdd Request`
                 })
 
-                database.dbconnect.query(query, [newUser.uuid, newUser.first_name, newUser.last_name, newUser.email, newUser.password, newUser.profil], (err, result) => {
+                database.dbconnect.query(query, [newUser.uuid, newUser.first_name, newUser.last_name, newUser.email, newUser.password, newUser.profil], async (err, result) => {
                     if (err) {
 
                         if (err.code === 'ER_DUP_ENTRY') {
@@ -130,55 +130,33 @@ async function addUser(req, res) {
                             module: 'User',
                             message: `User successfully created : ${result.message}`
                         })
-sendMsmNotification(
-    10,
-    `password1234`,
-    `Votre mot de passe est ${password}`,
-    `${email}`,
-    'contact@vparrot.fr',
-    1,
-    'https://vparrot.fr'
-)
 
-                        transporter.sendMail({
-                            from: {
-                                name: 'Garage Parrot',
-                                address: process.env.APP_SMTPUSER
-                            },
-                            to: newUser.email,
-                            subject: 'Votre nouveau mot de passe',
-                            text: ` Votre compte vient d'être créé , voici votre password : ${password}`,
-                            html: `<h1> Garage Parrot </h1><br><strong>Bonjour ${newUser.first_name} ${newUser.last_name}</strong><br><br><strong>Votre compte pour l'accès au site</strong>
-<br><strong>vient d'être créé . Voici le mot de passe</strong>
-<br>
-<br>
-<strong>${password}</strong>
- <br>
- <p>Cette information est sensible merci de la garder confidentielle</p>
- <br
- ><p>En vous souhaitant une bonne journée</p>`
+                        logger.log({
+                            level: 'info',
+                            module: 'User',
+                            message: `Call msm Api to send password to ${email}`
+                        })
+                        const msmResult = await sendMsmNotification(
+                            10,
+                            `password1234`,
+                            `Votre mot de passe est ${password}`,
+                            `${email}`,
+                            'contact@vparrot.fr',
+                            1,
+                        )
 
-                        }).then(() => {
 
-                                logger.log({
-                                    level: 'info',
-                                    module: 'User',
-                                    message: 'Mail sent'
-                                })
-
-                            }
-                        ).catch((err) => {
-
+                        if (msmResult.error) {
                             logger.log({
                                 level: 'error',
                                 module: 'User',
-                                message: `Error during sending email : ${err}`
+                                message: `Error with msm : ${msmResult.error}`
                             })
-                            res.status(200)
-                            res.send('Error with email')
+                            console.log('msmResult.error', msmResult.error)
+                            res.status(200).send('Error with msm')
+                            return ('msm error')
 
-                        })
-
+                        }
 
                         res.status(201)
                         res.send('User created successfully')
@@ -387,9 +365,8 @@ async function updateUser(req, res) {
             }
         })
 
-    }catch
-        (err)
-    {
+    } catch
+        (err) {
         logger.log({
             level: 'error',
             module: 'User',
@@ -399,8 +376,6 @@ async function updateUser(req, res) {
         res.status(500)
         res.send('Internal Error')
     }
-
-
 
 
 }
@@ -456,7 +431,7 @@ async function updateUserPassword(req, res) {
                         message: `Bdd Request`
                     })
 
-                    database.dbconnect.query(query, [user.password, user.email], (err, result) => {
+                    database.dbconnect.query(query, [user.password, user.email], async (err, result) => {
                             if (err) {
 
 
@@ -481,44 +456,32 @@ async function updateUserPassword(req, res) {
                                         module: 'User',
                                         message: `User password  successfully update : ${result.message}`
                                     })
-                                    transporter.sendMail({
-                                        from: {
-                                            name: 'Garage Parrot',
-                                            address: process.env.APP_SMTPUSER
-                                        },
-                                        to: user.email,
-                                        subject: 'Votre nouveau password',
-                                        text: `Voici votre nouveau password : ${password}`,
-                                        html: `<h1> Garage Parrot </h1><br><strong>Voici votre nouveau mot de passe</strong>
-<br><>pour l'accès au site du garage Parrot
-<br>
-<br>
-<strong>${password}</strong>
- <br>
- <p>Cette information est sensible merci de la garder <strong>confidentielle</strong></p>
- <br
- ><p>En vous souhaitant une bonne journée</p>`
+                                    logger.log({
+                                        level: 'info',
+                                        module: 'User',
+                                        message: `Call msm Api to send password to ${email}`
+                                    })
+                                    const msmResult = await sendMsmNotification(
+                                        10,
+                                        `password1234`,
+                                        `Votre mot de passe est ${password}`,
+                                        `${email}`,
+                                        'contact@vparrot.fr',
+                                        1,
+                                    )
 
-                                    }).then(() => {
 
-                                            logger.log({
-                                                level: 'info',
-                                                module: 'User',
-                                                message: 'Mail sent'
-                                            })
-
-                                        }
-                                    ).catch((err) => {
-
+                                    if (msmResult.error) {
                                         logger.log({
                                             level: 'error',
                                             module: 'User',
-                                            message: `Error during sending email : ${err}`
+                                            message: `Error with msm : ${msmResult.error}`
                                         })
-                                        res.status(200)
-                                        res.send('Error with email')
+                                        console.log('msmResult.error', msmResult.error)
+                                        res.status(200).send('Error with msm')
+                                        return ('msm error')
 
-                                    })
+                                    }
 
 
                                     res.status(201)

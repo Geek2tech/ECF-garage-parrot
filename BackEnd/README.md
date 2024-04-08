@@ -76,6 +76,7 @@ APP_SMTPSECURE="Insert true of false depending of your smtp server ( true is bet
 # Serveur MySecretMessage
 APP_MSM_URL="Insert URL of MySecretMessage"
 APP_MSM_APIKEY="Insert API key of MySecretMessageAccount"
+APP_MSM_FRONT_URL="Insert URL of FrontEnd to read the message"
 ```
 
 ## Create database
