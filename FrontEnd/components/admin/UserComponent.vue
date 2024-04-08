@@ -21,6 +21,7 @@ profils.push(item[1].profil_name)
 }
 
 
+
 const columns = [{
   key: 'first_name',
   label: `Prénom`,
@@ -92,14 +93,17 @@ async function edit(id, fName,lName,uEmail,uProfil) {
     return
   }
   // retreive profil id
-  props.profilList.results.forEach((item) => {
+  console.log(uProfil)
 
-        if (Object.values(item)[1] === uProfil) {
-          uProfil = Object.values(item)[0]
+  profilStore.profilList.results.forEach((item) => {
 
-        }
+    if (Object.values(item)[1] === uProfil) {
+      uProfil = Object.values(item)[0]
+
+    }
 
   })
+
 
   await userStore.update(id,fName,lName,uEmail,uProfil,props.token)
   await userStore.getUser(props.token)
@@ -111,7 +115,7 @@ async function edit(id, fName,lName,uEmail,uProfil) {
 
 async function add(fName,lName,uEmail,uProfil) {
 
-  if (fName === undefined || lName === undefined || uEmail === undefined || uProfil === undefined) {
+  if (fName === "" || lName === "" || uEmail === "" || uProfil === "") {
     alert("Merci de saisir tout les champs")
     return
   }
@@ -121,7 +125,7 @@ async function add(fName,lName,uEmail,uProfil) {
     return
   }
   // retreive profil id
-  props.profilList.results.forEach((item) => {
+  profilStore.profilList.results.forEach((item) => {
 
     if (Object.values(item)[1] === uProfil) {
       uProfil = Object.values(item)[0]

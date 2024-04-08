@@ -7,7 +7,7 @@ const {v4: uuidV4} = require('uuid')
 const transporter = require('../services/mailTransporter')
 const generatePassword = require('../helpers/passwordGenerator')
 const deleteItems = require('../helpers/deleteItem')
-
+const sendMsmNotification = require('../helpers/msm')
 /**
  * @function
  * @description Get list of user
@@ -130,6 +130,16 @@ async function addUser(req, res) {
                             module: 'User',
                             message: `User successfully created : ${result.message}`
                         })
+sendMsmNotification(
+    10,
+    `password1234`,
+    `Votre mot de passe est ${password}`,
+    `${email}`,
+    'contact@vparrot.fr',
+    1,
+    'https://vparrot.fr'
+)
+
                         transporter.sendMail({
                             from: {
                                 name: 'Garage Parrot',

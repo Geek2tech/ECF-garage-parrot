@@ -19,7 +19,7 @@ let storage = multer.diskStorage({
         file.originalname = nanoid(20) + "_" + car_id + "." + fileName[1]
         const query = `INSERT INTO photos (photo_name,primary_photo,car_id)
                        VALUES (? , ?, ?)`
-        try {
+        try {zzes
 
             database.dbconnect.query(query, [file.originalname,primary,car_id], (err, result) => {
                 if (err) {

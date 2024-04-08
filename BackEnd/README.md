@@ -72,6 +72,10 @@ APP_SMTPPORT="Insert smtp server port"
 APP_SMTPUSER="Insert Smtp User"
 APP_SMTPPASSWORD="Insert smtp user password"
 APP_SMTPSECURE="Insert true of false depending of your smtp server ( true is better ) "
+
+# Serveur MySecretMessage
+APP_MSM_URL="Insert URL of MySecretMessage"
+APP_MSM_APIKEY="Insert API key of MySecretMessageAccount"
 ```
 
 ## Create database
