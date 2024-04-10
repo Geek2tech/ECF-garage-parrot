@@ -65,7 +65,13 @@ APP_DBUSER="Insert database user who have right on the database"
 APP_DBPASSWORD="Insert User password"
 APP_DB="Insert database name"
 
+# Serveur SMTP
 
+APP_SMTPSERVER="Smtp server name"
+APP_SMTPPORT="Port of smtp server"
+APP_SMTPUSER="User of smtp server"
+APP_SMTPPASSWORD=" Password of smtp server"
+APP_SMTPSECURE="true or false depending of the smtp server configuration"
 
 # Serveur MySecretMessage
 APP_MSM_URL="Insert URL of MySecretMessage"
