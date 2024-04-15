@@ -1,3 +1,4 @@
+
 const logger = require('../services/Logger')
 const paginatedSelectQuery = require('../helpers/paginatedSelectQuery')
 const {suppressSpecialChar} = require("../helpers/fieldControl");
@@ -6,7 +7,8 @@ const bcrypt = require('bcrypt')
 const {v4: uuidV4} = require('uuid')
 const generatePassword = require('../helpers/passwordGenerator')
 const deleteItems = require('../helpers/deleteItem')
-const sendMsmNotification = require('../helpers/msm')
+const sendMsmNotification = require('../helpers/msmSend')
+const readMsmMessage = require('../helpers/msmRead')
 
 /**
  * @function
@@ -32,7 +34,7 @@ async function getUser(req, res) {
             module: 'User',
             message: 'Bdd Request'
         })
-        paginatedSelectQuery(req, res, query)
+        await paginatedSelectQuery(req, res, query)
 
     } catch (err) {
         logger.log({
@@ -138,7 +140,7 @@ async function addUser(req, res) {
                         })
                         const msmResult = await sendMsmNotification(
                             10,
-                            `password1234`,
+                            `Vparrot2024`,
                             `Votre mot de passe est ${password}`,
                             `${email}`,
                             'contact@vparrot.fr',
@@ -463,11 +465,12 @@ async function updateUserPassword(req, res) {
                                     })
                                     const msmResult = await sendMsmNotification(
                                         10,
-                                        `password1234`,
-                                        `Votre mot de passe est ${password}`,
+                                        `Vparrot2024`,
+                                        `${password}`,
                                         `${email}`,
                                         'contact@vparrot.fr',
-                                        1,
+                                        3,
+
                                     )
 
 
@@ -513,11 +516,29 @@ async function updateUserPassword(req, res) {
 
 
 }
+/**
+ * @function
+ * @description retrieve msm message
+ * @param req
+ * @param res
+ * @return {Promise<void>}
+ */
+async function getMsmMessage(req, res) {
+console.log('body getMsmMessage')
+console.log(req.body)
+    const {id, password} = req.body
+const result =  await readMsmMessage(id,password)
+    res.status(200).send(result)
+
+}
+
+
 
 module.exports = {
     getUser,
     addUser,
     deleteUser,
     updateUser,
-    updateUserPassword
+    updateUserPassword,
+    getMsmMessage
 }

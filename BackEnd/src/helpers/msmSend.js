@@ -8,7 +8,8 @@ async function  sendMsmNotification(validity, password, message, to, from, maxOp
         module: 'msm',
         message: ` start msm api call  `
     })
-const frontUrl = process.env.APP_FRONT_URL
+const frontUrl = process.env.APP_MSM_FRONT_URL
+    console.log('frontUrl ', frontUrl)
     const body = {
         validity,
         password,
@@ -42,5 +43,10 @@ const frontUrl = process.env.APP_FRONT_URL
 
 }
 
-module.exports = sendMsmNotification
+
+module.exports =  sendMsmNotification
+
+
+
+
 

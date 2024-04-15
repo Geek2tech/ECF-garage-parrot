@@ -55,6 +55,8 @@ APP_APIKEY="insert the API key to provide access to the BackEnd"
 APP_BACKEND_URL="Insert the BackEnd url , if your want to use local dev BackEnd ( see readme in BackEnd to setup ) use : http://localhost:8081"
 # APP
 APP_GARAGE_MAIL="Insert the email who retrieve notification"
+# MSM
+APP_MSM_URL="Insert the url of the MSM API"
 ```
 ## Development Server
 
