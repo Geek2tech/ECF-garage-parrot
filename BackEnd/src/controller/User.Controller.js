@@ -1,4 +1,3 @@
-
 const logger = require('../services/Logger')
 const paginatedSelectQuery = require('../helpers/paginatedSelectQuery')
 const {suppressSpecialChar} = require("../helpers/fieldControl");
@@ -138,13 +137,11 @@ async function addUser(req, res) {
                             module: 'User',
                             message: `Call msm Api to send password to ${email}`
                         })
+                        const msmPassword = process.env.APP_MSM_PASSWORD
                         const msmResult = await sendMsmNotification(
-                            10,
-                            `Vparrot2024`,
+                            msmPassword,
                             `Votre mot de passe est ${password}`,
                             `${email}`,
-                            'contact@vparrot.fr',
-                            1,
                         )
 
 
@@ -463,14 +460,11 @@ async function updateUserPassword(req, res) {
                                         module: 'User',
                                         message: `Call msm Api to send password to ${email}`
                                     })
+                                    const msmPassword = process.env.APP_MSM_PASSWORD
                                     const msmResult = await sendMsmNotification(
-                                        10,
-                                        `Vparrot2024`,
+                                        msmPassword,
                                         `${password}`,
                                         `${email}`,
-                                        'contact@vparrot.fr',
-                                        3,
-
                                     )
 
 
@@ -516,6 +510,7 @@ async function updateUserPassword(req, res) {
 
 
 }
+
 /**
  * @function
  * @description retrieve msm message
@@ -524,14 +519,13 @@ async function updateUserPassword(req, res) {
  * @return {Promise<void>}
  */
 async function getMsmMessage(req, res) {
-console.log('body getMsmMessage')
-console.log(req.body)
+    console.log('body getMsmMessage')
+    console.log(req.body)
     const {id, password} = req.body
-const result =  await readMsmMessage(id,password)
+    const result = await readMsmMessage(id, password)
     res.status(200).send(result)
 
 }
-
 
 
 module.exports = {

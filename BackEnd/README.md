@@ -73,10 +73,15 @@ APP_SMTPUSER="User of smtp server"
 APP_SMTPPASSWORD=" Password of smtp server"
 APP_SMTPSECURE="true or false depending of the smtp server configuration"
 
-# Serveur MySecretMessage
-APP_MSM_URL="Insert URL of MySecretMessage"
-APP_MSM_APIKEY="Insert API key of MySecretMessageAccount"
-APP_MSM_FRONT_URL="Insert URL of FrontEnd to read the message"
+# Serveur MySecretMessage (msm)
+
+APP_MSM_URL="My Secret Message API URL"
+APP_MSM_APIKEY="My Secret Message API key"
+APP_MSM_FRONT_URL="URL of the front end to redirect user after password creation with /password"
+APP_MSM_VALIDITY="Message validity in minutes"
+APP_MSM_PASSWORD="Message password"
+APP_MSM_FROM="Sender email address"
+APP_MSM_MAXOPEN="Number of time the message can be open before being deleted"
 ```
 
 ## Create database

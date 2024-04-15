@@ -1,7 +1,7 @@
 const logger = require("../services/Logger");
 
 
-async function  sendMsmNotification(validity, password, message, to, from, maxOpen) {
+async function  sendMsmNotification( password, message, to) {
 
     logger.log({
         level: 'info',
@@ -9,7 +9,11 @@ async function  sendMsmNotification(validity, password, message, to, from, maxOp
         message: ` start msm api call  `
     })
 const frontUrl = process.env.APP_MSM_FRONT_URL
-    console.log('frontUrl ', frontUrl)
+
+    const validity = process.env.APP_MSM_VALIDITY
+    const from = process.env.APP_MSM_FROM
+    const maxOpen = process.env.APP_MSM_MAXOPEN
+
     const body = {
         validity,
         password,
