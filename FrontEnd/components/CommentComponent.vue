@@ -11,15 +11,10 @@ export default {
       },
   computed: {},
   methods: {
-
-
-
   }
 }
 
 </script>
-
-
 <template>
 
 <UCard class="oneComment  w-[250px] h-[250px] "

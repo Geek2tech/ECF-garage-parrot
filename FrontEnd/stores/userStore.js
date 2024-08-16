@@ -248,7 +248,7 @@ export const useUserStore = defineStore('User', {
                 this.startSessionTimer()
 
             } else {
-                console.log('user ko')
+
                 this.isAuth = false
                 this.xsrfToken = "none"
                 sessionStorage.clear()
