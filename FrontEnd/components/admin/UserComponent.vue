@@ -16,7 +16,7 @@ await userStore.getUser(props.token)
 const profils = []
 
 for (const item of Object.entries(profilStore.profilList?.results)) {
-profils.push(item[1].profil_name)
+  profils.push(item[1].profil_name)
 
 }
 
@@ -69,8 +69,8 @@ const rowsPaginated = computed(() => {
 })
 const isOpen = ref(false)
 const firstName = ref()
-const lastName=ref()
-const profilName =ref()
+const lastName = ref()
+const profilName = ref()
 const email = ref()
 const idToChange = ref()
 const sliderActionName = ref()
@@ -79,7 +79,7 @@ const actionToDo = ref()
 const disabledField = ref(false)
 
 
-async function edit(id, fName,lName,uEmail,uProfil) {
+async function edit(id, fName, lName, uEmail, uProfil) {
 
   if (fName === undefined || lName === undefined || uEmail === undefined || uProfil === undefined) {
     alert("Merci de saisir tout les champs")
@@ -87,41 +87,14 @@ async function edit(id, fName,lName,uEmail,uProfil) {
   }
   const emailValide = userStore.valideEmail(uEmail)
 
-  if (emailValide === false ){
+  if (emailValide === false) {
     alert("Merci de saisir une adresse email valide")
     return
   }
   // retreive profil id
-  props.profilList.results.forEach((item) => {
+  console.log(uProfil)
 
-        if (Object.values(item)[1] === uProfil) {
-          uProfil = Object.values(item)[0]
-
-        }
-
-  })
-
-  await userStore.update(id,fName,lName,uEmail,uProfil,props.token)
-  await userStore.getUser(props.token)
-  await refresh()
-  isOpen.value = false
-  alert('Modification réalisée')
-
-}
-
-async function add(fName,lName,uEmail,uProfil) {
-
-  if (fName === undefined || lName === undefined || uEmail === undefined || uProfil === undefined) {
-    alert("Merci de saisir tout les champs")
-    return
-  }
-  const emailValide = userStore.valideEmail(uEmail)
-  if (emailValide === false ){
-    alert("Merci de saisir une adresse email valide")
-    return
-  }
-  // retreive profil id
-  props.profilList.results.forEach((item) => {
+  profilStore.profilList.results.forEach((item) => {
 
     if (Object.values(item)[1] === uProfil) {
       uProfil = Object.values(item)[0]
@@ -130,15 +103,55 @@ async function add(fName,lName,uEmail,uProfil) {
 
   })
 
-  const result = await userStore.add(fName,lName,uEmail,uProfil,props.token)
+
+  await userStore.update(id, fName, lName, uEmail, uProfil, props.token)
+  await userStore.getUser(props.token)
+  await refresh()
+  isOpen.value = false
+  alert('Modification réalisée')
+
+}
+
+async function add(fName, lName, uEmail, uProfil) {
+
+  if (fName === "" || lName === "" || uEmail === "" || uProfil === "") {
+    alert("Merci de saisir tout les champs")
+    return
+  }
+  const emailValide = userStore.valideEmail(uEmail)
+  if (emailValide === false) {
+    alert("Merci de saisir une adresse email valide")
+    return
+  }
+  // retreive profil id
+  profilStore.profilList.results.forEach((item) => {
+
+    if (Object.values(item)[1] === uProfil) {
+      uProfil = Object.values(item)[0]
+
+    }
+
+  })
+
+  const result = await userStore.add(fName, lName, uEmail, uProfil, props.token)
 
   await userStore.getUser(props.token)
   await refresh()
   isOpen.value = false
-  if (result._rawValue === "Utilisateur déja existant") {
-    alert('Email déja utilisé')
-  } else {
-    alert("Ajout réalisé")
+
+
+  switch (result._rawValue) {
+    case "Utilisateur déja existant":
+      alert("Email déja utilisé")
+      break
+    case 'Error with msm':
+      alert("L'utilisateur a été créé mais l'envoie du mot de passe n'a pas fonctionné.\nMerci de contacter l'administrateur")
+      break
+    case "User created successfully":
+      alert("Utilisateur créé avec succès")
+      break
+    default:
+      alert("Erreur lors de la création de l'utilisateur \n contactez l'administrateur")
   }
 
 
@@ -146,46 +159,46 @@ async function add(fName,lName,uEmail,uProfil) {
 
 async function supp(email) {
 
-  const result = await userStore.delete(email,props.token)
+  const result = await userStore.delete(email, props.token)
   await userStore.getUser(props.token)
   await refresh()
   isOpen.value = false
   if (result._rawValue === "Impossible de supprimer le dernier admin") {
     alert('Impossible de supprimer seul administrateur')
   } else {
-   alert("Suppression réalisée")
+    alert("Suppression réalisée")
   }
 
 
 }
 
-function setupSlider(id, fName,lName,uEmail,pName, action) {
+function setupSlider(id, fName, lName, uEmail, pName, action) {
   isOpen.value = true
 // retreive data
 
 
-  firstName.value=fName
-  lastName.value=lName
-  email.value=uEmail
-  profilName.value=pName
+  firstName.value = fName
+  lastName.value = lName
+  email.value = uEmail
+  profilName.value = pName
   idToChange.value = id
 
   switch (action) {
     case 'modify' :
       sliderActionName.value = `Modification de l'utilisateur`
       sliderInputName.value = `Veuillez renseigner les champs suivants`
-disabledField.value = false
+      disabledField.value = false
 
       actionToDo.value = 'Modifier'
       break
     case 'add' :
       sliderActionName.value = `Ajout d'un nouvel utilisateur`
       sliderInputName.value = `Veuillez renseigner les champs suivants`
-        disabledField.value = false
-      firstName.value=""
-      lastName.value=""
-      email.value=""
-      profilName.value=""
+      disabledField.value = false
+      firstName.value = ""
+      lastName.value = ""
+      email.value = ""
+      profilName.value = ""
       actionToDo.value = 'Ajouter'
       break
     case 'delete' :
@@ -200,10 +213,10 @@ disabledField.value = false
 function selectAction(action) {
   switch (action) {
     case 'Ajouter':
-      add(firstName.value,lastName.value,email.value,profilName.value)
+      add(firstName.value, lastName.value, email.value, profilName.value)
       break
     case 'Modifier':
-      edit(idToChange.value, firstName.value,lastName.value,email.value,profilName.value)
+      edit(idToChange.value, firstName.value, lastName.value, email.value, profilName.value)
       break
     case 'Supprimer':
       supp(email.value)
@@ -268,7 +281,7 @@ function selectAction(action) {
       <template #header>
         <div class="flex items-center justify-between">
           <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
-            {{ sliderActionName }} <br>{{ firstName }} {{lastName}}
+            {{ sliderActionName }} <br>{{ firstName }} {{ lastName }}
           </h3>
           <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
                    @click="isOpen = false"/>
@@ -278,7 +291,7 @@ function selectAction(action) {
       <h2 class="m-autp text-xl m-5 justify-center">{{ sliderInputName }}</h2>
       <div class="flex">
         <div class="flex-col">
-          <label  for="firstName" class="justify-center">Prénom</label>
+          <label for="firstName" class="justify-center">Prénom</label>
           <UInput
               v-model="firstName"
               variant="outline"
@@ -290,7 +303,7 @@ function selectAction(action) {
         </div>
 
         <div class="flex-col">
-          <label  for="firstName" class="justify-center">Nom</label>
+          <label for="firstName" class="justify-center">Nom</label>
           <UInput
               v-model="lastName"
               variant="outline"
@@ -302,12 +315,10 @@ function selectAction(action) {
         </div>
 
 
-
-
       </div>
 
       <div class="flex-col">
-        <label  for="firstName" class="justify-center">Email</label>
+        <label for="firstName" class="justify-center">Email</label>
         <UInput
             v-model="email"
             variant="outline"
@@ -319,7 +330,7 @@ function selectAction(action) {
         />
       </div>
       <div class="flex-col">
-        <label  for="firstName" class="justify-center">Profil</label>
+        <label for="firstName" class="justify-center">Profil</label>
         <USelectMenu
             v-model="profilName"
             variant="outline"

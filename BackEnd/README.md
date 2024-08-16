@@ -67,11 +67,21 @@ APP_DB="Insert database name"
 
 # Serveur SMTP
 
-APP_SMTPSERVER="Insert adress of smtp server"
-APP_SMTPPORT="Insert smtp server port"
-APP_SMTPUSER="Insert Smtp User"
-APP_SMTPPASSWORD="Insert smtp user password"
-APP_SMTPSECURE="Insert true of false depending of your smtp server ( true is better ) "
+APP_SMTPSERVER="Smtp server name"
+APP_SMTPPORT="Port of smtp server"
+APP_SMTPUSER="User of smtp server"
+APP_SMTPPASSWORD=" Password of smtp server"
+APP_SMTPSECURE="true or false depending of the smtp server configuration"
+
+# Serveur MySecretMessage (msm)
+
+APP_MSM_URL="My Secret Message API URL"
+APP_MSM_APIKEY="My Secret Message API key"
+APP_MSM_FRONT_URL="URL of the front end to redirect user after password creation with /password"
+APP_MSM_VALIDITY="Message validity in minutes"
+APP_MSM_PASSWORD="Message password"
+APP_MSM_FROM="Sender email address"
+APP_MSM_MAXOPEN="Number of time the message can be open before being deleted"
 ```
 
 ## Create database

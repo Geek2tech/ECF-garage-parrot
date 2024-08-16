@@ -13,7 +13,7 @@ definePageMeta({
 // store declaration
 
 const userStore = await useUserStore(pinia())
-console.log(userStore.isAuth)
+
 userStore.isAuth ?  null : navigateTo('/login')
 
 // init const for fetch

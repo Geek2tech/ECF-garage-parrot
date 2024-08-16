@@ -171,7 +171,7 @@ async function add(car, equipement, primaryPhoto, secondaryPhotos) {
     fieldNeededOrWrong.value.push("incorrect Value")
   }
   if (fieldNeededOrWrong.value.length > 0) {
-    alert('merci de remplir tout les champs ou de vérifier leur contenus ( Champs en rouge )')
+    alert('merci de remplir tout les champs ou de vérifier leur contenus ')
 
 
   } else {

@@ -7,7 +7,7 @@ import CommentComponent from "~/components/CommentComponent.vue";
 const carStore = useCarStore(pinia())
 await carStore.getMinMax()
 // management of carList
-await carStore.getCars("noselect", '', '', '', '5')
+await carStore.getCars("noselect", '', '', '', '3')
 
 
 function refresh(event) {
@@ -19,7 +19,7 @@ function refresh(event) {
       carStore.activePageIncrement()
 
 
-      carStore.getCars("all", carStore.priceFilter, carStore.yearFilter, carStore.mileageFilter, 5)
+      carStore.getCars("all", carStore.priceFilter, carStore.yearFilter, carStore.mileageFilter, 3)
     }
 
   } else {
@@ -27,7 +27,7 @@ function refresh(event) {
     if (carStore.activePage > 1) {
       carStore.activePageDecrement()
 
-      carStore.getCars("all", carStore.priceFilter, carStore.yearFilter, carStore.mileageFilter, 5)
+      carStore.getCars("all", carStore.priceFilter, carStore.yearFilter, carStore.mileageFilter, 3)
     }
   }
 }

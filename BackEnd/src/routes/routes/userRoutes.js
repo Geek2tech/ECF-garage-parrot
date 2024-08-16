@@ -18,6 +18,8 @@ router.post('/api/password',userController.updateUserPassword)
 //delete user
 router.delete('/api/protected/user',userController.deleteUser)
 
+//retreive msm password
+router.post('/api/msm',userController.getMsmMessage)
 
 
 

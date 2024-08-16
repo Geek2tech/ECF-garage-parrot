@@ -208,10 +208,10 @@ SELECT c.car_id,
 
 
 FROM cars AS c
-         JOIN ParrotDB.constructor c2 on c2.constructor_id = c.constructor_id
-         JOIN ParrotDB.fuels f on f.fuel_id = c.fuel_id
-         JOIN ParrotDB.towing_modes tm on tm.towing_id = c.towing_id
-         JOIN ParrotDB.transmission_types tt on tt.transmission_type_id = c.transmission_type_id;
+         JOIN constructor c2 on c2.constructor_id = c.constructor_id
+         JOIN fuels f on f.fuel_id = c.fuel_id
+         JOIN towing_modes tm on tm.towing_id = c.towing_id
+         JOIN transmission_types tt on tt.transmission_type_id = c.transmission_type_id;
 
 CREATE VIEW car_equipements_view AS
     SELECT c.car_id,
@@ -221,7 +221,7 @@ JOIN cars c on c.car_id = cars_equipements.car_id
 JOIN equipements e on cars_equipements.equipement_id = e.equipement_id
 
 CREATE TRIGGER UpdateCarsID
-    BEFORE INSERT ON ParrotDB.photos FOR EACH ROW
+    BEFORE INSERT ON photos FOR EACH ROW
     BEGIN
 
 
