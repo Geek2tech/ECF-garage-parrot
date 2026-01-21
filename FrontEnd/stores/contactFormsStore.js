@@ -23,40 +23,28 @@ export const useConstactStore = defineStore('contact', {
             }
 
         },
-        sendMail(subject,message){
+        sendMail(subject, message) {
             const runTimeConfigs = useRuntimeConfig()
 
             const body = {
                 to: `${runTimeConfigs.public.APP_MAIL}`,
-                subject:`${subject} `,
+                subject: `${subject} `,
                 message: message
             }
 
-
-
             const {data: MailSend} = useAsyncData(`SendMail`, () => {
-                    return $fetch(`${runTimeConfigs.public.API_URL}/api/mail`, {
+                    return $fetch(`/api/proxy/api/mail`, {
                             method: `POST`,
-                            mode: "cors",
                             headers: {
                                 "content-Type": "application/json",
-                                "x-api-key": `${runTimeConfigs.public.API_KEY}`
                             },
-                            key: `MailSend`,
                             lazy: true,
                             suspense: false,
-                            body: JSON.stringify(body)
-
-
+                            body: body
                         },
                     )
-
-
                 },
             )
-
-
-
         }
     },
 })

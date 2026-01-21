@@ -11,33 +11,18 @@ export const useTransmissionStore = defineStore('transmission', {
     actions : {
         async getTransmissions() {
 
-
-            const runTimeConfigs = useRuntimeConfig()
-
             const {error, data: transmissions} = await useAsyncData('transmissions', () => {
-                    return $fetch(`${runTimeConfigs.public.API_URL}/api/transmissions`, {
+                    return $fetch(`/api/proxy/api/transmissions`, {
                             method: 'GET',
-                            mode: 'cors',
                             credentials: 'include',
                             headers: {
                                 "content-Type": "application/json",
-                                "x-api-key": `${runTimeConfigs.public.API_KEY}`,
-
                             },
-                            key: 'transmissions',
-
-
-
-
                         }
                     )
-
                 }
             )
             this.transmissionsList = transmissions._rawValue.results
-
-
-
         }
     }
 

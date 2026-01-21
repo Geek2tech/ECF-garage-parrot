@@ -1,18 +1,21 @@
 const express = require('express')
 const commentController = require("../../controller/Comment.Controller")
+const { commentLimiter } = require("../../middleware/rateLimiter")
 const router = express.Router()
 
 // get validated comment
-router.get('/api/comments',commentController.getValidatedComment)
+router.get('/api/comments', commentController.getValidatedComment)
 
 // get unvalidated comment
-router.get('/api/protected/commentsPending',commentController.getUnvalidatedComment)
+router.get('/api/protected/commentsPending', commentController.getUnvalidatedComment)
 
-// Add comment
-router.post('/api/comment',commentController.addComment)
+// Add comment (with rate limiting to prevent spam)
+router.post('/api/comment', commentLimiter, commentController.addComment)
+
 // Delete comment
-router.delete('/api/protected/comment',commentController.deleteComment)
+router.delete('/api/protected/comment', commentController.deleteComment)
+
 // validate comment
-router.put('/api/protected/comment',commentController.validateComment)
+router.put('/api/protected/comment', commentController.validateComment)
 
 module.exports = router

@@ -4,20 +4,20 @@
  *
  * @param req request with optional ?page=X&limit=X
  * @param res response
- * @param table table to query
- * @param query sql query
+ * @param query sql query with placeholders
+ * @param params array of parameters for the query (optional)
  * @return {object}  number of rows ,if exist the number of previous and next page  and the result of the query
  */
 const logger = require('../services/Logger')
 const database = require("../services/db");
 
-async function paginatedResult(req, res,  query) {
+async function paginatedResult(req, res, query, params = []) {
 try {
 
     logger.log({
         level: 'info',
         module: 'paginatedSelectQuery',
-        message: `Call paginatedResult with params : ${query} `
+        message: 'Call paginatedResult'
     })
 
     // connexion à la base de données
@@ -34,7 +34,7 @@ try {
         message: 'BDD request'
     })
 
-    database.dbconnect.query(query, (err, rows) => {
+    database.dbconnect.query(query, params, (err, rows) => {
 
         if (err) {
             logger.log({
@@ -42,8 +42,7 @@ try {
                 module:'paginatedSelectQuery',
                 message:`SQL error : ${err}`
             })
-            res.status(500)
-            res.send(`SQL error : ${err}`)
+            return res.status(500).send('Database error')
         }
 
         //construction des limites d'affichage, si pas précisé on utilise 1 pour la page et le nombre de ligne en limit

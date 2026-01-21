@@ -27,73 +27,43 @@ export const useCommentStore = defineStore('comments', {
         activePageIncrement() {
             this.activePage++
         },
-        validePendingComment(id,token){
+        validePendingComment(id, token) {
             const body = {
-                "id":id
+                "id": id
             }
 
-
-            const runTimeConfigs = useRuntimeConfig()
-
-
             const {data: commentUpdate} = useAsyncData(`CommentUpdate`, () => {
-                    return $fetch(`${runTimeConfigs.public.API_URL}/api/protected/comment`, {
+                    return $fetch(`/api/proxy/api/protected/comment`, {
                             method: `PUT`,
-                            mode: "cors",
                             credentials: 'include',
                             headers: {
                                 "content-Type": "application/json",
-                                "x-api-key": `${runTimeConfigs.public.API_KEY}`,
-                                "x-xsrf-token":token
+                                "x-xsrf-token": token
                             },
-                            key: `CommentUpdate`,
-
-                            body: JSON.stringify(body)
-
-
+                            body: body
                         },
                     )
-
-
                 },
             )
-
-
-
-
         },
-        deletePendingComment(id,token){
-          const body = {
-              "id":id
-          }
-            const runTimeConfigs = useRuntimeConfig()
-
+        deletePendingComment(id, token) {
+            const body = {
+                "id": id
+            }
 
             const {data: commentremoved} = useAsyncData(`CommentRemoved`, () => {
-                    return $fetch(`${runTimeConfigs.public.API_URL}/api/protected/comment`, {
+                    return $fetch(`/api/proxy/api/protected/comment`, {
                             method: `DELETE`,
-                            mode: "cors",
-                        credentials: 'include',
+                            credentials: 'include',
                             headers: {
                                 "content-Type": "application/json",
-                                "x-api-key": `${runTimeConfigs.public.API_KEY}`,
-                                "x-xsrf-token":token
+                                "x-xsrf-token": token
                             },
-                            key: `CommentDeleted`,
-
-                            body: JSON.stringify(body)
-
-
+                            body: body
                         },
                     )
-
-
                 },
             )
-
-
-
-
         },
         async addComment(nom, comment, note) {
 
@@ -103,27 +73,16 @@ export const useCommentStore = defineStore('comments', {
                 garage_note: note
             }
 
-            const runTimeConfigs = useRuntimeConfig()
-
-            const {data: commentAdded} =  await useAsyncData(`Comments`, () => {
-                    return $fetch(`${runTimeConfigs.public.API_URL}/api/comment`, {
+            const {data: commentAdded} = await useAsyncData(`Comments`, () => {
+                    return $fetch(`/api/proxy/api/comment`, {
                             method: `POST`,
-                            mode: "cors",
                             headers: {
                                 "content-Type": "application/json",
-                                "x-api-key": `${runTimeConfigs.public.API_KEY}`
                             },
-                            key: `commentAdded`,
-
-                            body: JSON.stringify(body)
-
-
+                            body: body
                         },
                     )
-
-
                 },
-
             )
             this.lastInsertId =  commentAdded
             if (this.autoValidate === true) {
@@ -134,29 +93,18 @@ export const useCommentStore = defineStore('comments', {
 
 
         },
-        async getPendingComment(token){
-
-            const runTimeConfigs = useRuntimeConfig()
+        async getPendingComment(token) {
 
             const {data: pendingComments} = await useAsyncData(`pendingComments`, () => {
-                    return $fetch(`${runTimeConfigs.public.API_URL}/api/protected/commentsPending`, {
+                    return $fetch(`/api/proxy/api/protected/commentsPending`, {
                             method: `GET`,
-                            mode: "cors",
-                        credentials: 'include',
+                            credentials: 'include',
                             headers: {
                                 "content-Type": "application/json",
-                                "x-api-key": `${runTimeConfigs.public.API_KEY}`,
-                                "x-xsrf-token":token
+                                "x-xsrf-token": token
                             },
-                            key: `pendingCommentList`,
-
-
-
-
                         },
                     )
-
-
                 },
             )
 
@@ -166,28 +114,19 @@ export const useCommentStore = defineStore('comments', {
 
 
         async loadComment() {
-            const runTimeConfigs = useRuntimeConfig()
 
             const {data: comments} = await useAsyncData(`Comments`, () => {
-                    return $fetch(`${runTimeConfigs.public.API_URL}/api/comments`, {
+                    return $fetch(`/api/proxy/api/comments`, {
                             method: `GET`,
-                            mode: "cors",
                             headers: {
                                 "content-Type": "application/json",
-                                "x-api-key": `${runTimeConfigs.public.API_KEY}`
                             },
-                            key: `commentList-${this.activePage}`,
-
                             params: {
                                 page: this.activePage,
                                 limit: 4
                             },
-
-
                         },
                     )
-
-
                 },
             )
             this.commentList = comments

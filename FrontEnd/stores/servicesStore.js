@@ -9,133 +9,90 @@ export const useServicesStore = defineStore('services', {
     },
     getters: {},
     actions: {
-        async deleteService(id,token) {
+        async deleteService(id, token) {
 
             const body = {
-                "serviceId":id
+                "serviceId": id
             }
-
-            const runTimeConfigs = useRuntimeConfig()
 
             const {error, data: serviceDeleted} = await useAsyncData('deleteService', () => {
-                    return $fetch(`${runTimeConfigs.public.API_URL}/api/protected/service`, {
+                    return $fetch(`/api/proxy/api/protected/service`, {
                             method: 'DELETE',
-                            mode: 'cors',
                             credentials: 'include',
                             headers: {
                                 "content-Type": "application/json",
-                                "x-api-key": `${runTimeConfigs.public.API_KEY}`,
-                                "x-xsrf-token":token
-
+                                "x-xsrf-token": token
                             },
-                            key: 'serviceDelete',
-                            body:JSON.stringify(body)
-
-
-
-
+                            body: body
                         }
                     )
-
                 }
             )
-
         },
 
-        async addService(name,description,token) {
+        async addService(name, description, token) {
 
             const body = {
-                "name":name,
-                "description":description
+                "name": name,
+                "description": description
             }
-
-            const runTimeConfigs = useRuntimeConfig()
 
             const {error, data: serviceAdded} = await useAsyncData('serviceAdd', () => {
-                    return $fetch(`${runTimeConfigs.public.API_URL}/api/protected/service`, {
+                    return $fetch(`/api/proxy/api/protected/service`, {
                             method: 'POST',
-                            mode: 'cors',
                             credentials: 'include',
                             headers: {
                                 "content-Type": "application/json",
-                                "x-api-key": `${runTimeConfigs.public.API_KEY}`,
-                                "x-xsrf-token":token
-
+                                "x-xsrf-token": token
                             },
-                            key: 'serviceAdded',
-                            body:JSON.stringify(body)
-
-
-
-
+                            body: body
                         }
                     )
-
                 }
             )
-
         },
-        async update(id,name,description,token){
+
+        async update(id, name, description, token) {
 
             const body = {
-                "serviceId":id,
-                "newValue":name,
-                "description":description
+                "serviceId": id,
+                "newValue": name,
+                "description": description
             }
 
-            const runTimeConfigs = useRuntimeConfig()
-
             const {error, data: serviceUpdate} = await useAsyncData('serviceUpdate', () => {
-                    return $fetch(`${runTimeConfigs.public.API_URL}/api/protected/service`, {
+                    return $fetch(`/api/proxy/api/protected/service`, {
                             method: 'PUT',
-                            mode: 'cors',
                             credentials: 'include',
                             headers: {
                                 "content-Type": "application/json",
-                                "x-api-key": `${runTimeConfigs.public.API_KEY}`,
-                                "x-xsrf-token":token
-
+                                "x-xsrf-token": token
                             },
-                            key: 'serviceupdate',
-                            body:JSON.stringify(body)
+                            body: body
                         }
                     )
-
                 }
             )
-
         },
-         async loadServices() {
-            const runTimeConfigs = useRuntimeConfig()
 
-            const {data: services} = await  useAsyncData(`Services`, () => {
-                    return $fetch(`${runTimeConfigs.public.API_URL}/api/services`, {
+        async loadServices() {
+
+            const {data: services} = await useAsyncData(`Services`, () => {
+                    return $fetch(`/api/proxy/api/services`, {
                             method: `GET`,
-                            mode: "cors",
                             headers: {
                                 "content-Type": "application/json",
-                                "x-api-key": `${runTimeConfigs.public.API_KEY}`
                             },
-                            key: `ServiceList`,
                             lazy: true,
                             params: {
                                 page: "",
                                 limit: ""
                             },
-
-
                         },
                     )
-
-
                 },
             )
             this.services = services._rawValue?.results
-
         },
-
-
     }
-
-
 })

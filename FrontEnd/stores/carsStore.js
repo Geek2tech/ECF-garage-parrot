@@ -77,21 +77,16 @@ export const useCarStore = defineStore('car', {
 
             }
 
-            const runTimeConfigs = useRuntimeConfig()
-
             const {error, data: carAdded} = await useAsyncData('CarAdd', () => {
-                    return $fetch(`${runTimeConfigs.public.API_URL}/api/protected/car`, {
+                    return $fetch(`/api/proxy/api/protected/car`, {
                             method: 'POST',
-                            mode: 'cors',
                             credentials: 'include',
                             headers: {
                                 "content-Type": "application/json",
-                                "x-api-key": `${runTimeConfigs.public.API_KEY}`,
                                 "x-xsrf-token": token
 
                             },
-                            key: 'carAdded',
-                            body: JSON.stringify(body)
+                            body: body
 
                         }
                     )
@@ -104,21 +99,14 @@ export const useCarStore = defineStore('car', {
         },
         delete(id, token) {
 
-            const runTimeConfigs = useRuntimeConfig()
-
-
             const {data: carRemoved} = useAsyncData(`CarRemoved`, () => {
-                    return $fetch(`${runTimeConfigs.public.API_URL}/api/protected/car/${id}`, {
+                    return $fetch(`/api/proxy/api/protected/car/${id}`, {
                             method: `DELETE`,
-                            mode: "cors",
                             credentials: 'include',
                             headers: {
                                 "content-Type": "application/json",
-                                "x-api-key": `${runTimeConfigs.public.API_KEY}`,
                                 "x-xsrf-token": token
                             },
-                            key: `CarDeleted`,
-
 
                         },
                     )
@@ -131,17 +119,13 @@ export const useCarStore = defineStore('car', {
         },
 
         async getMinMax() {
-            const runTimeConfigs = useRuntimeConfig()
 
             const {data: carMinMax} = await useAsyncData('CarMinMax', () => {
-                return $fetch(`${runTimeConfigs.public.API_URL}/api/car/minmax`, {
+                return $fetch(`/api/proxy/api/car/minmax`, {
                     method: `GET`,
-                    mode: "cors",
                     headers: {
                         "content-Type": "application/json",
-                        "x-api-key": `${runTimeConfigs.public.API_KEY}`
                     },
-                    key: `CarMinMax`,
 
                     pick: ['results']
                 })
@@ -166,20 +150,14 @@ export const useCarStore = defineStore('car', {
 
             }
 
-
-            const runTimeConfigs = useRuntimeConfig()
-
             const {error, data: cars} = await useAsyncData('Cars', () => {
-                    return $fetch(`${runTimeConfigs.public.API_URL}/api/cars`, {
+                    return $fetch(`/api/proxy/api/cars`, {
                             method: 'POST',
-                            mode: 'cors',
                             headers: {
                                 "content-Type": "application/json",
-                                "x-api-key": `${runTimeConfigs.public.API_KEY}`
                             },
-                            key: 'Cars',
                             lazy: true,
-                            body: JSON.stringify(body),
+                            body: body,
                             params: {
                                 page: this.activePage,
                                 limit: limit
@@ -197,22 +175,18 @@ export const useCarStore = defineStore('car', {
 
         },
         async getCarEquipement(id) {
-            const runTimeConfigs = useRuntimeConfig()
             const body = {
                 car_id: id
             }
 
             const {data: equipements} = await useAsyncData('equipements', () => {
-                return $fetch(`${runTimeConfigs.public.API_URL}/api/carEquipements`, {
+                return $fetch(`/api/proxy/api/carEquipements`, {
                     method: 'POST',
-                    mode: 'cors',
                     headers: {
                         "content-Type": "application/json",
-                        "x-api-key": `${runTimeConfigs.public.API_KEY}`
                     },
-                    key: 'equipements',
                     lazy: true,
-                    body: JSON.stringify(body),
+                    body: body,
                     params: {
                         page: "",
                         limit: ""
@@ -224,25 +198,21 @@ export const useCarStore = defineStore('car', {
 
         },
         async addCarEquipement(carId, equipementId, token) {
-            const runTimeConfigs = useRuntimeConfig()
             const body = {
                 car_id: carId,
                 equipement_id: equipementId
             }
 
             const {data: addEquipement} = await useAsyncData('AddEequipement', () => {
-                return $fetch(`${runTimeConfigs.public.API_URL}/api/protected/carEquipement`, {
+                return $fetch(`/api/proxy/api/protected/carEquipement`, {
                     method: 'POST',
-                    mode: 'cors',
                     credentials: 'include',
                     headers: {
                         "content-Type": "application/json",
-                        "x-api-key": `${runTimeConfigs.public.API_KEY}`,
                         "x-xsrf-token": token
                     },
-                    key: 'addEquipement',
                     lazy: true,
-                    body: JSON.stringify(body),
+                    body: body,
                     params: {
                         page: "",
                         limit: ""
@@ -255,18 +225,13 @@ export const useCarStore = defineStore('car', {
         },
 
         async getCarPhotos(id) {
-            const runTimeConfigs = useRuntimeConfig()
-
 
             const {data: carPhotos} = await useAsyncData('carPhotos', () => {
-                return $fetch(`${runTimeConfigs.public.API_URL}/api/photos/${id}`, {
+                return $fetch(`/api/proxy/api/photos/${id}`, {
                     method: 'GET',
-                    mode: 'cors',
                     headers: {
                         "content-Type": "application/json",
-                        "x-api-key": `${runTimeConfigs.public.API_KEY}`
                     },
-                    key: 'carPhotos',
                     lazy: true,
 
                     params: {
@@ -278,26 +243,19 @@ export const useCarStore = defineStore('car', {
             })
             this.photoList = carPhotos
         },
-        async addCarPhoto(carId, primary,photo, token) {
-            const runTimeConfigs = useRuntimeConfig()
+        async addCarPhoto(carId, primary, photo, token) {
             const body = new FormData()
-            body.append("file",photo)
+            body.append("file", photo)
 
             const {data: addCarPhoto} = await useAsyncData('AddCarPhoto', () => {
-                return $fetch(`${runTimeConfigs.public.API_URL}/api/protected/photo/${carId}/${primary}`, {
+                return $fetch(`/api/upload/${carId}/${primary}`, {
                     method: 'POST',
-                    mode: 'cors',
                     credentials: 'include',
                     headers: {
-
-                        "x-api-key": `${runTimeConfigs.public.API_KEY}`,
                         "x-xsrf-token": token
                     },
-                    key: 'AddCarPhoto',
                     lazy: true,
                     body: body,
-
-
                 })
             })
 

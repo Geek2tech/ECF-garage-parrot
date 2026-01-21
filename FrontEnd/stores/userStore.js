@@ -22,23 +22,16 @@ export const useUserStore = defineStore('User', {
                 "email": email
             }
 
-            const runTimeConfigs = useRuntimeConfig()
-
             const {error, data: userDeleted} = await useAsyncData('deleteUser', () => {
-                    return $fetch(`${runTimeConfigs.public.API_URL}/api/protected/user`, {
+                    return $fetch(`/api/proxy/api/protected/user`, {
                             method: 'DELETE',
-                            mode: 'cors',
                             credentials: 'include',
                             headers: {
                                 "content-Type": "application/json",
-                                "x-api-key": `${runTimeConfigs.public.API_KEY}`,
                                 "x-xsrf-token": token
 
                             },
-                            key: 'userDelete',
-                            body: JSON.stringify(body)
-
-
+                            body: body
                         }
                     )
 
@@ -56,22 +49,16 @@ export const useUserStore = defineStore('User', {
                 "profil": profil
             }
 
-            const runTimeConfigs = useRuntimeConfig()
-
             const {error, data: userAdded} = await useAsyncData('UserAdd', () => {
-                    return $fetch(`${runTimeConfigs.public.API_URL}/api/protected/user`, {
+                    return $fetch(`/api/proxy/api/protected/user`, {
                             method: 'POST',
-                            mode: 'cors',
                             credentials: 'include',
                             headers: {
                                 "content-Type": "application/json",
-                                "x-api-key": `${runTimeConfigs.public.API_KEY}`,
                                 "x-xsrf-token": token
 
                             },
-                            key: 'UserAdded',
-                            body: JSON.stringify(body)
-
+                            body: body
                         }
                     )
 
@@ -91,21 +78,16 @@ export const useUserStore = defineStore('User', {
                 "profil": profil
             }
 
-            const runTimeConfigs = useRuntimeConfig()
-
             const {error, data: userUpdate} = await useAsyncData('userUpdate', () => {
-                    return $fetch(`${runTimeConfigs.public.API_URL}/api/protected/user`, {
+                    return $fetch(`/api/proxy/api/protected/user`, {
                             method: 'PUT',
-                            mode: 'cors',
                             credentials: 'include',
                             headers: {
                                 "content-Type": "application/json",
-                                "x-api-key": `${runTimeConfigs.public.API_KEY}`,
                                 "x-xsrf-token": token
 
                             },
-                            key: 'userUpdate',
-                            body: JSON.stringify(body)
+                            body: body
                         }
                     )
 
@@ -120,23 +102,14 @@ export const useUserStore = defineStore('User', {
 
             }
 
-
-            const runTimeConfigs = useRuntimeConfig()
-
             const {error, data: emailToReset} = await useAsyncData('User', () => {
-                    return $fetch(`${runTimeConfigs.public.API_URL}/api/password`, {
+                    return $fetch(`/api/proxy/api/password`, {
                             method: 'POST',
-                            mode: 'cors',
                             credentials: 'include',
                             headers: {
                                 "content-Type": "application/json",
-                                "x-api-key": `${runTimeConfigs.public.API_KEY}`
                             },
-                            key: 'resetPassword',
-
-                            body: JSON.stringify(body),
-
-
+                            body: body,
                         }
                     )
 
@@ -172,22 +145,14 @@ export const useUserStore = defineStore('User', {
         },
         async getUser(token) {
 
-
-            const runTimeConfigs = useRuntimeConfig()
-
             const {error, data: users} = await useAsyncData('users', () => {
-                    return $fetch(`${runTimeConfigs.public.API_URL}/api/protected/users`, {
+                    return $fetch(`/api/proxy/api/protected/users`, {
                             method: 'GET',
-                            mode: 'cors',
                             credentials: 'include',
                             headers: {
                                 "content-Type": "application/json",
-                                "x-api-key": `${runTimeConfigs.public.API_KEY}`,
                                 "x-xsrf-token": token
                             },
-                            key: 'users',
-
-
                         }
                     )
 
@@ -206,23 +171,14 @@ export const useUserStore = defineStore('User', {
                 "password": password,
             }
 
-
-            const runTimeConfigs = useRuntimeConfig()
-
             const {error, data: userData} = await useAsyncData('User', () => {
-                    return $fetch(`${runTimeConfigs.public.API_URL}/api/login`, {
+                    return $fetch(`/api/proxy/api/login`, {
                             method: 'POST',
-                            mode: 'cors',
                             credentials: 'include',
                             headers: {
                                 "content-Type": "application/json",
-                                "x-api-key": `${runTimeConfigs.public.API_KEY}`
                             },
-                            key: 'login',
-
-                            body: JSON.stringify(body),
-
-
+                            body: body,
                         }
                     )
 

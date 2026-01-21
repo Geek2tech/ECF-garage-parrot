@@ -1,10 +1,7 @@
 const logger = require('../services/Logger')
 const paginatedSelectQuery = require('../helpers/paginatedSelectQuery')
-const {suppressSpecialChar} = require("../helpers/fieldControl");
-const database = require("../services/db");
-
-
-
+const {suppressSpecialChar} = require("../helpers/fieldControl")
+const database = require("../services/db")
 
 /**
  * @function
@@ -14,7 +11,6 @@ const database = require("../services/db");
  * @return {Promise<void>}
  */
 async function getValidatedComment(req, res) {
-
     try {
         logger.log({
             level: 'info',
@@ -22,22 +18,17 @@ async function getValidatedComment(req, res) {
             message: 'Call getValidatedComment'
         })
 
-        query = `SELECT *
-             FROM comments
-             WHERE STATUS = 1`
+        const query = `SELECT * FROM comments WHERE status = 1`
         paginatedSelectQuery(req, res, query)
-    }catch (err) {
+    } catch (err) {
         logger.log({
-            level:'error',
-            module:'Comment',
-            message:`Internal error :  ${err}`
+            level: 'error',
+            module: 'Comment',
+            message: `Internal error: ${err}`
         })
 
-        res.status(500)
-        res.send('Internal Error')
+        return res.status(500).send('Internal Error')
     }
-
-
 }
 
 /**
@@ -47,32 +38,25 @@ async function getValidatedComment(req, res) {
  * @param res return the list of pending comment
  * @return {Promise<void>}
  */
-
 async function getUnvalidatedComment(req, res) {
- try {
+    try {
+        logger.log({
+            level: 'info',
+            module: 'Comments',
+            message: "Call getUnvalidatedComment"
+        })
 
-     logger.log({
-         level: 'info',
-         module: 'Comments',
-         message: "Call getUnvalidatedComment"
-     })
+        const query = `SELECT * FROM comments WHERE status = 0`
+        paginatedSelectQuery(req, res, query)
+    } catch (err) {
+        logger.log({
+            level: 'error',
+            module: 'Comment',
+            message: `Internal error: ${err}`
+        })
 
-     query = `SELECT *
-             FROM comments
-             WHERE STATUS = 0`
-     paginatedSelectQuery(req, res, query)
-
- }catch (err) {
-     logger.log({
-         level:'error',
-         module:'Comment',
-         message:`Internal error :  ${err}`
-     })
-
-     res.status(500)
-     res.send('Internal Error')
- }
-
+        return res.status(500).send('Internal Error')
+    }
 }
 
 /**
@@ -83,186 +67,172 @@ async function getUnvalidatedComment(req, res) {
  * @return {Promise<void>}
  */
 async function addComment(req, res) {
-
     try {
         const sender_name = suppressSpecialChar(req.body.sender_name)
         const comment_text = suppressSpecialChar(req.body.comment_text)
         const garage_note = suppressSpecialChar(req.body.garage_note)
 
+        if (!sender_name || !comment_text || !garage_note) {
+            return res.status(400).send('Missing required fields')
+        }
+
         logger.log({
             level: 'info',
             module: 'Comments',
-            message: `Call addComment with params : ${sender_name} , ${comment_text} , ${garage_note}`
+            message: 'Call addComment'
         })
 
+        const query = `INSERT INTO comments (sender_name, comment_text, garage_note, status) VALUES (?, ?, ?, 0)`
 
-        const query = `INSERT INTO comments (sender_name, comment_text, garage_note, status)
-                   VALUES (?, ?, ?, 0)`
         logger.log({
             level: 'info',
             module: 'Comments',
-            message: `BDD Request`
+            message: 'BDD Request'
         })
-        await database.dbconnect.query(query,[sender_name,comment_text,garage_note],(err,result) => {
-            if(err) {
+
+        database.dbconnect.query(query, [sender_name, comment_text, garage_note], (err, result) => {
+            if (err) {
                 logger.log({
-                    level:'error',
-                    module:'Comments',
-                    message:`SQL Error : ${err}`
+                    level: 'error',
+                    module: 'Comments',
+                    message: `SQL Error: ${err}`
                 })
-                res.status(500)
-                res.send(`SQL Error : ${err}`)
+                return res.status(500).send('Database error')
             }
+
             logger.log({
                 level: 'info',
                 module: 'Comments',
-                message: `Insert successfully with id : ${result.insertId}`
+                message: `Insert successfully with id: ${result.insertId}`
             })
-            res.status(201)
-            res.send(`${result.insertId}`)
-
+            return res.status(201).send(`${result.insertId}`)
         })
-
-
-    }catch (err) {
+    } catch (err) {
         logger.log({
-            level:'error',
-            module:'Comment',
-            message:`Internal error :  ${err}`
+            level: 'error',
+            module: 'Comment',
+            message: `Internal error: ${err}`
         })
 
-        res.status(500)
-        res.send('Internal Error')
+        return res.status(500).send('Internal Error')
     }
-
-
-
 }
 
 /**
- * @funtion
+ * @function
  * @description delete a comment
  * @param req
  * @param res
  * @return {Promise<void>}
  */
 async function deleteComment(req, res) {
-
     try {
-        const id = req.body.id
+        const id = parseInt(req.body.id, 10)
+
+        if (isNaN(id)) {
+            return res.status(400).send('Invalid comment ID')
+        }
 
         logger.log({
-            level:'info',
-            module:'Comments',
-            message:`Call delete comment with params : ${id}`
+            level: 'info',
+            module: 'Comments',
+            message: `Call delete comment with id: ${id}`
         })
 
-
-
         logger.log({
-            level:'info',
-            module:'Comments',
-            message:`BDD Request`
+            level: 'info',
+            module: 'Comments',
+            message: 'BDD Request'
         })
 
         const query = 'DELETE FROM comments WHERE comment_id = ?'
-        await database.dbconnect.query(query,[id],(err,result) =>{
-            if(err){
+        database.dbconnect.query(query, [id], (err, result) => {
+            if (err) {
                 logger.log({
-                    level:'error',
-                    module:'Comments',
-                    message:`SQL Error : ${err}`
+                    level: 'error',
+                    module: 'Comments',
+                    message: `SQL Error: ${err}`
                 })
-                res.status(500)
-                res.send(`SQL error : ${err}`)
+                return res.status(500).send('Database error')
             }
 
-            if (result.affectedRows === 0){
+            if (result.affectedRows === 0) {
                 logger.log({
-                    level:'info',
-                    module:'Comments',
-                    message:`Nothing to Delete`
+                    level: 'info',
+                    module: 'Comments',
+                    message: 'Nothing to delete'
                 })
-                res.status(204)
-                res.send('Nothing to delete')
-            }else {
-                logger.log({
-                    level:'info',
-                    module:'Comments',
-                    message:`Delete successfully ${result.affectedRows}`
-                })
-                res.status(200)
-                res.send(`Delete Ok }`)
+                return res.status(404).send('Comment not found')
             }
 
-
-
+            logger.log({
+                level: 'info',
+                module: 'Comments',
+                message: `Delete successfully ${result.affectedRows}`
+            })
+            return res.status(200).send('Delete Ok')
         })
-
-    }catch (err) {
+    } catch (err) {
         logger.log({
-            level:'error',
-            module:'Comment',
-            message:`Internal error :  ${err}`
+            level: 'error',
+            module: 'Comment',
+            message: `Internal error: ${err}`
         })
 
-        res.status(500)
-        res.send('Internal Error')
+        return res.status(500).send('Internal Error')
     }
-
-
 }
 
-async function validateComment(req,res) {
+/**
+ * @function
+ * @description validate a comment
+ * @param req
+ * @param res
+ * @return {Promise<void>}
+ */
+async function validateComment(req, res) {
     try {
+        const id = parseInt(req.body.id, 10)
 
-        const id = req.body.id
-        const query = ' UPDATE comments  SET status = 1 WHERE comment_id = ?'
-        await database.dbconnect.query(query,[id],(err,result) =>{
-            if(err){
+        if (isNaN(id)) {
+            return res.status(400).send('Invalid comment ID')
+        }
+
+        const query = 'UPDATE comments SET status = 1 WHERE comment_id = ?'
+        database.dbconnect.query(query, [id], (err, result) => {
+            if (err) {
                 logger.log({
-                    level:'error',
-                    module:'Comments',
-                    message:`SQL Error : ${err}`
+                    level: 'error',
+                    module: 'Comments',
+                    message: `SQL Error: ${err}`
                 })
-                res.status(500)
-                res.send(`SQL error : ${err}`)
+                return res.status(500).send('Database error')
             }
 
-            if (result.affectedRows === 0){
+            if (result.affectedRows === 0) {
                 logger.log({
-                    level:'info',
-                    module:'Comments',
-                    message:`Nothing to update`
+                    level: 'info',
+                    module: 'Comments',
+                    message: 'Nothing to update'
                 })
-                res.status(204)
-                res.send('Nothing to update')
-            }else {
-                logger.log({
-                    level:'info',
-                    module:'Comments',
-                    message:`update successfully ${result.affectedRows}`
-                })
-                res.status(200)
-                res.send(`update Ok `)
+                return res.status(404).send('Comment not found')
             }
 
-
-
+            logger.log({
+                level: 'info',
+                module: 'Comments',
+                message: `Update successfully ${result.affectedRows}`
+            })
+            return res.status(200).send('Update Ok')
         })
-
-
-
-    }catch (err) {
+    } catch (err) {
         logger.log({
-            level:'error',
-            module:'Comment',
-            message:`Internal Error : ${err}`
+            level: 'error',
+            module: 'Comment',
+            message: `Internal Error: ${err}`
         })
-        res.status(500)
-        res.send(`internal error ${err}`)
+        return res.status(500).send('Internal error')
     }
-
 }
 
 module.exports = {

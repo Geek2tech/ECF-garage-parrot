@@ -9,135 +9,82 @@ export const useequipementStore = defineStore('equipements', {
     },
 
     actions : {
-        async addEquipement(name,token) {
+        async addEquipement(name, token) {
 
             const body = {
-                "equipement_name":name
+                "equipement_name": name
             }
-
-            const runTimeConfigs = useRuntimeConfig()
 
             const {error, data: equipementAdded} = await useAsyncData('equipementAdded', () => {
-                    return $fetch(`${runTimeConfigs.public.API_URL}/api/protected/equipement`, {
+                    return $fetch(`/api/proxy/api/protected/equipement`, {
                             method: 'POST',
-                            mode: 'cors',
                             credentials: 'include',
                             headers: {
                                 "content-Type": "application/json",
-                                "x-api-key": `${runTimeConfigs.public.API_KEY}`,
-                                "x-xsrf-token":token
-
+                                "x-xsrf-token": token
                             },
-                            key: 'equipementAdded',
-                            body:JSON.stringify(body)
-
-
-
-
+                            body: body
                         }
                     )
-
                 }
             )
-
         },
 
-async deleteEquipement(id,token){
+        async deleteEquipement(id, token) {
             const body = {
-                "equipement_id":id
-
-
-                        }
-    const runTimeConfigs = useRuntimeConfig()
-
-    const {error, data: DeletedEquipement} = await useAsyncData('deletedEquipement', () => {
-            return $fetch(`${runTimeConfigs.public.API_URL}/api/protected/equipement`, {
-                    method: 'DELETE',
-                    mode: 'cors',
-                    credentials: 'include',
-                    headers: {
-                        "content-Type": "application/json",
-                        "x-api-key": `${runTimeConfigs.public.API_KEY}`,
-                        "x-xsrf-token":token
-
-                    },
-                    key: 'deletedEquipement',
-                    body:JSON.stringify(body)
-
-
-                }
-            )
-
-        }
-    )
-
-
-
-},
-
-        async updateEquipements(id,name,token){
-            const body = {
-                "equipement_id":id,
-                "newValue":name
+                "equipement_id": id
             }
 
-            const runTimeConfigs = useRuntimeConfig()
-
-            const {error, data: equipementUpdate} = await useAsyncData('equipementUpdate', () => {
-                    return $fetch(`${runTimeConfigs.public.API_URL}/api/protected/equipement`, {
-                            method: 'PUT',
-                            mode: 'cors',
+            const {error, data: DeletedEquipement} = await useAsyncData('deletedEquipement', () => {
+                    return $fetch(`/api/proxy/api/protected/equipement`, {
+                            method: 'DELETE',
                             credentials: 'include',
                             headers: {
                                 "content-Type": "application/json",
-                                "x-api-key": `${runTimeConfigs.public.API_KEY}`,
-                                "x-xsrf-token":token
-
+                                "x-xsrf-token": token
                             },
-                            key: 'equipementupdate',
-                        body:JSON.stringify(body)
-
-
-
-
+                            body: body
                         }
                     )
-
                 }
             )
+        },
 
+        async updateEquipements(id, name, token) {
+            const body = {
+                "equipement_id": id,
+                "newValue": name
+            }
 
+            const {error, data: equipementUpdate} = await useAsyncData('equipementUpdate', () => {
+                    return $fetch(`/api/proxy/api/protected/equipement`, {
+                            method: 'PUT',
+                            credentials: 'include',
+                            headers: {
+                                "content-Type": "application/json",
+                                "x-xsrf-token": token
+                            },
+                            body: body
+                        }
+                    )
+                }
+            )
         },
 
         async getEquipements() {
 
-
-            const runTimeConfigs = useRuntimeConfig()
-
             const {error, data: equipements} = await useAsyncData('equipements', () => {
-                    return $fetch(`${runTimeConfigs.public.API_URL}/api/equipements`, {
+                    return $fetch(`/api/proxy/api/equipements`, {
                             method: 'GET',
-                            mode: 'cors',
                             credentials: 'include',
                             headers: {
                                 "content-Type": "application/json",
-                                "x-api-key": `${runTimeConfigs.public.API_KEY}`,
-
                             },
-                            key: 'equipements',
-
-
-
-
                         }
                     )
-
                 }
             )
             this.equipementsList = equipements._rawValue.results
-
-
-
         }
     }
 

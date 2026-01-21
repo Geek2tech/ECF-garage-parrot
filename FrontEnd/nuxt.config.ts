@@ -1,19 +1,15 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
     runtimeConfig: {
-        API_URL: process.env.APP_BACKEND_URL,
+        // Server-side only (not exposed to client)
         API_KEY: process.env.APP_APIKEY,
-        APP_MAIL: process.env.APP_GARAGE_MAIL,
         APP_MSM_URL: process.env.APP_MSM_URL,
         public: {
+            // Client-side accessible (no secrets here!)
             API_URL: process.env.APP_BACKEND_URL,
-            API_KEY: process.env.APP_APIKEY,
             APP_MAIL: process.env.APP_GARAGE_MAIL,
-
-
         }
     },
-    //ssr:false,
 
     routeRules: {
         '/login': {ssr: false},
@@ -31,12 +27,10 @@ export default defineNuxtConfig({
 
     },
     modules: [
-        "@nuxtjs/tailwindcss", '@pinia/nuxt'
-
-
+        "@nuxtjs/tailwindcss",
+        '@pinia/nuxt',
+        '@nuxt/ui'
     ],
-
-    modules: ['@nuxt/ui'],
 
 
 })

@@ -1,20 +1,23 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const crypto = require("crypto");
-const {suppressSpecialChar} = require("../helpers/fieldControl");
+const crypto = require("crypto")
+const util = require('util')
+const {suppressSpecialChar} = require("../helpers/fieldControl")
 const SECRET_KEY = process.env.APP_SECRET_KEY
 const logger = require('../services/Logger')
 const database = require('../services/db')
+
+// Promisify database query
+const dbQuery = util.promisify(database.dbconnect.query).bind(database.dbconnect)
+
 /**
  * @function
- * @description check email and password in database , if ok send JWT
- * @param req request with email and passwod
+ * @description check email and password in database, if ok send JWT
+ * @param req request with email and password
  * @param res
  * @return {Promise<*>}
  */
 async function authentification(req, res) {
-
-
     logger.log({
         level: 'info',
         module: 'Authentification',
@@ -23,130 +26,114 @@ async function authentification(req, res) {
 
     const {email, password} = req.body
 
+    if (!email || !password) {
+        return res.status(400).json({ error: 'Email and password are required' })
+    }
 
     try {
-        // recherche de l'utilisateur
-
-
         const query = `SELECT u.first_name, u.last_name, u.email, u.password, p.profil_name
-                       from users as u
-                                join profils as p on u.profil_id = p.profil_id
-                       where u.email = ?`
+                       FROM users AS u
+                       JOIN profils AS p ON u.profil_id = p.profil_id
+                       WHERE u.email = ?`
 
         logger.log({
-            level:'info',
-            module:'Authentification',
-            message:'BDD request'
+            level: 'info',
+            module: 'Authentification',
+            message: 'BDD request'
         })
 
-        await database.dbconnect.query(query, suppressSpecialChar(email), (err, rows, result) => {
+        const rows = await dbQuery(query, [suppressSpecialChar(email)])
 
-            if (rows[0] !== undefined) {
-                logger.log({
-                    level: 'info',
-                    module: 'Authentification',
-                    message: `User ${email}  found `
-                })
-            const passwordDb = rows[0].password
-            const userFirstName = rows[0].first_name
-            const userLastName = rows[0].last_name
+        if (!rows || rows.length === 0) {
+            logger.log({
+                level: 'warn',
+                module: 'Authentification',
+                message: 'Authentication failed'
+            })
+            // Use same message for both cases to prevent user enumeration
+            return res.status(401).json('wrong_credentials')
+        }
 
+        const user = rows[0]
+        const passwordDb = user.password
+        const userFirstName = user.first_name
+        const userLastName = user.last_name
+        const userProfil = user.profil_name
 
+        // Compare passwords using promisified bcrypt
+        const passwordMatch = await bcrypt.compare(suppressSpecialChar(password), passwordDb)
 
+        if (!passwordMatch) {
+            logger.log({
+                level: 'warn',
+                module: 'Authentification',
+                message: 'Authentication failed'
+            })
+            return res.status(401).json('wrong_credentials')
+        }
 
-                const userProfil = rows[0].profil_name
+        logger.log({
+            level: 'info',
+            module: 'Authentification',
+            message: 'User password ok'
+        })
 
-                bcrypt.compare(suppressSpecialChar(password), passwordDb, function (err, response) {
-                    if (err) {
-                        logger.log({
-                            level: 'error',
-                            module: 'Authentification',
-                            message: `Error when compare decrypted password : ${err} `
-                        })
-                        throw new Error(err);
-                    }
+        // Create XSRF token
+        const xsrfToken = crypto.randomBytes(64).toString('hex')
+        logger.log({
+            level: 'info',
+            module: 'Authentification',
+            message: 'xsrf token generated'
+        })
 
-                    if (response) {
+        // JWT expires in 1 hour (was 100 days!)
+        const expireIn = 60 * 60
+        const token = jwt.sign(
+            {
+                userFirsname: userFirstName,
+                userLastName: userLastName,
+                profil: userProfil,
+                xsrfToken
+            },
+            SECRET_KEY,
+            { expiresIn: expireIn }
+        )
 
-                        logger.log({
-                            level: 'info',
-                            module: 'Authentification',
-                            message: 'User password ok'
-                        })
-// création token xsrf
-                        const xsrfToken = crypto.randomBytes(64).toString('hex')
-                        logger.log({
-                            level: 'info',
-                            module: 'Authentification',
-                            message: 'xsrf token generated'
-                        })
+        res.cookie('token', token, {
+            httpOnly: true,
+            sameSite: 'none',
+            secure: true,
+            maxAge: expireIn * 1000 // maxAge is in milliseconds
+        })
 
-                        const expireIn = 2400 * 60 * 60
-                        const token = jwt.sign({
-                                userFirsname: userFirstName,
-                                userLastName: userLastName,
-                                profil: userProfil,
-                                xsrfToken
-                            },
-                            SECRET_KEY,
-                            {
-                                expiresIn: expireIn
-                            });
-                        res.cookie('token', token, {
-                            httpOnly: true,
-                            SameSite:"None",
-                            secure:true,
-                            maxAge: expireIn
-                        })
-                        logger.log({
-                            level: 'info',
-                            module: 'Authentification',
-                            message: 'JWT token generated and stocked'
-                        })
-                        logger.log({
-                            level: 'info',
-                            module: 'Authentification',
-                            message: `user ${userFirstName} ${userLastName} is connected`
-                        })
+        logger.log({
+            level: 'info',
+            module: 'Authentification',
+            message: 'JWT token generated and stored'
+        })
+        logger.log({
+            level: 'info',
+            module: 'Authentification',
+            message: 'User connected successfully'
+        })
 
-
-                        res.send({
-                            tokenExpiresIn: expireIn,
-                            xsrfToken,userProfil,userFirstName,userLastName
-
-                        })
-
-                    } else {
-                        logger.log({
-                            level: 'error',
-                            module: 'Authentification',
-                            message: `Wrong credentials for ${email}`
-                        })
-                        return res.status(200).json('wrong_credentials')
-                    }
-
-
-                })
-            } else {
-                logger.log({
-                    level: 'error',
-                    module: 'Authentification',
-                    message: ` user ${email} not found `
-                })
-                return res.status(200).json('user_not_found')
-            }
+        return res.status(200).json({
+            tokenExpiresIn: expireIn,
+            xsrfToken,
+            userProfil,
+            userFirstName,
+            userLastName
         })
 
     } catch (err) {
         logger.log({
             level: 'error',
             module: 'Authentification',
-            message: `Internal error : ${err} `
+            message: `Internal error: ${err.message}`
         })
 
-        return res.status(501).json(err)
+        return res.status(500).json({ error: 'Internal server error' })
     }
-
 }
 
 module.exports = {

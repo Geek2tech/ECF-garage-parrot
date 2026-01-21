@@ -14,36 +14,38 @@ async function getCars(req, res) {
             message: 'Call getCars'
         })
         const carId = suppressSpecialChar(req.body.car_id)
-        console.log('From Back')
-        console.log(carId)
-console.log(req.body.priceFilter)
-        console.log(req.body.circulationYearFilter)
-        console.log(req.body.mileageFilter)
 
         let query
+        let params = []
+
         if (carId === "all") {
+            // Validate numeric filters
+            const priceFilter = parseInt(req.body.priceFilter, 10)
+            const circulationYearFilter = parseInt(req.body.circulationYearFilter, 10)
+            const mileageFilter = parseInt(req.body.mileageFilter, 10)
 
-            const priceFilter = suppressSpecialChar(req.body.priceFilter.toString())
-            const circulationYearFilter = suppressSpecialChar(req.body.circulationYearFilter.toString())
-            const mileageFilter = suppressSpecialChar(req.body.mileageFilter.toString())
+            if (isNaN(priceFilter) || isNaN(circulationYearFilter) || isNaN(mileageFilter)) {
+                return res.status(400).send('Invalid filter parameters')
+            }
 
-            //const priceFilter = req.body.priceFilter
-            //const circulationYearFilter = req.body.circulationYearFilter
-            //const mileageFilter = req.body.mileageFilter
+            query = `SELECT c.* , p.photo_name FROM car_view AS c JOIN photos AS p ON c.car_id = p.car_id WHERE circulation_year >= ? AND price <= ? AND mileage <= ? AND p.primary_photo = "Y"`
+            params = [circulationYearFilter, priceFilter, mileageFilter]
 
-            query = `SELECT c.* , p.photo_name FROM car_view AS c JOIN photos AS p ON c.car_id = p.car_id WHERE circulation_year >=  ${circulationYearFilter}  and price <=  ${priceFilter} and mileage <=  ${mileageFilter} and p.primary_photo = "Y"`
+        } else if (carId === "noselect") {
+            query = `SELECT c.* , p.photo_name FROM car_view AS c JOIN photos AS p ON c.car_id = p.car_id WHERE p.primary_photo = 'Y'`
+            params = []
+        } else {
+            // Validate carId is numeric
+            const carIdNum = parseInt(carId, 10)
+            if (isNaN(carIdNum)) {
+                return res.status(400).send('Invalid car ID')
+            }
 
-        }else if (carId === "noselect") {
-            query = `SELECT c.* , p.photo_name FROM car_view AS c JOIN photos AS p ON c.car_id = p.car_id where p.primary_photo ='Y'`
-        } 
-        
-        else {
-
-            query = `SELECT c.*, p.photo_name FROM car_view as c JOIN photos AS p ON c.car_id = p.car_id  WHERE c.car_id = ${carId} and p.primary_photo = "Y"`
-
+            query = `SELECT c.*, p.photo_name FROM car_view AS c JOIN photos AS p ON c.car_id = p.car_id WHERE c.car_id = ? AND p.primary_photo = "Y"`
+            params = [carIdNum]
         }
 
-        paginatedSelectQuery(req, res, query)
+        paginatedSelectQuery(req, res, query, params)
     } catch (err) {
 
         logger.log({
@@ -51,7 +53,7 @@ console.log(req.body.priceFilter)
             module: 'Cars',
             message: `Internal error ${err}`
         })
-
+        return res.status(500).send('Internal error')
     }
 
 
@@ -116,7 +118,7 @@ async function addCar(req, res) {
                 module: 'Cars',
                 message: `Sql Error : ${err.message}`
             })
-            return res.status(500).send(`Sql error : ${err.message}`)
+            return res.status(500).send('Database error')
         }
 
         logger.log({
@@ -161,7 +163,7 @@ async function deleteCar(req, res) {
                 module: 'Cars',
                 message: `Sql Error : ${err.sqlMessage}`
             })
-            return res.status(500).send(`Sql error : ${err.sqlMessage}`)
+            return res.status(500).send('Database error')
         }
 
         logger.log({
@@ -188,7 +190,7 @@ async function deleteCar(req, res) {
                     module: 'Cars',
                     message: `Sql error : ${err.sqlMessage}`
                 })
-                return res.status(500).send(`Sql error ${err.sqlMessage}`)
+                return res.status(500).send('Database error')
             }
             logger.log({
                 level: 'info',
